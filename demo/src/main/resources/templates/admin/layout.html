@@ -29,6 +29,7 @@
     <!-- custom Css-->
     <link th:href="@{/admin/assets/css/custom.min.css}" rel="stylesheet" type="text/css" />
 
+
     <!-- Plugins css -->
     <link th:href="@{/admin/assets/libs/dropzone/dropzone.css}" rel="stylesheet" type="text/css" />
 
@@ -685,8 +686,13 @@
                             </div>
 
                             <li class="nav-item">
+
                                 <a class="nav-link menu-link" href="/admin/apps-ecommerce-orders" role="button"
                                     aria-expanded="false" aria-controls="sidebarDashboards">
+
+                                <a class="nav-link menu-link" href="/admin/apps-ecommerce-orders" role="button" aria-expanded="false"
+                                    aria-controls="sidebarDashboards">
+
                                     <i class="mdi mdi-calendar-text"></i> <span data-key="t-dashboards">Orders</span>
                                 </a>
                             </li>
@@ -698,10 +704,16 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+
                                 <a class="nav-link menu-link" href="/admin/apps-ecommerce-sellers" role="button"
                                     aria-expanded="false" aria-controls="sidebarDashboards">
                                     <i class="mdi mdi-account-multiple-outline"></i> <span
                                         data-key="t-dashboards">Sellers</span>
+
+                                <a class="nav-link menu-link" href="/admin/apps-ecommerce-sellers" role="button" aria-expanded="false"
+                                    aria-controls="sidebarDashboards">
+                                    <i class="mdi mdi-account-multiple-outline"></i> <span data-key="t-dashboards">Sellers</span>
+
                                 </a>
                             </li>
                             <a class="nav-link menu-link collapsed" href="#sidebarBlog" data-bs-toggle="collapse"
@@ -791,6 +803,7 @@
 
         <!-- App js -->
         <script th:src="@{/admin/assets/js/app.js}"></script>
+
 
         <!-- ckeditor -->
         <script th:src="@{/admin/assets/libs/%40ckeditor/ckeditor5-build-classic/build/ckeditor.js}"></script>
