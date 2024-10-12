@@ -586,7 +586,7 @@
                                             class="badge bg-success-subtle text-success mt-1 float-end">New</span><i
                                             class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span
                                             class="align-middle">Settings</span></a>
-                                    <a class="dropdown-item" href="/admin/auth-logout-basic"><i
+                                    <a class="dropdown-item" href="/user/login"><i
                                             class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span
                                             class="align-middle" data-key="t-logout">Logout</span></a>
                                 </div>
@@ -655,9 +655,7 @@
 
                 <div id="scrollbar">
                     <div class="container-fluid">
-
-                        <div id="two-column-menu">
-                        </div>
+                        <div id="two-column-menu"></div>
                         <ul class="navbar-nav" id="navbar-nav">
                             <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                             <li class="nav-item">
@@ -665,60 +663,61 @@
                                     aria-controls="sidebarDashboards">
                                     <i class="mdi mdi-speedometer"></i> <span data-key="t-dashboards">Dashboards</span>
                                 </a>
-
-                            </li> <!-- end Dashboard Menu -->
-                            <li class="nav-item">
-                                <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse"
-                                    role="button" aria-expanded="true" aria-controls="sidebarApps">
-                                    <i class="mdi mdi-view-grid-plus-outline"></i> <span data-key="t-apps">Admin</span>
-                                </a>
-                                <div class="collapse show menu-dropdown" id="sidebarApps">
-                                    <ul class="nav nav-sm flex-column">
-
-
-
-
-                                        <li class="nav-item">
-                                            <a href="/admin/apps-ecommerce-products" class="nav-link"
-                                                data-key="t-products">
-                                                Products </a>
-                                        </li>
-
-                                        <li class="nav-item">
-                                            <a href="/admin/apps-ecommerce-add-product" class="nav-link"
-                                                data-key="t-create-product"> Create Product </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="/admin/apps-ecommerce-orders" class="nav-link" data-key="t-orders">
-                                                Orders </a>
-                                        </li>
-
-                                        <li class="nav-item">
-                                            <a href="/admin/apps-ecommerce-customers" class="nav-link"
-                                                data-key="t-customers">
-                                                Customers </a>
-                                        </li>
-
-                                        <li class="nav-item">
-                                            <a href="/admin/apps-ecommerce-sellers" class="nav-link"
-                                                data-key="t-sellers">
-                                                Sellers </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="/admin/apps-ecommerce-blog" class="nav-link"
-                                                data-key="t-sellers-details"> Blog </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="/admin/apps-ecommerce-create-blog" class="nav-link"
-                                                data-key="t-sellers-details"> Create Blog </a>
-                                        </li>
-
-                                    </ul>
-                                </div>
                             </li>
+                            <a class="nav-link menu-link collapsed" href="#sidebarProducts" data-bs-toggle="collapse"
+                                role="button" aria-expanded="false" aria-controls="sidebarProducts">
+                                <i class="mdi mdi-auto-fix"></i> <span data-key="t-dashboards">Products</span>
+                            </a>
+                            <div class="menu-dropdown collapse" id="sidebarProducts">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="/admin/apps-ecommerce-products" class="nav-link"
+                                            data-key="t-analytics"> Product List </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/admin/apps-ecommerce-add-product" class="nav-link"
+                                            data-key="t-analytics"> Add Product </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/admin/apps-ecommerce-orders" role="button" aria-expanded="false"
+                                    aria-controls="sidebarDashboards">
+                                    <i class="mdi mdi-calendar-text"></i> <span data-key="t-dashboards">Orders</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/admin/apps-ecommerce-customers" role="button"
+                                    aria-expanded="false" aria-controls="sidebarDashboards">
+                                    <i class="mdi mdi-account-circle-outline"></i> <span
+                                        data-key="t-dashboards">Customers</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="/admin/apps-ecommerce-sellers" role="button" aria-expanded="false"
+                                    aria-controls="sidebarDashboards">
+                                    <i class="mdi mdi-account-multiple-outline"></i> <span data-key="t-dashboards">Sellers</span>
+                                </a>
+                            </li>
+                            <a class="nav-link menu-link collapsed" href="#sidebarBlog" data-bs-toggle="collapse"
+                                role="button" aria-expanded="false" aria-controls="sidebarBlog">
+                                <i class="mdi mdi-book"></i> <span data-key="t-dashboards">Blog</span>
+                            </a>
+                            <div class="menu-dropdown collapse" id="sidebarBlog">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="/admin/apps-ecommerce-blog" class="nav-link" data-key="t-analytics">
+                                            Blog List </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/admin/apps-ecommerce-create-blog" class="nav-link"
+                                            data-key="t-analytics"> Create Blog </a>
+                                    </li>
+                                </ul>
+                            </div>
 
                             <!-- end Dashboard Menu -->
-
                         </ul>
                     </div>
                     <!-- Sidebar -->
@@ -734,6 +733,8 @@
         <!-- Start right Content here -->
         <!-- ============================================================== -->
         <div class="main-content">
+
+
 
             <main>
                 <section th:insert="~{::mainContent}"></section>

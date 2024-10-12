@@ -13,6 +13,7 @@ public class AdminController {
         return ("admin/index");
     }
 
+
     @GetMapping("apps-ecommerce-add-product")
     public String addproduct() {
         return ("admin/apps-ecommerce-add-product");
@@ -73,9 +74,9 @@ public class AdminController {
         return ("admin/apps-invoices-details");
     }
 
-    @GetMapping("pages-account-settings")
+    @GetMapping("pages-profile-settings")
     public String setting() {
-        return ("admin/pages-account-settings");
+        return ("admin/pages-profile-settings");
     }
 
 }
