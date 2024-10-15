@@ -28,28 +28,7 @@
             <!--Checkout page section-->
             <div class="Checkout_section">
                 <div class="container">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="user-actions">
-                                <h3>
-                                    <i class="fa fa-file-o" aria-hidden="true"></i>
-                                    Returning customer?
-                                    <a class="Returning" href="#" data-bs-toggle="collapse"
-                                        data-bs-target="#checkout_coupon" aria-expanded="true">Click here to enter your
-                                        code</a>
 
-                                </h3>
-                                <div id="checkout_coupon" class="collapse" data-parent="#accordion">
-                                    <div class="checkout_info coupon_info">
-                                        <form action="#">
-                                            <input placeholder="Coupon code" type="text">
-                                            <button type="submit">Apply coupon</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="checkout_form">
                         <div class="row">
                             <div class="col-lg-6 col-md-6">
@@ -57,13 +36,9 @@
                                     <h3>Billing Details</h3>
                                     <div class="row">
 
-                                        <div class="col-lg-6 mb-20">
-                                            <label>First Name <span>*</span></label>
-                                            <input type="text">
-                                        </div>
-                                        <div class="col-lg-6 mb-20">
-                                            <label>Last Name <span>*</span></label>
-                                            <input type="text">
+                                        <div class="col-12 mb-20">
+                                            <label>Full Name <span>*</span></label>
+                                            <input placeholder="Enter your full name" type="text">
                                         </div>
 
 
@@ -77,10 +52,23 @@
                                             <label>City <span>*</span></label>
                                             <input type="text">
                                         </div>
+
                                         <div class="col-12 mb-20">
-                                            <label>Province <span>*</span></label>
-                                            <input type="text">
+                                            <label for="country">Province <span>*</span></label>
+                                            <select class="select_option" name="cuntry" id="country">
+                                                <option value="2">Bình Dương</option>
+                                                <option value="3">Bình Phước</option>
+                                                <option value="4">Tây Ninh</option>
+                                                <option value="5">Đồng Nai</option>
+                                                <option value="6">Thành phố Hồ Chí Minh</option>
+                                                <option value="7">Bà Rịa Vũng Tàu</option>
+                                                <option value="8">Long An</option>
+                                                <option value="9">Bình Thuận</option>
+                                                <option value="10">Hà Nội</option>
+
+                                            </select>
                                         </div>
+
                                         <div class="col-lg-6 mb-20">
                                             <label>Phone<span>*</span></label>
                                             <input type="text">
