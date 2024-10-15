@@ -111,11 +111,14 @@
                                                                     id="checkAll" value="option">
                                                             </div>
                                                         </th>
-
-                                                        <th class="sort" data-sort="customer_name">Customer</th>
-                                                        <th class="sort" data-sort="email">Email</th>
-                                                        <th class="sort" data-sort="phone">Phone</th>
-                                                        <th class="sort" data-sort="date">Joining Date</th>
+                                                        <th class="sort" data-sort="id">ID</th>
+                                                        <th class="sort" data-sort="name">Name</th>
+                                                        <th class="sort" data-sort="image">Main Image</th>
+                                                        <th class="sort" data-sort="category">Category</th>
+                                                        <th class="sort" data-sort="description">Description</th>
+                                                        <th class="sort" data-sort="price">Price</th>
+                                                        <th class="sort" data-sort="quantity">Quantity</th>
+                                                        <th class="sort" data-sort="date">Creating Date</th>
                                                         <th class="sort" data-sort="status">Status</th>
                                                         <th class="sort" data-sort="action">Action</th>
                                                     </tr>
@@ -131,10 +134,14 @@
                                                         <td class="id" style="display:none;"><a
                                                                 href="javascript:void(0);"
                                                                 class="fw-medium link-primary">#VZ2101</a></td>
-                                                        <td class="customer_name">Mary Cousar</td>
-                                                        <td class="email">marycousar@velzon.com</td>
-                                                        <td class="phone">580-464-4694</td>
-                                                        <td class="date">06 Apr, 2021</td>
+                                                        <td class="id">A001</td>
+                                                        <td class="name">Hadalabo</td>
+                                                        <td class="image"></td>
+                                                        <td class="category">Skin care</td>
+                                                        <td class="description">lorem ipsum dolor sit amet</td>
+                                                        <td class="price">20</td>
+                                                        <td class="quantity">500</td>
+                                                        <td class="date">15 Oct, 2024</td>
                                                         <td class="status"><span
                                                                 class="badge bg-success-subtle text-success text-uppercase">Active</span>
                                                         </td>
@@ -144,7 +151,7 @@
                                                                     data-bs-toggle="tooltip" data-bs-trigger="hover"
                                                                     data-bs-placement="top" aria-label="Edit"
                                                                     data-bs-original-title="Edit">
-                                                                    <a href="#showModal" data-bs-toggle="modal"
+                                                                    <a href="/admin/apps-ecommerce-add-product"
                                                                         class="text-primary d-inline-block edit-item-btn">
                                                                         <i class="ri-pencil-fill fs-16"></i>
                                                                     </a>
@@ -189,81 +196,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal fade" id="showModal" tabindex="-1" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header bg-light p-3">
-                                                    <h5 class="modal-title" id="exampleModalLabel"></h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close" id="close-modal"></button>
-                                                </div>
-                                                <form class="tablelist-form" autocomplete="off">
-                                                    <div class="modal-body">
-                                                        <input type="hidden" id="id-field">
-
-                                                        <div class="mb-3" id="modal-id" style="display: none;">
-                                                            <label for="id-field1" class="form-label">ID</label>
-                                                            <input type="text" id="id-field1" class="form-control"
-                                                                placeholder="ID" readonly="">
-                                                        </div>
-
-                                                        <div class="mb-3">
-                                                            <label for="customername-field" class="form-label">Customer
-                                                                Name</label>
-                                                            <input type="text" id="customername-field"
-                                                                class="form-control" placeholder="Enter name"
-                                                                required="">
-                                                            <div class="invalid-feedback">Please enter a customer name.
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="mb-3">
-                                                            <label for="email-field" class="form-label">Email</label>
-                                                            <input type="email" id="email-field" class="form-control"
-                                                                placeholder="Enter email" required="">
-                                                            <div class="invalid-feedback">Please enter an email.</div>
-                                                        </div>
-
-                                                        <div class="mb-3">
-                                                            <label for="phone-field" class="form-label">Phone</label>
-                                                            <input type="text" id="phone-field" class="form-control"
-                                                                placeholder="Enter phone no." required="">
-                                                            <div class="invalid-feedback">Please enter a phone.</div>
-                                                        </div>
-
-                                                        <div class="mb-3">
-                                                            <label for="date-field" class="form-label">Joining
-                                                                Date</label>
-                                                            <input type="date" id="date-field" class="form-control"
-                                                                data-provider="flatpickr" data-date-format="d M, Y"
-                                                                required="" placeholder="Select date">
-                                                            <div class="invalid-feedback">Please select a date.</div>
-                                                        </div>
-
-                                                        <div>
-                                                            <label for="status-field" class="form-label">Status</label>
-                                                            <select class="form-control" data-choices=""
-                                                                data-choices-search-false="" name="status-field"
-                                                                id="status-field" required="">
-                                                                <option value="">Status</option>
-                                                                <option value="Active">Active</option>
-                                                                <option value="Block">Block</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <div class="hstack gap-2 justify-content-end">
-                                                            <button type="button" class="btn btn-light"
-                                                                data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-success"
-                                                                id="add-btn">Add Customer</button>
-                                                            <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
 
                                     <!-- Modal -->
                                     <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1"
@@ -281,7 +214,7 @@
                                                             style="width:100px;height:100px"></lord-icon>
                                                         <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
                                                             <h4>Are you sure ?</h4>
-                                                            <p class="text-muted mx-4 mb-0">Are you sure you want to
+                                                            <p class="text-muted mx-4 mb-0">Are you sure to
                                                                 remove this record ?</p>
                                                         </div>
                                                     </div>
