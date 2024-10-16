@@ -39,6 +39,11 @@ public class AdminController {
         return ("admin/apps-ecommerce-create-blog");
     }
 
+    @GetMapping("apps-ecommerce-edit-blog")
+    public String editblog() {
+        return ("admin/apps-ecommerce-edit-blog");
+    }
+
     @GetMapping("apps-ecommerce-customers")
     public String customers() {
         return ("admin/apps-ecommerce-customers");

@@ -38,13 +38,9 @@
                                                 <button class="btn btn-soft-danger" id="remove-actions"
                                                     onclick="deleteMultiple()"><i
                                                         class="ri-delete-bin-2-line"></i></button>
-                                                <button type="button" class="btn btn-success add-btn"
-                                                    data-bs-toggle="modal" id="create-btn"
-                                                    data-bs-target="#showModal"><i
-                                                        class="ri-add-line align-bottom me-1"></i> Add Customer</button>
                                                 <button type="button" class="btn btn-info"><i
                                                         class="ri-file-download-line align-bottom me-1"></i>
-                                                    Import</button>
+                                                    Export</button>
                                             </div>
                                         </div>
                                     </div>
@@ -111,11 +107,13 @@
                                                                     id="checkAll" value="option">
                                                             </div>
                                                         </th>
-
-                                                        <th class="sort" data-sort="customer_name">Customer</th>
+                                                        <th class="sort" data-sort="id">ID</th>
+                                                        <th class="sort" data-sort="name">Full Name</th>
                                                         <th class="sort" data-sort="email">Email</th>
                                                         <th class="sort" data-sort="phone">Phone</th>
-                                                        <th class="sort" data-sort="date">Joining Date</th>
+                                                        <th class="sort" data-sort="address">Address</th>
+                                                        <th class="sort" data-sort="city">City</th>
+                                                        <th class="sort" data-sort="province">Province</th>
                                                         <th class="sort" data-sort="status">Status</th>
                                                         <th class="sort" data-sort="action">Action</th>
                                                     </tr>
@@ -128,13 +126,13 @@
                                                                     name="chk_child" value="option1">
                                                             </div>
                                                         </th>
-                                                        <td class="id" style="display:none;"><a
-                                                                href="javascript:void(0);"
-                                                                class="fw-medium link-primary">#VZ2101</a></td>
-                                                        <td class="customer_name">Mary Cousar</td>
+                                                        <td class="id">CUS-A0001</td>
+                                                        <td class="name">Mary Cousar</td>
                                                         <td class="email">marycousar@velzon.com</td>
                                                         <td class="phone">580-464-4694</td>
-                                                        <td class="date">06 Apr, 2021</td>
+                                                        <td class="address">Nam Kỳ Khởi Nghĩa, Định Hòa</td>
+                                                        <td class="city">Thủ Dầu Một</td>
+                                                        <td class="province">Bình Dương</td>
                                                         <td class="status"><span
                                                                 class="badge bg-success-subtle text-success text-uppercase">Active</span>
                                                         </td>
@@ -193,7 +191,7 @@
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header bg-light p-3">
-                                                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                                                    <h5 class="modal-title" id="exampleModalLabel">Edit Customer</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close" id="close-modal"></button>
                                                 </div>
@@ -201,43 +199,62 @@
                                                     <div class="modal-body">
                                                         <input type="hidden" id="id-field">
 
-                                                        <div class="mb-3" id="modal-id" style="display: none;">
-                                                            <label for="id-field1" class="form-label">ID</label>
-                                                            <input type="text" id="id-field1" class="form-control"
-                                                                placeholder="ID" readonly="">
-                                                        </div>
-
-                                                        <div class="mb-3">
-                                                            <label for="customername-field" class="form-label">Customer
-                                                                Name</label>
-                                                            <input type="text" id="customername-field"
-                                                                class="form-control" placeholder="Enter name"
-                                                                required="">
-                                                            <div class="invalid-feedback">Please enter a customer name.
+                                                        <div class="row gy-4 mb-3">
+                                                            <div class="col-md-6">
+                                                                <label for="id-field1" class="form-label">ID</label>
+                                                                <input type="text" id="id-field1" class="form-control"
+                                                                    readonly="">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="customername-field" class="form-label">Full
+                                                                    Name</label>
+                                                                <input type="text" id="customername-field"
+                                                                    class="form-control"
+                                                                    required="">
+                                                                <div class="invalid-feedback">Please enter a customer
+                                                                    name.
+                                                                </div>
                                                             </div>
                                                         </div>
 
                                                         <div class="mb-3">
                                                             <label for="email-field" class="form-label">Email</label>
                                                             <input type="email" id="email-field" class="form-control"
-                                                                placeholder="Enter email" required="">
+                                                                required="">
                                                             <div class="invalid-feedback">Please enter an email.</div>
                                                         </div>
 
                                                         <div class="mb-3">
                                                             <label for="phone-field" class="form-label">Phone</label>
                                                             <input type="text" id="phone-field" class="form-control"
-                                                                placeholder="Enter phone no." required="">
+                                                                required="">
                                                             <div class="invalid-feedback">Please enter a phone.</div>
                                                         </div>
 
                                                         <div class="mb-3">
-                                                            <label for="date-field" class="form-label">Joining
-                                                                Date</label>
-                                                            <input type="date" id="date-field" class="form-control"
-                                                                data-provider="flatpickr" data-date-format="d M, Y"
-                                                                required="" placeholder="Select date">
-                                                            <div class="invalid-feedback">Please select a date.</div>
+                                                            <label for="address-field" class="form-label">Address</label>
+                                                            <input type="text" id="address-field" class="form-control"
+                                                               required="">
+                                                            <div class="invalid-feedback">Please enter address.</div>
+                                                        </div>
+
+                                                        <div class="row gy-4 mb-3">
+                                                            <div class="col-md-6">
+                                                                <label for="city-field" class="form-label">City</label>
+                                                                <input type="text" id="city-field"
+                                                                    class="form-control"
+                                                                    required="">
+                                                                <div class="invalid-feedback">Please enter a city.
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="province-field" class="form-label">Province</label>
+                                                                <input type="text" id="province-field"
+                                                                    class="form-control"
+                                                                    required="">
+                                                                <div class="invalid-feedback">Please enter a province.
+                                                                </div>
+                                                            </div>
                                                         </div>
 
                                                         <div>
@@ -255,9 +272,9 @@
                                                         <div class="hstack gap-2 justify-content-end">
                                                             <button type="button" class="btn btn-light"
                                                                 data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-success"
-                                                                id="add-btn">Add Customer</button>
-                                                            <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
+                                                            <!-- <button type="submit" class="btn btn-success"
+                                                                id="add-btn">Edit Customer</button> -->
+                                                            <button type="button" class="btn btn-success" id="edit-btn">Update</button>
                                                         </div>
                                                     </div>
                                                 </form>
