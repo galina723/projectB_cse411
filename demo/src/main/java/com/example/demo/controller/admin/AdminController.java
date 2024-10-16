@@ -19,6 +19,11 @@ public class AdminController {
         return ("admin/apps-ecommerce-add-product");
     }
 
+    @GetMapping("apps-ecommerce-edit-product")
+    public String editproduct() {
+        return ("admin/apps-ecommerce-edit-product");
+    }
+
     @GetMapping("apps-ecommerce-blog-details")
     public String blogdetail() {
         return ("admin/apps-ecommerce-blog-details");
