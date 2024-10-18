@@ -2,8 +2,9 @@ package com.example.demo.repository;
 
 import com.example.demo.model.products;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+//import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface productrepository extends JpaRepository<products, String> {
+public interface productrepository extends CrudRepository<products, String> {
     
 }

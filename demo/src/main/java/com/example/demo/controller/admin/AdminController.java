@@ -8,21 +8,27 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.demo.model.products;
+import com.example.demo.model.*;
+import com.example.demo.repository.customerrepository;
 import com.example.demo.repository.productrepository;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-    @Autowired private productrepository productrepo;
+    @Autowired
+    customerrepository customerrepo;
+
+    @Autowired
+    productrepository productrepo;  
+
+
 
     @GetMapping("index")
     public String dashboard() {
         return ("admin/index");
     }
 
-    
     @GetMapping("apps-ecommerce-add-product")
     public String addproduct() {
         return ("admin/apps-ecommerce-add-product");
@@ -54,7 +60,10 @@ public class AdminController {
     }
 
     @GetMapping("apps-ecommerce-customers")
-    public String customers() {
+    public String customers(Model model) {
+
+        List<customers> customers = (List<customers>) customerrepo.findAll();
+        model.addAttribute("customers", customers);
         return ("admin/apps-ecommerce-customers");
     }
 
@@ -73,11 +82,10 @@ public class AdminController {
         return ("admin/apps-ecommerce-product-details");
     }
 
-    
     @GetMapping("apps-ecommerce-products")
-    public String product(Model model) {
-        List<products> products = productrepo.findAll();
-        System.out.println(products); // Log the products to see if data is fetched
+    public String products(Model model) {
+
+        List<products> products = (List<products>) productrepo.findAll();
         model.addAttribute("products", products);
         return ("admin/apps-ecommerce-products");
     }
