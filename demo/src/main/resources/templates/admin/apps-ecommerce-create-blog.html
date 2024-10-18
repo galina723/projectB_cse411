@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
-    data-sidebar-image="none" data-preloader="disable" xmlns:th="http://www.thymeleaf.org">
+      data-sidebar-image="none" data-preloader="disable" xmlns:th="http://www.thymeleaf.org">
 
 
 <head th:replace="admin/layout :: pageHead('Create Blog')">
@@ -9,158 +9,158 @@
 
 <body>
 
-    <div th:replace="admin/layout :: body">
-        <section th:fragment="mainContent">
-            <div class="page-content">
-                <div class="container-fluid">
-                    <!-- start page title -->
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                <h4 class="mb-sm-0">Create Blog</h4>
-                            </div>
+<div th:replace="admin/layout :: body">
+    <section th:fragment="mainContent">
+        <div class="page-content">
+            <div class="container-fluid">
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">Create Blog</h4>
                         </div>
                     </div>
-                    <!-- end page title -->
-                    <form id="createblog-form" autocomplete="off" class="needs-validation" novalidate="">
-                        <div class="row">
-                            <div class="col-lg-8">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="blog-title-input">Blog ID</label>
-                                            <input type="hidden" class="form-control" id="formAction" name="formAction"
-                                                value="add">
-                                            <input type="text" class="form-control d-none" id="blog-id-input">
-                                            <input type="text" class="form-control" id="blog-title-input" value=""
-                                                placeholder="Enter blog ID" required="">
-                                            <div class="invalid-feedback">Please Enter a blog ID.</div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="blog-title-input">Title</label>
-                                            <input type="hidden" class="form-control" id="formAction" name="formAction"
-                                                value="add">
-                                            <input type="text" class="form-control d-none" id="blog-id-input">
-                                            <input type="text" class="form-control" id="blog-title-input" value=""
-                                                placeholder="Enter blog title" required="">
-                                            <div class="invalid-feedback">Please Enter a blog title.</div>
-                                        </div>
-                                        <div>
-                                            <label>Description</label>
+                </div>
+                <!-- end page title -->
+                <form id="createblog-form" autocomplete="off" class="needs-validation" novalidate="">
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="blog-title-input">Blog ID</label>
+                                        <input type="hidden" class="form-control" id="formAction" name="formAction"
+                                               value="add">
+                                        <input type="text" class="form-control d-none" id="blog-id-input">
+                                        <input type="text" class="form-control" id="blog-title-input" value=""
+                                               placeholder="Enter blog ID" required="">
+                                        <div class="invalid-feedback">Please Enter a blog ID.</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="blog-title-input">Title</label>
+                                        <input type="hidden" class="form-control" id="formAction" name="formAction"
+                                               value="add">
+                                        <input type="text" class="form-control d-none" id="blog-id-input">
+                                        <input type="text" class="form-control" id="blog-title-input" value=""
+                                               placeholder="Enter blog title" required="">
+                                        <div class="invalid-feedback">Please Enter a blog title.</div>
+                                    </div>
+                                    <div>
+                                        <label>Description</label>
 
-                                            <div id="ckeditor-classic" style="display: none;">
+                                        <div id="ckeditor-classic" style="display: none;">
 
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- end card -->
+                            </div>
+                            <!-- end card -->
 
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title mb-0">Blog Gallery</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="mb-4">
-                                            <h5 class="fs-14 mb-1">Blog Image</h5>
-                                            <p class="text-muted">Add Image.</p>
-                                            <div class="text-center">
-                                                <div class="position-relative d-inline-block">
-                                                    <div class="position-absolute top-100 start-100 translate-middle">
-                                                        <label for="product-image-input" class="mb-0"
-                                                            data-bs-toggle="tooltip" data-bs-placement="right"
-                                                            aria-label="Select Image"
-                                                            data-bs-original-title="Select Image">
-                                                            <div class="avatar-xs">
-                                                                <div
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Blog Gallery</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-4">
+                                        <h5 class="fs-14 mb-1">Blog Image</h5>
+                                        <p class="text-muted">Add Image.</p>
+                                        <div class="text-center">
+                                            <div class="position-relative d-inline-block">
+                                                <div class="position-absolute top-100 start-100 translate-middle">
+                                                    <label for="product-image-input" class="mb-0"
+                                                           data-bs-toggle="tooltip" data-bs-placement="right"
+                                                           aria-label="Select Image"
+                                                           data-bs-original-title="Select Image">
+                                                        <div class="avatar-xs">
+                                                            <div
                                                                     class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
-                                                                    <i class="ri-image-fill"></i>
-                                                                </div>
+                                                                <i class="ri-image-fill"></i>
                                                             </div>
-                                                        </label>
-                                                        <input class="form-control d-none" value=""
-                                                            id="product-image-input" type="file"
-                                                            accept="image/png, image/gif, image/jpeg">
-                                                    </div>
-                                                    <div class="avatar-lg">
-                                                        <div class="avatar-title bg-light rounded">
-                                                            <img src="#" id="product-img" class="avatar-md h-auto">
                                                         </div>
+                                                    </label>
+                                                    <input class="form-control d-none" value=""
+                                                           id="product-image-input" type="file"
+                                                           accept="image/png, image/gif, image/jpeg">
+                                                </div>
+                                                <div class="avatar-lg">
+                                                    <div class="avatar-title bg-light rounded">
+                                                        <img src="#" id="product-img" class="avatar-md h-auto">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        
                                     </div>
-                                </div>
-                                <!-- end card -->
-                                <div class="text-end mb-3">
-                                    <button type="submit" class="btn btn-success w-sm">Submit</button>
+
                                 </div>
                             </div>
-                            <!-- end col -->
-
-                            <div class="col-lg-4">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title mb-0">General Info</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="author-input">Author ID</label>
-                                            <input type="text" class="form-control" id="author-input"
-                                                placeholder="Enter an author id" required="">
-                                            <div class="invalid-feedback">Please Enter an author id.
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="tag-input">Tag</label>
-                                            <input type="text" class="form-control" id="tag-input"
-                                                placeholder="Enter tags" required="">
-                                            <div class="invalid-feedback">Please Enter tags.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- end card body -->
-                                </div>
-                                <!-- end card -->
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="card-title mb-0">Publish</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="mb-3">
-                                            <label for="choices-publish-status-input" class="form-label">Status</label>
-
-                                            <select class="form-select" id="choices-publish-status-input"
-                                                data-choices="" data-choices-search-false="">
-                                                <option value="Published" selected="">Published</option>
-                                                <option value="Scheduled">Scheduled</option>
-                                                <option value="Draft">Draft</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="datepicker-publish-input" class="form-label">Publish Date &amp;
-                                                Time</label>
-                                            <input type="text" id="datepicker-publish-input" class="form-control"
-                                                placeholder="Enter publish date" data-provider="flatpickr"
-                                                data-date-format="d.m.y" data-enable-time="">
-                                        </div>
-
-                                    </div>
-                                    <!-- end card body -->
-                                </div>
-                                <!-- end card -->
+                            <!-- end card -->
+                            <div class="text-end mb-3">
+                                <button type="submit" class="btn btn-success w-sm">Submit</button>
                             </div>
-                            <!-- end col -->
                         </div>
-                        <!-- end row -->
+                        <!-- end col -->
 
-                    </form>
-                </div>
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">General Info</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="author-input">Author ID</label>
+                                        <input type="text" class="form-control" id="author-input"
+                                               placeholder="Enter an author id" required="">
+                                        <div class="invalid-feedback">Please Enter an author id.
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="tag-input">Tag</label>
+                                        <input type="text" class="form-control" id="tag-input"
+                                               placeholder="Enter tags" required="">
+                                        <div class="invalid-feedback">Please Enter tags.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end card body -->
+                            </div>
+                            <!-- end card -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">Publish</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="choices-publish-status-input" class="form-label">Status</label>
+
+                                        <select class="form-select" id="choices-publish-status-input"
+                                                data-choices="" data-choices-search-false="">
+                                            <option value="Published" selected="">Published</option>
+                                            <option value="Scheduled">Scheduled</option>
+                                            <option value="Draft">Draft</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="datepicker-publish-input" class="form-label">Publish Date &amp;
+                                            Time</label>
+                                        <input type="text" id="datepicker-publish-input" class="form-control"
+                                               placeholder="Enter publish date" data-provider="flatpickr"
+                                               data-date-format="d.m.y" data-enable-time="">
+                                    </div>
+
+                                </div>
+                                <!-- end card body -->
+                            </div>
+                            <!-- end card -->
+                        </div>
+                        <!-- end col -->
+                    </div>
+                    <!-- end row -->
+
+                </form>
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
+</div>
 
 </body>
 

@@ -559,11 +559,14 @@
 
                                         <div class="notification-actions" id="notification-actions">
                                             <div class="d-flex text-muted justify-content-center">
-                                                Select <div id="select-content" class="text-body fw-semibold px-1">0
+                                                Select
+                                                <div id="select-content" class="text-body fw-semibold px-1">0
                                                 </div>
-                                                Result <button type="button" class="btn btn-link link-danger p-0 ms-3"
+                                                Result
+                                                <button type="button" class="btn btn-link link-danger p-0 ms-3"
                                                     data-bs-toggle="modal"
-                                                    data-bs-target="#removeNotificationModal">Remove</button>
+                                                    data-bs-target="#removeNotificationModal">Remove
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -622,7 +625,8 @@
                             <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                                 <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
                                 <button type="button" class="btn w-sm btn-danger" id="delete-notification">Yes, Delete
-                                    It!</button>
+                                    It!
+                                </button>
                             </div>
                         </div>
 
@@ -748,7 +752,6 @@
         <div class="main-content">
 
 
-
             <main>
                 <section th:insert="~{::mainContent}"></section>
             </main>
@@ -756,7 +759,8 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-sm-6">
-                            <script>document.write(new Date().getFullYear())</script> © Liora.
+                            <script>document.write(new Date().getFullYear())</script>
+                            © Liora.
                         </div>
                         <div class="col-sm-6">
                             <div class="text-sm-end d-none d-sm-block">
@@ -810,7 +814,8 @@
 
         <script th:src="@{/admin/assets/js/pages/ecommerce-product-create.init.js}"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-        <script type="text/javascript" th:src="@{/admin/assets/libs/choices.js/public/assets/scripts/choices.min.js}"></script>
+        <script type="text/javascript"
+            th:src="@{/admin/assets/libs/choices.js/public/assets/scripts/choices.min.js}"></script>
         <script type="text/javascript" th:src="@{/admin/assets/libs/flatpickr/flatpickr.min.js}"></script>
         <script th:src="@{assets/js/pages/ecommerce-product-details.init.js}"></script>
 
