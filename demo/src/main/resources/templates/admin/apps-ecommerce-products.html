@@ -3,13 +3,13 @@
     data-sidebar-image="none" data-preloader="disable" xmlns:th="http://www.thymeleaf.org">
 
 
-<head th:replace="admin/layout :: pageHead('Products')">
+<head th:replace="~{admin/layout :: pageHead('Products')}">
 
 </head>
 
 <body>
 
-    <div th:replace="admin/layout :: body">
+    <div th:replace="~{admin/layout :: body}">
         <section th:fragment="mainContent">
             <div class="page-content">
                 <div class="container-fluid">
@@ -46,7 +46,8 @@
 
                                                 <button type="button" class="btn btn-info"><i
                                                         class="ri-file-download-line align-bottom me-1"></i>
-                                                    Export</button>
+                                                    Export
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -90,8 +91,9 @@
                                                     <div class="col-sm-4">
                                                         <div>
                                                             <button type="button" class="btn btn-primary w-100"
-                                                                onclick="SearchData();"> <i
-                                                                    class="ri-equalizer-fill me-2 align-bottom"></i>Filters</button>
+                                                                onclick="SearchData();"><i
+                                                                    class="ri-equalizer-fill me-2 align-bottom"></i>Filters
+                                                            </button>
                                                         </div>
                                                     </div>
                                                     <!--end col-->
@@ -126,23 +128,25 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody class="list form-check-all">
-                                                    <tr>
-                                                        <th scope="row">
+                                                    <tr th:each="product : ${products}">
+                                                        <td scope="row">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
                                                                     name="chk_child" value="option1">
                                                             </div>
-                                                        </th>
-                                                        <td class="id"><a
-                                                                href="/admin/apps-ecommerce-product-details">A001</a>
                                                         </td>
-                                                        <td class="name">Hadalabo</td>
-                                                        <td class="image"></td>
-                                                        <td class="category">Skin care</td>
-                                                        <td class="description">lorem ipsum dolor sit amet</td>
-                                                        <td class="price">20</td>
-                                                        <td class="quantity">500</td>
-                                                        <td class="date">15 Oct, 2024</td>
+                                                        <td class="id">
+                                                            <a th:href="@{/admin/apps-ecommerce-product-details/{id}(id=${product.id})}">[[${product.id}]]</a>
+                                                        </td>
+                                                        <td class="name" th:text="${product.name}"></td>
+                                                        <td class="image">
+                                                            <img th:src="@{'/path/to/images/' + ${product.mainimage}}" alt="Product Image" />
+                                                        </td>
+                                                        <td class="category" th:text="${product.category}"></td>
+                                                        <td class="description" th:text="${product.description}"></td>
+                                                        <td class="price" th:text="'$' + ${product.price}"></td>
+                                                        <td class="quantity" th:text="${product.quantity}"></td>
+                                                        <td class="date" th:text="${product.createtime}"></td>
                                                         <td class="status"><span
                                                                 class="badge bg-success-subtle text-success text-uppercase">Active</span>
                                                         </td>
@@ -221,9 +225,11 @@
                                                     </div>
                                                     <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                                                         <button type="button" class="btn w-sm btn-light"
-                                                            data-bs-dismiss="modal">Close</button>
+                                                            data-bs-dismiss="modal">Close
+                                                        </button>
                                                         <button type="button" class="btn w-sm btn-danger"
-                                                            id="delete-record">Yes, Delete It!</button>
+                                                            id="delete-record">Yes, Delete It!
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>

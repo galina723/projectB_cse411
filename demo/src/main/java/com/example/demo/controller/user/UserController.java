@@ -12,15 +12,17 @@ public class UserController {
     public String index() {
         return "user/index";
     }
+
     @GetMapping("register")
     public String register() {
         return "user/register";
     }
+
     @GetMapping("404")
     public String error() {
         return "user/404";
     }
-    
+
     @GetMapping("about")
     public String about() {
         return "user/about";
