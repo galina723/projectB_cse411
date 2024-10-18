@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "product")
-public class products {
+public class Products {
 
     @Id
     @Column(name = "id", length = 10, nullable = false)

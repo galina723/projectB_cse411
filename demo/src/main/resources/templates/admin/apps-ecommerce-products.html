@@ -129,18 +129,18 @@
                                                 </thead>
                                                 <tbody class="list form-check-all">
                                                     <tr th:each="product : ${products}">
-                                                        <td scope="row">
+                                                        <td>
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
                                                                     name="chk_child" value="option1">
                                                             </div>
                                                         </td>
                                                         <td class="id">
-                                                            <a th:href="@{/admin/apps-ecommerce-product-details/{id}(id=${product.id})}">[[${product.id}]]</a>
+                                                            <a th:text="${product.ProductId}"></a>
                                                         </td>
-                                                        <td class="name" th:text="${product.name}"></td>
+                                                        <td class="name" th:text="${product.ProductName}"></td>
                                                         <td class="image">
-                                                            <img th:src="@{'/path/to/images/' + ${product.mainimage}}" alt="Product Image" />
+                                                            <img th:text="${product.mainimage}" alt="Product Image" />
                                                         </td>
                                                         <td class="category" th:text="${product.category}"></td>
                                                         <td class="description" th:text="${product.description}"></td>
