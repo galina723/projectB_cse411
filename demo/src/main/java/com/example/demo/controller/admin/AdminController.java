@@ -8,7 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.demo.model.Products;
+import com.example.demo.model.*;
+import com.example.demo.repository.customerrepository;
 import com.example.demo.repository.productrepository;
 
 @Controller
@@ -16,7 +17,12 @@ import com.example.demo.repository.productrepository;
 public class AdminController {
 
     @Autowired
-    private productrepository productrepo;
+    customerrepository customerrepo;
+
+    @Autowired
+    productrepository productrepo;  
+
+
 
     @GetMapping("index")
     public String dashboard() {
@@ -54,7 +60,10 @@ public class AdminController {
     }
 
     @GetMapping("apps-ecommerce-customers")
-    public String customers() {
+    public String customers(Model model) {
+
+        List<customers> customers = (List<customers>) customerrepo.findAll();
+        model.addAttribute("customers", customers);
         return ("admin/apps-ecommerce-customers");
     }
 
@@ -74,13 +83,9 @@ public class AdminController {
     }
 
     @GetMapping("apps-ecommerce-products")
-    public String product(Model model) {
-        List<Products> products = productrepo.findAll();
-        if (products.isEmpty()) {
-            System.out.println("No products found!");
-        } else {
-            System.out.println("Products found: " + products.size());
-        }
+    public String products(Model model) {
+
+        List<products> products = (List<products>) productrepo.findAll();
         model.addAttribute("products", products);
         return ("admin/apps-ecommerce-products");
     }
