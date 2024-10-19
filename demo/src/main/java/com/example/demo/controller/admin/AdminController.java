@@ -1,3 +1,4 @@
+
 package com.example.demo.controller.admin;
 
 import java.util.List;
@@ -9,7 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.model.*;
+import com.example.demo.repository.adminrepository;
+import com.example.demo.repository.blogrepository;
 import com.example.demo.repository.customerrepository;
+import com.example.demo.repository.orderrepository;
 import com.example.demo.repository.productrepository;
 
 @Controller
@@ -21,6 +25,15 @@ public class AdminController {
 
     @Autowired
     productrepository productrepo;  
+
+    @Autowired
+    orderrepository orderrepo;
+
+    @Autowired
+    adminrepository adminrepo;
+
+    @Autowired
+    blogrepository blogrepo;
 
 
 
@@ -45,7 +58,10 @@ public class AdminController {
     }
 
     @GetMapping("apps-ecommerce-blog")
-    public String blog() {
+    public String blog(Model model) {
+
+        List<blogs> blogs = (List<blogs>) blogrepo.findAll();
+        model.addAttribute("blogs", blogs);
         return ("admin/apps-ecommerce-blog");
     }
 
@@ -96,7 +112,10 @@ public class AdminController {
     }
 
     @GetMapping("apps-ecommerce-sellers")
-    public String sellers() {
+    public String sellers(Model model) {
+
+        List<admin> admins = (List<admin>) adminrepo.findAll();
+        model.addAttribute("admins", admins);
         return ("admin/apps-ecommerce-sellers");
     }
 
