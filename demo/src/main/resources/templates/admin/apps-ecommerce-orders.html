@@ -97,7 +97,7 @@
                             <div class="card-body">
                                 <div>
                                     <div class="table-responsive table-card mb-1">
-                                        <table class="table align-middle" id="orderTable">
+                                        <table class="table align-middle" id="orderTable" >
                                             <thead class="text-muted table-light">
                                             <th scope="col" style="width: 25px;">
                                                 <div class="form-check">
@@ -118,7 +118,7 @@
                                             <th class="sort" data-sort="action">Action</th>
                                             </thead>
                                             <tbody class="list form-check-all">
-                                            <tr>
+                                            <tr th:each="order : ${orders}">
                                                 <th scope="row">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox"
@@ -126,17 +126,17 @@
                                                     </div>
                                                 </th>
                                                 <td class="id"><a href="/admin/apps-ecommerce-order-details"
-                                                                  class="fw-medium link-primary">B001</a></td>
-                                                <td class="customerid">CUS-A0001</td>
-                                                <td class="date">20 Dec, 2021</td>
-                                                <td class="address">Nam Kỳ Khởi Nghĩa, Định Hòa</td>
-                                                <td class="city">Thủ Dầu Một</td>
-                                                <td class="province">Bình Dương</td>
-                                                <td class="note">Lorem ipsum dolor sit amet</td>
-                                                <td class="amount">$654.45</td>
-                                                <td class="payment">COD</td>
+                                                                  class="fw-medium link-primary"></a></td>
+                                                <td class="customerid">[[${order.Customer.CustomerId}]]</td>
+                                                <td class="date">[[${order.OrderDate}]]</td>
+                                                <td class="address">[[${order.OrderAddress}]]</td>
+                                                <td class="city">[[${order.OrderCity}]]</td>
+                                                <td class="province">[[${order.OrderProvince}]]</td>
+                                                <td class="note">[[${order.OrderNote}]]</td>
+                                                <td class="amount">[[${order.OrderAmount}]]</td>
+                                                <td class="payment">[[${order.OrderPaymentMethod}]]</td>
                                                 <td class="status"><span
-                                                        class="badge bg-warning-subtle text-warning text-uppercase">Pending</span>
+                                                        class="badge bg-warning-subtle text-warning text-uppercase">[[${order.OrderStatus}]]</span>
                                                 </td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
