@@ -10,11 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.model.*;
-import com.example.demo.repository.adminrepository;
-import com.example.demo.repository.blogrepository;
-import com.example.demo.repository.customerrepository;
-import com.example.demo.repository.orderrepository;
-import com.example.demo.repository.productrepository;
+import com.example.demo.repository.*;
 
 @Controller
 @RequestMapping("/admin")

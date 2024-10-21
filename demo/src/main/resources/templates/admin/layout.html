@@ -17,7 +17,10 @@
 
     <!--Swiper slider css-->
     <link th:href="@{/admin/assets/libs/swiper/swiper-bundle.min.css}" rel="stylesheet" type="text/css" />
-
+    <!-- nouislider css-->
+    <link rel="stylesheet" th:href="@{/admin/assets/libs/nouislider/nouislider.min.css}">
+    <!-- gridjs css-->
+    <link rel="stylesheet" th:href="@{/admin/assets/libs/gridjs/theme/mermaid.min.css}">
     <!-- Layout config Js -->
     <script th:src="@{/admin/assets/js/layout.js}"></script>
     <!-- Bootstrap Css -->
@@ -28,7 +31,8 @@
     <link th:href="@{/admin/assets/css/app.min.css}" rel="stylesheet" type="text/css" />
     <!-- custom Css-->
     <link th:href="@{/admin/assets/css/custom.min.css}" rel="stylesheet" type="text/css" />
-
+    <!-- sweet alert css-->
+    <link th:href="@{/admin/assets/libs/sweetalert2/sweetalert2.min.css}" rel="stylesheet" type="text/css">
 
     <!-- Plugins css -->
     <link th:href="@{/admin/assets/libs/dropzone/dropzone.css}" rel="stylesheet" type="text/css" />
@@ -788,6 +792,10 @@
         <script th:src="@{/admin/assets/libs/feather-icons/feather.min.js}"></script>
         <script th:src="@{/admin/assets/js/pages/plugins/lord-icon-2.1.0.js}"></script>
         <script th:src="@{/admin/assets/js/plugins.js}"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+        <script type="text/javascript"
+            th:src="@{/admin/assets/libs/choices.js/public/assets/scripts/choices.min.js}"></script>
+        <script type="text/javascript" th:src="@{/admin/assets/libs/flatpickr/flatpickr.min.js}"></script>
 
         <!-- apexcharts -->
         <script th:src="@{/admin/assets/libs/apexcharts/apexcharts.min.js}"></script>
@@ -805,6 +813,9 @@
         <!-- App js -->
         <script th:src="@{/admin/assets/js/app.js}"></script>
 
+        <!-- nouislider js-->
+        <script th:src="@{/admin/assets/libs/nouislider/nouislider.min.js}"></script>
+        <script th:src="@{/admin/assets/libs/wnumb/wNumb.min.js}"></script>
 
         <!-- ckeditor -->
         <script th:src="@{/admin/assets/libs/%40ckeditor/ckeditor5-build-classic/build/ckeditor.js}"></script>
@@ -812,12 +823,21 @@
         <!-- dropzone js -->
         <script th:src="@{/admin/assets/libs/dropzone/dropzone-min.js}"></script>
 
+        <!-- gridjs js -->
+        <script th:src="@{/admin/assets/libs/gridjs/gridjs.umd.js}"></script>
+        <script th:src="@{/admin/unpkg.com/gridjs%406.2.0/plugins/selection/dist/selection.umd.js}"></script>
+
+        <!-- list js-->
+        <script th:src="@{/admin/assets/libs/list.js/list.min.js}"></script>
+        <script th:src="@{/admin/assets/libs/list.pagination.js/list.pagination.min.js}"></script>
+
+        <!-- sweer alert js-->
+        <script th:src="@{/admin/assets/libs/sweetalert2/sweetalert2.min.js}"></script>
+
         <script th:src="@{/admin/assets/js/pages/ecommerce-product-create.init.js}"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-        <script type="text/javascript"
-            th:src="@{/admin/assets/libs/choices.js/public/assets/scripts/choices.min.js}"></script>
-        <script type="text/javascript" th:src="@{/admin/assets/libs/flatpickr/flatpickr.min.js}"></script>
-        <script th:src="@{assets/js/pages/ecommerce-product-details.init.js}"></script>
+        <script th:src="@{/admin/assets/js/pages/ecommerce-product-list.init.js}"></script>
+        <script th:src="@{/admin/assets/js/pages/ecommerce-product-details.init.js}"></script>
+        <script th:src="@{/admin/assets/js/pages/ecommerce-customer-list.init.js}"></script>
 
     </div>
 </body>
