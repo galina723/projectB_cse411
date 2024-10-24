@@ -2,6 +2,8 @@ package com.example.demo.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -10,8 +12,9 @@ import jakarta.persistence.Table;
 public class customers {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", length = 10, nullable = false)
-    private String CustomerId;
+    private int CustomerId;
 
     @Column(name = "email", length = 50, nullable = false)
     private String CustomerEmail;
@@ -37,11 +40,11 @@ public class customers {
     @Column(name = "status", length = 50, nullable = false)
     private String CustomerStatus;
 
-    public String getCustomerId() {
+    public int getCustomerId() {
         return CustomerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(int customerId) {
         CustomerId = customerId;
     }
 

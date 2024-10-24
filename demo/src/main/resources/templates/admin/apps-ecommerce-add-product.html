@@ -23,7 +23,9 @@
                     </div>
                     <!-- end page title -->
 
-                    <form id="createproduct-form" autocomplete="off" class="needs-validation" novalidate="">
+                    <form id="createproduct-form" autocomplete="off" class="needs-validation" novalidate=""
+                        method="post" enctype="multipart/form-data" th:object="${productsdto}"
+                        th:action="@{/admin/apps-ecommerce-add-product/save}">
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="card">
@@ -34,7 +36,7 @@
                                                 value="add">
                                             <input type="text" class="form-control d-none" id="product-id-input">
                                             <input type="text" class="form-control" id="product-title-input" value=""
-                                                placeholder="Enter product ID" required="">
+                                                placeholder="Enter product ID" required="" th:field="*{ProductId}">
                                             <div class="invalid-feedback">Please Enter a product ID.</div>
                                         </div>
                                         <div class="mb-3">
@@ -43,15 +45,14 @@
                                                 value="add">
                                             <input type="text" class="form-control d-none" id="product-id-input">
                                             <input type="text" class="form-control" id="product-title-input" value=""
-                                                placeholder="Enter product title" required="">
+                                                placeholder="Enter product title" required="" th:field="*{ProductName}">
                                             <div class="invalid-feedback">Please Enter a product title.</div>
                                         </div>
                                         <div>
-                                            <label>Product Description</label>
-
-                                            <div id="ckeditor-classic" style="display: none;">
-
-                                            </div>
+                                            <label for="product-description-input">Product Description</label>
+                                            <textarea id="product-description-input" name="description"
+                                                class="form-control" placeholder="Enter product description" required=""
+                                                th:field="*{ProductDescription}"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -81,7 +82,8 @@
                                                         </label>
                                                         <input class="form-control d-none" value=""
                                                             id="product-image-input" type="file"
-                                                            accept="image/png, image/gif, image/jpeg">
+                                                            accept="image/png, image/gif, image/jpeg"
+                                                            th:field="*{ProductMainImage}">
                                                     </div>
                                                     <div class="avatar-lg">
                                                         <div class="avatar-title bg-light rounded">
@@ -96,7 +98,6 @@
                                             <p class="text-muted">Add Product Gallery Images.</p>
 
                                             <div class="dropzone dz-clickable">
-
                                                 <div class="dz-message needsclick">
                                                     <div class="mb-3">
                                                         <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
@@ -113,6 +114,7 @@
                                                         <div class="d-flex p-2">
                                                             <div class="flex-shrink-0 me-3">
                                                                 <div class="avatar-sm bg-light rounded">
+                                                                    <!-- Display image thumbnail -->
                                                                     <img data-dz-thumbnail
                                                                         class="img-fluid rounded d-block" src="#"
                                                                         alt="Product-Image" />
@@ -134,8 +136,14 @@
                                                     </div>
                                                 </li>
                                             </ul>
-                                            <!-- end dropzon-preview -->
+
+                                            <!-- Add the input field for uploading multiple files -->
+                                            <input class="form-control" type="file" id="product-gallery-input"
+                                                name="ProductOtherImages" multiple
+                                                accept="image/png, image/gif, image/jpeg"
+                                                th:field="*{ProductOtherImages}" />
                                         </div>
+
                                     </div>
                                 </div>
                                 <!-- end card -->
@@ -154,7 +162,7 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="stocks-input">Quantity</label>
                                             <input type="text" class="form-control" id="stocks-input"
-                                                placeholder="Stocks" required="">
+                                                placeholder="Stocks" required="" th:field="*{ProductQuantity}">
                                             <div class="invalid-feedback">Please Enter a product stocks.
                                             </div>
                                         </div>
@@ -164,7 +172,8 @@
                                                 <span class="input-group-text" id="product-price-addon">$</span>
                                                 <input type="text" class="form-control" id="product-price-input"
                                                     placeholder="Enter price" aria-label="Price"
-                                                    aria-describedby="product-price-addon" required="">
+                                                    aria-describedby="product-price-addon" required=""
+                                                    th:field="*{ProductPrice}">
                                                 <div class="invalid-feedback">Please Enter a product
                                                     price.
                                                 </div>
@@ -190,11 +199,11 @@
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="datepicker-publish-input" class="form-label">Publish Date &amp;
+                                            <label for="datepicker-publish-input" class="form-label">Publish Date &
                                                 Time</label>
                                             <input type="text" id="datepicker-publish-input" class="form-control"
                                                 placeholder="Enter publish date" data-provider="flatpickr"
-                                                data-date-format="d.m.y" data-enable-time="">
+                                                data-date-format="y.m.d" data-enable-time="">
                                         </div>
 
                                     </div>
@@ -209,15 +218,23 @@
                                     <div class="card-body">
                                         <p class="text-muted mb-2">Select product category</p>
                                         <select class="form-select" id="choices-category-input"
-                                            name="choices-category-input" data-choices="" data-choices-search-false="">
-                                            <option value="Appliances">Appliances</option>
-                                            <option value="Automotive Accessories">Automotive Accessories</option>
-                                            <option value="Electronics">Electronics</option>
-                                            <option value="Fashion">Fashion</option>
-                                            <option value="Furniture">Furniture</option>
-                                            <option value="Grocery">Grocery</option>
-                                            <option value="Kids">Kids</option>
-                                            <option value="Watches">Watches</option>
+                                            name="choices-category-input" data-choices="" th:field="*{ProductCategory}"
+                                            data-choices-search-false="">
+                                            <option value="Lipstick">Lipstick</option>
+                                            <option value="Mascara">Mascara</option>
+                                            <option value="Foundation">Foundation</option>
+                                            <option value="Concealer">Concealer</option>
+                                            <option value="Blush">Blush</option>
+                                            <option value="Perfume">Perfume</option>
+                                            <option value="Cleanser">Cleanser</option>
+                                            <option value="Moisturizer">Moisturizer</option>
+                                            <option value="Sunscreen">Sunscreen</option>
+                                            <option value="Exfoliant">Exfoliant</option>
+                                            <option value="Toner">Toner</option>
+                                            <option value="Shampoo">Shampoo</option>
+                                            <option value="Lotion">Lotion</option>
+                                            <option value="Conditioner">Conditioner</option>
+                                            <option value="Deodorant">Deodorant</option>
                                         </select>
                                     </div>
                                     <!-- end card body -->
@@ -232,6 +249,16 @@
             </div>
         </section>
     </div>
+    <script>
+        // Get the current date
+        const currentDate = new Date();
+
+        // Format the date as 'dd.mm.yyyy'
+        const formattedDate = currentDate.toLocaleDateString('en-GB').split('/').join('.');
+
+        // Set the value of the input field
+        document.getElementById('datepicker-publish-input').value = formattedDate;
+    </script>
 
 </body>
 

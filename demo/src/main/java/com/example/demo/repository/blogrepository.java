@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.example.demo.model.blogs;
 
-public interface blogrepository extends CrudRepository<blogs, String> {
+public interface blogrepository extends CrudRepository<blogs, Integer> {
 
 }

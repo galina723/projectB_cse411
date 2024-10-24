@@ -8,7 +8,9 @@
 </head>
 
 <body>
-
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <span th:text="${successMessage}"></span>
+    </div>
     <div th:replace="admin/layout :: body">
         <section th:fragment="mainContent">
             <div class="page-content">
@@ -34,7 +36,8 @@
                                                 value="add">
                                             <input type="text" class="form-control d-none" id="product-id-input">
                                             <input type="text" class="form-control" id="product-title-input" value=""
-                                                placeholder="Enter product ID" required="">
+                                                placeholder="Enter product ID" required=""
+                                                th:value="${product.ProductId}" readonly>
                                             <div class="invalid-feedback">Please Enter a product ID.</div>
                                         </div>
                                         <div class="mb-3">
@@ -43,16 +46,20 @@
                                                 value="add">
                                             <input type="text" class="form-control d-none" id="product-id-input">
                                             <input type="text" class="form-control" id="product-title-input" value=""
-                                                placeholder="Enter product title" required="">
+                                                placeholder="Enter product title" required=""
+                                                th:value="${product.ProductName}">
                                             <div class="invalid-feedback">Please Enter a product title.</div>
                                         </div>
-                                        <div>
-                                            <label>Product Description</label>
-
-                                            <div id="ckeditor-classic" style="display: none;">
-
-                                            </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="product-description-input">Product
+                                                Description</label>
+                                            <textarea id="product-description-input"
+                                                name="productDescription.description" class="form-control"
+                                                placeholder="Enter product description" required=""
+                                                th:text="${product.ProductDescription}"></textarea>
+                                            <div class="invalid-feedback">Please enter a product description.</div>
                                         </div>
+
                                     </div>
                                 </div>
                                 <!-- end card -->
@@ -80,12 +87,13 @@
                                                             </div>
                                                         </label>
                                                         <input class="form-control d-none" value=""
-                                                            id="product-image-input" type="file"
-                                                            accept="image/png, image/gif, image/jpeg">
+                                                            id="product-image-input" type="file" name="ProductMainImage"
+                                                            accept="image/png, image/gif, image/jpeg" required>
                                                     </div>
                                                     <div class="avatar-lg">
                                                         <div class="avatar-title bg-light rounded">
-                                                            <img src="#" id="product-img" class="avatar-md h-auto">
+                                                            <img th:src="@{'/images/'+${product.ProductMainImage}}"
+                                                                id="product-img" class="avatar-md h-auto">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -154,7 +162,7 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="stocks-input">Quantity</label>
                                             <input type="text" class="form-control" id="stocks-input"
-                                                placeholder="Stocks" required="">
+                                                placeholder="Stocks" required="" th:value="${product.ProductQuantity}">
                                             <div class="invalid-feedback">Please Enter a product stocks.
                                             </div>
                                         </div>
@@ -164,7 +172,8 @@
                                                 <span class="input-group-text" id="product-price-addon">$</span>
                                                 <input type="text" class="form-control" id="product-price-input"
                                                     placeholder="Enter price" aria-label="Price"
-                                                    aria-describedby="product-price-addon" required="">
+                                                    aria-describedby="product-price-addon" required=""
+                                                    th:value="${product.ProductPrice}">
                                                 <div class="invalid-feedback">Please Enter a product
                                                     price.
                                                 </div>
@@ -194,9 +203,9 @@
                                                 Time</label>
                                             <input type="text" id="datepicker-publish-input" class="form-control"
                                                 placeholder="Enter publish date" data-provider="flatpickr"
-                                                data-date-format="d.m.y" data-enable-time="">
+                                                data-date-format="yyyy-MM-dd" data-enable-time=""
+                                                th:value="${product.CreateTime}">
                                         </div>
-
                                     </div>
                                     <!-- end card body -->
                                 </div>

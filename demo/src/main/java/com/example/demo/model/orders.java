@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
@@ -11,15 +12,24 @@ import jakarta.persistence.*;
 public class orders {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", length = 10, nullable = false)
-    private String OrderId;
+    private int OrderId;
 
     @Column(name = "customerid", length = 10, nullable = false)
     private String CustomerId;
 
     @CreationTimestamp
     @Column(name = "date", nullable = false)
-    private LocalDateTime OrderDate;
+    private Date OrderDate;
+
+    public Date getOrderDate() {
+        return OrderDate;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        OrderDate = orderDate;
+    }
 
     @Column(name = "status", length = 50, nullable = false)
     private String OrderStatus;
@@ -42,11 +52,11 @@ public class orders {
     @Column(name = "province", length = 50, nullable = false)
     private String OrderProvince;
 
-    public String getOrderId() {
+    public int getOrderId() {
         return OrderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(int orderId) {
         OrderId = orderId;
     }
 
@@ -58,13 +68,7 @@ public class orders {
         CustomerId = customerId;
     }
 
-    public LocalDateTime getOrderDate() {
-        return OrderDate;
-    }
-
-    public void setOrderDate(LocalDateTime orderDate) {
-        OrderDate = orderDate;
-    }
+    
 
     public String getOrderStatus() {
         return OrderStatus;

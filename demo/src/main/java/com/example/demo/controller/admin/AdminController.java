@@ -1,21 +1,37 @@
-
 package com.example.demo.controller.admin;
 
+import java.nio.file.*;
+import java.util.*;
+import java.io.*;
+import java.sql.Date;
 import java.util.List;
 
+import org.hibernate.engine.jdbc.mutation.spi.BindingGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.*;
-import com.example.demo.repository.*;
+import com.example.demo.repository.adminrepository;
+import com.example.demo.repository.blogrepository;
+import com.example.demo.repository.customerrepository;
+import com.example.demo.repository.orderrepository;
+import com.example.demo.repository.productrepository;
+
+import jakarta.persistence.criteria.CriteriaBuilder.In;
+
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping("/admin")
@@ -41,15 +57,7 @@ public class AdminController {
         return ("admin/index");
     }
 
-    @GetMapping("apps-ecommerce-add-product")
-    public String addproduct() {
-        return ("admin/apps-ecommerce-add-product");
-    }
-
-    @GetMapping("apps-ecommerce-edit-product")
-    public String editproduct() {
-        return ("admin/apps-ecommerce-edit-product");
-    }
+    
 
     @GetMapping("apps-ecommerce-blog-details")
     public String blogdetail() {
@@ -65,7 +73,9 @@ public class AdminController {
     }
 
     @GetMapping("apps-ecommerce-create-blog")
-    public String createblog() {
+    public String createblog(Model model) {
+        productsdto productsdto = new productsdto();
+        model.addAttribute("productsdto", productsdto);
         return ("admin/apps-ecommerce-create-blog");
     }
 
@@ -99,23 +109,10 @@ public class AdminController {
 
     @GetMapping("apps-ecommerce-products")
     public String products(Model model) {
+
         List<products> products = (List<products>) productrepo.findAll();
         model.addAttribute("products", products);
         return ("admin/apps-ecommerce-products");
-    }
-
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
-        try {
-            productrepo.deleteById(id);
-            redirectAttributes.addFlashAttribute("successMessage", "Product deleted successfully!");
-        } catch (EmptyResultDataAccessException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Product not found or already deleted.");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while deleting the product.");
-        }
-
-        return "redirect:/admin/apps-ecommerce-products";
     }
 
     @GetMapping("apps-ecommerce-seller-details")
