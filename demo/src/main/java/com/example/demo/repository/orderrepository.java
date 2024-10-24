@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.example.demo.model.orders;
 
-public interface orderrepository extends CrudRepository<orders, String> {
+public interface orderrepository extends CrudRepository<orders, Integer> {
     
 }

@@ -7,8 +7,9 @@ import jakarta.persistence.*;
 public class admin {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", length = 10, nullable = false)
-    private String AdminId;
+    private int AdminId;
 
     @Column(name = "email", length = 50, nullable = false)
     private String AdminEmail;
@@ -34,11 +35,11 @@ public class admin {
     @Column(name = "status", length = 50, nullable = false)
     private String AdminStatus;
 
-    public String getAdminId() {
+    public int getAdminId() {
         return AdminId;
     }
 
-    public void setAdminId(String AdminId) {
+    public void setAdminId(int AdminId) {
         AdminId = AdminId;
     }
 

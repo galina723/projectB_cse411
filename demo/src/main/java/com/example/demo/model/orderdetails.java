@@ -7,8 +7,9 @@ import jakarta.persistence.*;
 public class orderdetails {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "orderid", length = 10, nullable = false)
-    private String OrderId;
+    private int OrderId;
 
     @Column (name = "productid", length = 10, nullable = false)
     private String ProductId;
@@ -21,10 +22,10 @@ public class orderdetails {
 
     @Column (name = "coupon", length = 50, nullable = false)
     private String coupon;
-    public String getOrderId() {
+    public int getOrderId() {
         return OrderId;
     }
-    public void setOrderId(String orderId) {
+    public void setOrderId(int orderId) {
         OrderId = orderId;
     }
     public String getProductId() {

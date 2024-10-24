@@ -1,42 +1,26 @@
 package com.example.demo.model;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 
-import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.persistence.*;
+public class blogsdto {
 
-@Entity
-@Table(name = "blogs")
-public class blogs {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", length = 10, nullable = false)
     private int BlogId;
 
-    @Column(name = "title", length = 50, nullable = false)
     private String BlogTitle;
 
-    @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String BlogDescription;
 
-    @Column(name = "status", length = 50, nullable = false)
     private String BlogStatus;
 
-    @CreationTimestamp
-    @Column(name = "createtime", updatable = false)
     private Date BlogCreateDate;
 
-    @Column(name = "postby", length = 50, nullable = false)
     private String BlogPostBy;
 
-    @Column(name = "tag", length = 50, nullable = false)
     private String Blogtag;
 
-    @Column(name = "image", length = 2083, nullable = false)
-    private String BlogImage;
+    private MultipartFile BlogImage;
 
     public int getBlogId() {
         return BlogId;
@@ -48,14 +32,6 @@ public class blogs {
 
     public String getBlogTitle() {
         return BlogTitle;
-    }
-
-    public Date getBlogCreateDate() {
-        return BlogCreateDate;
-    }
-
-    public void setBlogCreateDate(Date blogCreateDate) {
-        BlogCreateDate = blogCreateDate;
     }
 
     public void setBlogTitle(String blogTitle) {
@@ -78,7 +54,13 @@ public class blogs {
         BlogStatus = blogStatus;
     }
 
-    
+    public Date getBlogCreateDate() {
+        return BlogCreateDate;
+    }
+
+    public void setBlogCreateDate(Date blogCreateDate) {
+        BlogCreateDate = blogCreateDate;
+    }
 
     public String getBlogPostBy() {
         return BlogPostBy;
@@ -96,11 +78,11 @@ public class blogs {
         Blogtag = blogtag;
     }
 
-    public String getBlogImage() {
+    public MultipartFile getBlogImage() {
         return BlogImage;
     }
 
-    public void setBlogImage(String blogImage) {
+    public void setBlogImage(MultipartFile blogImage) {
         BlogImage = blogImage;
     }
 
