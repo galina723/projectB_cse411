@@ -1,10 +1,5 @@
 package com.example.demo.model;
 
-import java.sql.Date;
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.CreationTimestamp;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -35,7 +30,18 @@ public class categories {
         CategoryName = categoryName;
     }
 
-    @Column (name = "status")
+    @Column(name = "quantity")
+    private int CategoryQuantity;
+
+    public int getCategoryQuantity() {
+        return CategoryQuantity;
+    }
+
+    public void setCategoryQuantity(int categoryQuantity) {
+        CategoryQuantity = categoryQuantity;
+    }
+
+    @Column(name = "status")
     private Boolean CategoryStatus;
 
     public Boolean getCategoryStatus() {
@@ -45,9 +51,5 @@ public class categories {
     public void setCategoryStatus(Boolean categoryStatus) {
         CategoryStatus = categoryStatus;
     }
-
-    
-
-    
 
 }

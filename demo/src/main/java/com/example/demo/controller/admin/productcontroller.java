@@ -1,206 +1,222 @@
 package com.example.demo.controller.admin;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Date;
-import java.util.List;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.Locale.Category;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.*;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.demo.model.blogs;
-import com.example.demo.model.productimages;
-import com.example.demo.model.products;
-import com.example.demo.model.productsdto;
-import com.example.demo.repository.adminrepository;
-import com.example.demo.repository.blogrepository;
-import com.example.demo.repository.customerrepository;
-import com.example.demo.repository.orderrepository;
-import com.example.demo.repository.productimagerepository;
-import com.example.demo.repository.productrepository;
+import com.example.demo.model.*;
+import com.example.demo.repository.*;
 
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 
 @Controller
 @RequestMapping("/admin")
 public class productcontroller {
 
     @Autowired
-    customerrepository customerrepo;
+    categoriesrepository caterepo;
 
     @Autowired
     productrepository productrepo;
 
     @Autowired
-    orderrepository orderrepo;
-
-    @Autowired
-    adminrepository adminrepo;
-
-    @Autowired
-    blogrepository blogrepo;
-
-    @Autowired productimagerepository productimagerepo;
-
-    // list product
-
-    @GetMapping("apps-ecommerce-products")
-    public String blog(Model model) {
-        List<products> products = (List<products>) productrepo.findAll();
-        model.addAttribute("products", products);
-        return ("admin/apps-ecommerce-products");
-    }
+    productimagesrepository productimagerepo;
 
     // add product
 
-    @GetMapping("apps-ecommerce-add-product")
-    public String addProduct(Model model) {
-        productsdto productsDto = new productsdto();
-        model.addAttribute("productsdto", productsDto);
-        return "admin/apps-ecommerce-add-product";
+    @GetMapping("apps-ecommerce-products")
+    public String products(Model model) {
+        List<products> productList = (List<products>) productrepo.findAll();
+        model.addAttribute("products", productList);
+        return "admin/apps-ecommerce-products";
     }
 
-    // Handle the submission of the product form
-    @PostMapping("apps-ecommerce-add-product/save")
-    public String saveProduct(@ModelAttribute("productsdto") productsdto productsDto, BindingResult result) {
+    @GetMapping("apps-ecommerce-add-product")
+    public String addproduct(Model model) {
+        List<categories> categories = (List<categories>) caterepo.findAll(); // Fetch categories from the database
+        model.addAttribute("categories", categories); // Add categories to the model
+        productsdto productsdto = new productsdto();
+        // Get the next available ProductId
+        int nextProductId = productrepo.findNextProductId();
+        // Set the ProductId in the DTO
+        productsdto.setProductId(nextProductId);
+        model.addAttribute("productsdto", productsdto);
+        return ("admin/apps-ecommerce-add-product");
+    }
+
+    @PostMapping("apps-ecommerce-add-product")
+    public String saveProduct(@ModelAttribute("productsdto") productsdto productsdto, BindingResult result) {
+        // Check for form validation errors
         if (result.hasErrors()) {
             return "admin/apps-ecommerce-add-product";
         }
 
-        // Validate main image
-        if (productsDto.getProductMainImage() == null || productsDto.getProductMainImage().isEmpty()) {
-            result.addError(new FieldError("productsdto", "productMainImage", "Product main image is required"));
-            return "admin/apps-ecommerce-add-product";
+        // Check if the uploaded image is empty
+        if (productsdto.getProductMainImage().isEmpty()) {
+            result.addError(new FieldError("productsdto", "ProductMainImage", "ProductMainImage is required"));
+            return "admin/apps-ecommerce-add-product"; // Return to the form if there's an error
         }
 
-        // Process main image
-        MultipartFile mainImage = productsDto.getProductMainImage();
-        String storageMainImageFilename = mainImage.getOriginalFilename();
+        MultipartFile image = productsdto.getProductMainImage();
+        String storagefilename = image.getOriginalFilename(); // Get the original file name
 
-        String uploadDirMain = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\productimages";
-        Path uploadPathMain = Paths.get(uploadDirMain);
+        // Define the absolute path for the images directory
+        String uploaddir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\productimages";
+        // Print the upload directory for debugging
+        System.out.println("Upload Directory: " + uploaddir);
+
+        Path uploadpath = Paths.get(uploaddir);
 
         try {
-            // Create directory if it does not exist
-            if (!Files.exists(uploadPathMain)) {
-                Files.createDirectories(uploadPathMain);
+            // Ensure the directory exists, if not, create it
+            if (!Files.exists(uploadpath)) {
+                Files.createDirectories(uploadpath);
+                System.out.println("Directory created: " + uploadpath.toString());
             }
 
-            // Save main image
-            try (InputStream inputStream = mainImage.getInputStream()) {
-                Path targetMainPath = uploadPathMain.resolve(storageMainImageFilename);
-                if (!Files.exists(targetMainPath)) {
-                    Files.copy(inputStream, targetMainPath, StandardCopyOption.REPLACE_EXISTING);
+            // Save the uploaded image to the directory
+            try (InputStream inputStream = image.getInputStream()) {
+                Path targetPath = uploadpath.resolve(storagefilename);
+
+                // Print target path for debugging
+                System.out.println("Target File Path: " + targetPath.toString());
+
+                // Only copy the file if it does not already exist
+                if (!Files.exists(targetPath)) {
+                    Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
+                    System.out.println("File successfully saved at: " + targetPath.toString());
                 } else {
-                    System.out.println("Main image already exists: " + targetMainPath);
+                    System.out.println("File already exists: " + targetPath.toString());
                 }
             }
-
-            // Declare an array to hold filenames for other images
-            String[] otherImageFilenames = new String[4];
-
-            // Handle other images if they exist
-            if (productsDto.getProductOtherImages() != null && productsDto.getProductOtherImages().length > 0) {
-                MultipartFile[] otherImages = productsDto.getProductOtherImages();
-
-                for (int i = 0; i < otherImages.length && i < 4; i++) {
-                    MultipartFile otherImage = otherImages[i];
-                    String otherImageFilename = otherImage.getOriginalFilename();
-                    otherImageFilenames[i] = otherImageFilename; // Store filename for DB
-
-                    // Save other images
-                    String uploadDirOther = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\otherimages";
-                    Path uploadPathOther = Paths.get(uploadDirOther);
-
-                    if (!Files.exists(uploadPathOther)) {
-                        Files.createDirectories(uploadPathOther);
-                    }
-
-                    try (InputStream otherImageInputStream = otherImage.getInputStream()) {
-                        Path targetOtherPath = uploadPathOther.resolve(otherImageFilename);
-                        if (!Files.exists(targetOtherPath)) {
-                            Files.copy(otherImageInputStream, targetOtherPath, StandardCopyOption.REPLACE_EXISTING);
-                        } else {
-                            System.out.println("Other image already exists: " + targetOtherPath);
-                        }
-                    }
-                }
-            }
-
-            // Create and save the product
-            products pro = new products();
-            pro.setProductId(productsDto.getProductId());
-            pro.setProductName(productsDto.getProductName());
-            pro.setProductPrice(productsDto.getProductPrice());
-            pro.setProductDescription(productsDto.getProductDescription());
-            pro.setProductCategory(productsDto.getProductCategory());
-            pro.setProductQuantity(productsDto.getProductQuantity());
-            pro.setProductMainImage(storageMainImageFilename);
-
-            // Save the product to the repository
-            productrepo.save(pro);
-
-            // Save the product images
-            productimages productImage = new productimages();
-            productImage.setProductId(pro.getProductId()); // Set the foreign key
-            productImage.setMainImage(storageMainImageFilename);
-            productImage.setOtherImage1(otherImageFilenames.length > 0 ? otherImageFilenames[0] : null);
-            productImage.setOtherImage2(otherImageFilenames.length > 1 ? otherImageFilenames[1] : null);
-            productImage.setOtherImage3(otherImageFilenames.length > 2 ? otherImageFilenames[2] : null);
-            productImage.setOtherImage4(otherImageFilenames.length > 3 ? otherImageFilenames[3] : null);
-
-            // Save the product images to the repository
-            productimagerepo.save(productImage);
 
         } catch (IOException e) {
+            // Handle file saving error
             System.out.println("Error occurred while saving image: " + e.getMessage());
-            result.addError(new FieldError("productsdto", "productMainImage", "Unable to save the image. Try again."));
+            result.addError(new FieldError("productsdto", "ProductMainImage", "Unable to save the image. Try again."));
             return "admin/apps-ecommerce-add-product";
         }
 
-        // Redirect to the product listing page after saving
+        // Create a new product entity and set its fields
+        products pro = new products();
+        pro.setProductId(productsdto.getProductId());
+        pro.setProductName(productsdto.getProductName());
+        pro.setProductPrice(productsdto.getProductPrice());
+        pro.setProductDescription(productsdto.getProductDescription());
+        pro.setProductCategory(productsdto.getProductCategory());
+        pro.setProductQuantity(productsdto.getProductQuantity());
+        pro.setProductMainImage(storagefilename);
+        pro.setProductStatus(productsdto.getProductStatus());
+
+        // Save the product to the repository
+        productrepo.save(pro);
+
+        // Redirect to the product listing page after successful save
         return "redirect:/admin/apps-ecommerce-products";
     }
 
-    // edit product
+    @GetMapping("/set-current-product-id/{id}")
+    public String setCurrentProductId(@PathVariable("id") int id, HttpSession session) {
+        session.setAttribute("currentProductId", id); // Store as Integer
+        return "redirect:/admin/apps-ecommerce-edit-product";
+    }
 
     @GetMapping("/apps-ecommerce-edit-product")
-    public String editproduct(HttpSession session, Model model) {
-        Integer id = (Integer) session.getAttribute("currentProductId");
-        if (id == null) {
+    public String showEditForm(HttpSession session, Model model) {
+        List<categories> categories = (List<categories>) caterepo.findAll(); // Fetch categories from the database
+        model.addAttribute("categories", categories); // Add categories to the model
+        Integer productId = (Integer) session.getAttribute("currentProductId");
+        if (productId == null) {
             model.addAttribute("errorMessage", "No product selected!");
             return "admin/apps-ecommerce-edit-product";
         }
 
-        products product = productrepo.findById(id).orElse(null);
+        products product = productrepo.findById(productId).orElse(null);
         if (product == null) {
             model.addAttribute("errorMessage", "Product not found!");
             return "admin/apps-ecommerce-edit-product";
         }
 
-        model.addAttribute("product", product);
+        productsdto productsDto = new productsdto();
+        productsDto.setProductId(product.getProductId());
+        productsDto.setProductName(product.getProductName());
+        productsDto.setProductPrice(product.getProductPrice());
+        productsDto.setProductDescription(product.getProductDescription());
+        productsDto.setProductCategory(product.getProductCategory());
+        productsDto.setProductQuantity(product.getProductQuantity());
+        productsDto.setProductStatus(product.getProductStatus());
+        productsDto.setCreateTime(product.getCreateTime());
+
+        model.addAttribute("productsdto", productsDto);
+        // Pass the existing image URL to the model for displaying in the view
+        model.addAttribute("existingImage", "/productimages/" + product.getProductMainImage());
+
         return "admin/apps-ecommerce-edit-product";
     }
 
-    @GetMapping("/set-current-product-id/{id}")
-    public String setCurrentProductId(@PathVariable("id") int id, HttpSession session) {
-        session.setAttribute("currentProductId", id);
-        return "redirect:/admin/apps-ecommerce-edit-product";
+    @PostMapping("/apps-ecommerce-edit-product")
+
+    public String saveEditedProduct(@ModelAttribute("productsdto") productsdto productsdto, BindingResult result) {
+
+        if (result.hasErrors()) {
+            return "admin/apps-ecommerce-edit-product"; // Return to form if there are errors
+        }
+
+        products pro = productrepo.findById(productsdto.getProductId()).orElse(null);
+        if (pro == null) {
+            result.addError(new FieldError("productsdto", "productId", "Product not found!"));
+            return "admin/apps-ecommerce-edit-product"; // Return to the form if the product is not found
+        }
+
+        // Check if a new image is uploaded
+        MultipartFile image = productsdto.getProductMainImage();
+        if (image != null && !image.isEmpty()) {
+            String uploadDir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\productimages";
+            Path uploadPath = Paths.get(uploadDir);
+            String storageFilename = image.getOriginalFilename();
+
+            try {
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath); // Create directory if it doesn't exist
+                }
+                try (InputStream inputStream = image.getInputStream()) {
+                    Path targetPath = uploadPath.resolve(storageFilename);
+                    Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
+                }
+                pro.setProductMainImage(storageFilename); // Save only the filename in the entity
+            } catch (IOException e) {
+                result.addError(
+                        new FieldError("productsdto", "ProductMainImage", "Unable to save the image. Try again."));
+                return "admin/apps-ecommerce-edit-product"; // Return to the form on error
+            }
+        } else {
+            // If no new image is uploaded, keep the existing image
+            pro.setProductMainImage(pro.getProductMainImage());
+        }
+
+        // Set other fields
+        pro.setProductName(productsdto.getProductName());
+        pro.setProductPrice(productsdto.getProductPrice());
+        pro.setProductDescription(productsdto.getProductDescription());
+        pro.setProductCategory(productsdto.getProductCategory());
+        pro.setProductQuantity(productsdto.getProductQuantity());
+        pro.setProductStatus(productsdto.getProductStatus());
+        pro.setCreateTime(productsdto.getCreateTime());
+
+        productrepo.save(pro); // Save the updated product
+
+        return "redirect:/admin/apps-ecommerce-products"; // Redirect to the product listing page
     }
 
     // delete product
@@ -218,7 +234,4 @@ public class productcontroller {
 
         return "redirect:/admin/apps-ecommerce-products";
     }
-
-
-
 }
