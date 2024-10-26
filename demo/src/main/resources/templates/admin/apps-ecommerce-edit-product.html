@@ -8,9 +8,7 @@
 </head>
 
 <body>
-    <div th:if="${successMessage}" class="alert alert-success" role="alert">
-        <span th:text="${successMessage}"></span>
-    </div>
+
     <div th:replace="admin/layout :: body">
         <section th:fragment="mainContent">
             <div class="page-content">
@@ -25,7 +23,9 @@
                     </div>
                     <!-- end page title -->
 
-                    <form id="createproduct-form" autocomplete="off" class="needs-validation" novalidate="">
+                    <form id="createproduct-form" autocomplete="off" class="needs-validation" novalidate=""
+                        method="post" enctype="multipart/form-data" th:object="${productsdto}"
+                        th:action="@{/admin/apps-ecommerce-edit-product}">
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="card">
@@ -36,8 +36,8 @@
                                                 value="add">
                                             <input type="text" class="form-control d-none" id="product-id-input">
                                             <input type="text" class="form-control" id="product-title-input" value=""
-                                                placeholder="Enter product ID" required=""
-                                                th:value="${product.ProductId}" readonly>
+                                                placeholder="Enter product ID" required="" th:field="*{ProductId}"
+                                                readonly>
                                             <div class="invalid-feedback">Please Enter a product ID.</div>
                                         </div>
                                         <div class="mb-3">
@@ -46,20 +46,15 @@
                                                 value="add">
                                             <input type="text" class="form-control d-none" id="product-id-input">
                                             <input type="text" class="form-control" id="product-title-input" value=""
-                                                placeholder="Enter product title" required=""
-                                                th:value="${product.ProductName}">
+                                                placeholder="Enter product title" required="" th:field="*{ProductName}">
                                             <div class="invalid-feedback">Please Enter a product title.</div>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="product-description-input">Product
-                                                Description</label>
-                                            <textarea id="product-description-input"
-                                                name="productDescription.description" class="form-control"
-                                                placeholder="Enter product description" required=""
-                                                th:text="${product.ProductDescription}"></textarea>
-                                            <div class="invalid-feedback">Please enter a product description.</div>
+                                        <div>
+                                            <label for="product-description-input">Product Description</label>
+                                            <textarea id="product-description-input" name="description"
+                                                class="form-control" placeholder="Enter product description" required=""
+                                                th:field="*{ProductDescription}"></textarea>
                                         </div>
-
                                     </div>
                                 </div>
                                 <!-- end card -->
@@ -71,7 +66,7 @@
                                     <div class="card-body">
                                         <div class="mb-4">
                                             <h5 class="fs-14 mb-1">Product Image</h5>
-                                            <p class="text-muted">Add Product Main Image.</p>
+                                            <p class="text-muted">Add Product main Image.</p>
                                             <div class="text-center">
                                                 <div class="position-relative d-inline-block">
                                                     <div class="position-absolute top-100 start-100 translate-middle">
@@ -87,13 +82,14 @@
                                                             </div>
                                                         </label>
                                                         <input class="form-control d-none" value=""
-                                                            id="product-image-input" type="file" name="ProductMainImage"
-                                                            accept="image/png, image/gif, image/jpeg" required>
+                                                            id="product-image-input" type="file"
+                                                            accept="image/png, image/gif, image/jpeg"
+                                                            th:field="*{ProductMainImage}">
                                                     </div>
                                                     <div class="avatar-lg">
                                                         <div class="avatar-title bg-light rounded">
-                                                            <img th:src="@{'/images/'+${product.ProductMainImage}}"
-                                                                id="product-img" class="avatar-md h-auto">
+                                                            <img th:src="${existingImage}" alt="" id="product-img"
+                                                                class="avatar-md h-auto">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -104,7 +100,6 @@
                                             <p class="text-muted">Add Product Gallery Images.</p>
 
                                             <div class="dropzone dz-clickable">
-
                                                 <div class="dz-message needsclick">
                                                     <div class="mb-3">
                                                         <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
@@ -121,6 +116,7 @@
                                                         <div class="d-flex p-2">
                                                             <div class="flex-shrink-0 me-3">
                                                                 <div class="avatar-sm bg-light rounded">
+                                                                    <!-- Display image thumbnail -->
                                                                     <img data-dz-thumbnail
                                                                         class="img-fluid rounded d-block" src="#"
                                                                         alt="Product-Image" />
@@ -142,8 +138,8 @@
                                                     </div>
                                                 </li>
                                             </ul>
-                                            <!-- end dropzon-preview -->
                                         </div>
+
                                     </div>
                                 </div>
                                 <!-- end card -->
@@ -162,7 +158,7 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="stocks-input">Quantity</label>
                                             <input type="text" class="form-control" id="stocks-input"
-                                                placeholder="Stocks" required="" th:value="${product.ProductQuantity}">
+                                                placeholder="Stocks" required="" th:field="*{ProductQuantity}">
                                             <div class="invalid-feedback">Please Enter a product stocks.
                                             </div>
                                         </div>
@@ -173,7 +169,7 @@
                                                 <input type="text" class="form-control" id="product-price-input"
                                                     placeholder="Enter price" aria-label="Price"
                                                     aria-describedby="product-price-addon" required=""
-                                                    th:value="${product.ProductPrice}">
+                                                    th:field="*{ProductPrice}">
                                                 <div class="invalid-feedback">Please Enter a product
                                                     price.
                                                 </div>
@@ -190,22 +186,23 @@
                                     <div class="card-body">
                                         <div class="mb-3">
                                             <label for="choices-publish-status-input" class="form-label">Status</label>
-
-                                            <select class="form-select" id="choices-publish-status-input"
-                                                data-choices="" data-choices-search-false="">
-                                                <option value="Published" selected="">Published</option>
-                                                <option value="Scheduled">Scheduled</option>
-                                                <option value="Draft">Draft</option>
+                                            <select class="form-select" id="choices-publish-status-input" name="status"
+                                                data-choices="" data-choices-search-false=""
+                                                th:field="*{ProductStatus}">
+                                                <option value="Active">Active</option>
+                                                <option value="Block">Block</option>
                                             </select>
                                         </div>
+
                                         <div class="mb-3">
-                                            <label for="datepicker-publish-input" class="form-label">Publish Date &amp;
+                                            <label for="datepicker-publish-input" class="form-label">Publish Date &
                                                 Time</label>
                                             <input type="text" id="datepicker-publish-input" class="form-control"
                                                 placeholder="Enter publish date" data-provider="flatpickr"
                                                 data-date-format="yyyy-MM-dd" data-enable-time=""
-                                                th:value="${product.CreateTime}">
+                                                th:field="*{CreateTime}">
                                         </div>
+
                                     </div>
                                     <!-- end card body -->
                                 </div>
@@ -218,15 +215,12 @@
                                     <div class="card-body">
                                         <p class="text-muted mb-2">Select product category</p>
                                         <select class="form-select" id="choices-category-input"
-                                            name="choices-category-input" data-choices="" data-choices-search-false="">
-                                            <option value="Appliances">Appliances</option>
-                                            <option value="Automotive Accessories">Automotive Accessories</option>
-                                            <option value="Electronics">Electronics</option>
-                                            <option value="Fashion">Fashion</option>
-                                            <option value="Furniture">Furniture</option>
-                                            <option value="Grocery">Grocery</option>
-                                            <option value="Kids">Kids</option>
-                                            <option value="Watches">Watches</option>
+                                            name="choices-category-input" data-choices="" th:field="*{ProductCategory}"
+                                            data-choices-search-false="">
+                                            <option th:each="category : ${categories}"
+                                                th:if="${category.CategoryStatus}" th:value="${category.CategoryName}"
+                                                th:text="${category.CategoryName}">
+                                            </option>
                                         </select>
                                     </div>
                                     <!-- end card body -->
@@ -236,13 +230,12 @@
                             <!-- end col -->
                         </div>
                         <!-- end row -->
-
                     </form>
-
                 </div>
             </div>
         </section>
     </div>
+
 
 </body>
 
