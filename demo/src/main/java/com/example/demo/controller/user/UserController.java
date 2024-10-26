@@ -1,12 +1,25 @@
 package com.example.demo.controller.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.demo.model.*;
+import com.example.demo.model.productsdto;
+
+import org.springframework.ui.Model;
+import com.example.demo.repository.customerrepository;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
+    @Autowired
+    private customerrepository customerrepo;
 
     @GetMapping("index")
     public String index() {
@@ -14,8 +27,16 @@ public class UserController {
     }
 
     @GetMapping("register")
-    public String register() {
+    public String register(Model model) {
+        customers customer = new customers();
         return "user/register";
+    }
+
+    @PostMapping("register/save")
+    public String savecustomer(@ModelAttribute customers customer) {
+        customerrepo.save(customer);
+
+        return "redirect:/user/login";
     }
 
     @GetMapping("404")

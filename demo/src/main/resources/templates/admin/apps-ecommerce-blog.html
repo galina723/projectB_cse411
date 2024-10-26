@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
     data-sidebar-image="none" data-preloader="disable" xmlns:th="http://www.thymeleaf.org">
-
+    <!-- <meta http-equiv="refresh" content="5"> -->
 
 <head th:replace="admin/layout :: pageHead('Blog')">
 
@@ -139,7 +139,7 @@
                                                         <td class="title">[[${blog.BlogTitle}]]</td>
                                                         <td class="image img-fluid d">
                                                             <div class="avatar-sm bg-light rounded p-1">
-                                                                <img th:src="@{'/images/' + ${blog.BlogImage}}" alt="" class="img-fluid d-block">
+                                                                <img th:src="@{'/blogimages/' + ${blog.BlogImage}}" alt="" class="img-fluid d-block">
                                                             </div>
                                                         </td>
                                                         <td class="description">

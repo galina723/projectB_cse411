@@ -10,10 +10,18 @@ public class productsdto {
     private String ProductCategory;
     private String ProductDescription;
     private MultipartFile ProductMainImage;
-    private MultipartFile ProductOtherImages;
+    private MultipartFile[] ProductOtherImages;
+    
     private double ProductPrice;
     private int ProductQuantity;
     private Date CreateTime;
+
+    public MultipartFile[] getProductOtherImages() {
+        return ProductOtherImages;
+    }
+    public void setProductOtherImages(MultipartFile[] productOtherImages) {
+        ProductOtherImages = productOtherImages;
+    }
     public int getProductId() {
         return ProductId;
     }
@@ -43,12 +51,6 @@ public class productsdto {
     }
     public void setProductMainImage(MultipartFile productMainImage) {
         ProductMainImage = productMainImage;
-    }
-    public MultipartFile getProductOtherImages() {
-        return ProductOtherImages;
-    }
-    public void setProductOtherImages(MultipartFile productOtherImages) {
-        ProductOtherImages = productOtherImages;
     }
     public double getProductPrice() {
         return ProductPrice;

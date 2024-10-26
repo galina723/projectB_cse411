@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping("/admin")
-public class AdminController {
+public class customercontroller {
 
     @Autowired
     customerrepository customerrepo;
@@ -57,32 +57,30 @@ public class AdminController {
         return ("admin/index");
     }
 
-    
+    // @GetMapping("apps-ecommerce-blog-details")
+    // public String blogdetail() {
+    // return ("admin/apps-ecommerce-blog-details");
+    // }
 
-    @GetMapping("apps-ecommerce-blog-details")
-    public String blogdetail() {
-        return ("admin/apps-ecommerce-blog-details");
-    }
+    // @GetMapping("apps-ecommerce-blog")
+    // public String blog(Model model) {
 
-    @GetMapping("apps-ecommerce-blog")
-    public String blog(Model model) {
+    // List<blogs> blogs = (List<blogs>) blogrepo.findAll();
+    // model.addAttribute("blogs", blogs);
+    // return ("admin/apps-ecommerce-blog");
+    // }
 
-        List<blogs> blogs = (List<blogs>) blogrepo.findAll();
-        model.addAttribute("blogs", blogs);
-        return ("admin/apps-ecommerce-blog");
-    }
+    // @GetMapping("apps-ecommerce-create-blog")
+    // public String createblog(Model model) {
+    // productsdto productsdto = new productsdto();
+    // model.addAttribute("productsdto", productsdto);
+    // return ("admin/apps-ecommerce-create-blog");
+    // }
 
-    @GetMapping("apps-ecommerce-create-blog")
-    public String createblog(Model model) {
-        productsdto productsdto = new productsdto();
-        model.addAttribute("productsdto", productsdto);
-        return ("admin/apps-ecommerce-create-blog");
-    }
-
-    @GetMapping("apps-ecommerce-edit-blog")
-    public String editblog() {
-        return ("admin/apps-ecommerce-edit-blog");
-    }
+    // @GetMapping("apps-ecommerce-edit-blog")
+    // public String editblog() {
+    // return ("admin/apps-ecommerce-edit-blog");
+    // }
 
     @GetMapping("apps-ecommerce-customers")
     public String customers(Model model) {
@@ -91,6 +89,7 @@ public class AdminController {
         model.addAttribute("customers", customers);
         return ("admin/apps-ecommerce-customers");
     }
+    
 
     @GetMapping("apps-ecommerce-order-details")
     public String orderdetail() {
@@ -100,19 +99,6 @@ public class AdminController {
     @GetMapping("apps-ecommerce-orders")
     public String orders() {
         return ("admin/apps-ecommerce-orders");
-    }
-
-    @GetMapping("apps-ecommerce-product-details")
-    public String productdetail() {
-        return ("admin/apps-ecommerce-product-details");
-    }
-
-    @GetMapping("apps-ecommerce-products")
-    public String products(Model model) {
-
-        List<products> products = (List<products>) productrepo.findAll();
-        model.addAttribute("products", products);
-        return ("admin/apps-ecommerce-products");
     }
 
     @GetMapping("apps-ecommerce-seller-details")

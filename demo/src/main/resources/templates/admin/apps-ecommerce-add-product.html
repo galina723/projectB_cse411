@@ -97,7 +97,7 @@
                                             <h5 class="fs-14 mb-1">Product Gallery</h5>
                                             <p class="text-muted">Add Product Gallery Images.</p>
 
-                                            <div class="dropzone dz-clickable">
+                                            <div class="dropzone dz-clickable" id="product-gallery-dropzone">
                                                 <div class="dz-message needsclick">
                                                     <div class="mb-3">
                                                         <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
@@ -117,7 +117,8 @@
                                                                     <!-- Display image thumbnail -->
                                                                     <img data-dz-thumbnail
                                                                         class="img-fluid rounded d-block" src="#"
-                                                                        alt="Product-Image" />
+                                                                        alt="Product-Image" type="file"
+                                                                        th:field="*{ProductOtherImages}" />
                                                                 </div>
                                                             </div>
                                                             <div class="flex-grow-1">
@@ -136,14 +137,7 @@
                                                     </div>
                                                 </li>
                                             </ul>
-
-                                            <!-- Add the input field for uploading multiple files -->
-                                            <input class="form-control" type="file" id="product-gallery-input"
-                                                name="ProductOtherImages" multiple
-                                                accept="image/png, image/gif, image/jpeg"
-                                                th:field="*{ProductOtherImages}" />
                                         </div>
-
                                     </div>
                                 </div>
                                 <!-- end card -->
@@ -259,6 +253,30 @@
         // Set the value of the input field
         document.getElementById('datepicker-publish-input').value = formattedDate;
     </script>
+
+    <script>
+        // Dropzone configuration
+        Dropzone.options.productGalleryDropzone = {
+            url: '/apps-ecommerce-add-product/save', // The endpoint to handle uploads
+            maxFilesize: 5, // MB
+            acceptedFiles: 'image/*',
+            addRemoveLinks: true,
+            init: function () {
+                this.on("addedfile", function (file) {
+                    // Show file preview in the list
+                    var mockFile = { name: file.name, size: file.size };
+                    this.emit("addedfile", mockFile);
+                    this.emit("thumbnail", mockFile, URL.createObjectURL(file));
+                    this.emit("complete", mockFile);
+                });
+                this.on("removedfile", function (file) {
+                    console.log("Removed file: " + file.name);
+                    // Implement the logic to remove the file from the server if needed
+                });
+            }
+        };
+    </script>
+
 
 </body>
 

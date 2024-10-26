@@ -3,7 +3,7 @@
     data-sidebar-image="none" data-preloader="disable" xmlns:th="http://www.thymeleaf.org">
 
 
-<head th:replace="admin/layout :: pageHead('Create Blog')">
+<head th:replace="admin/layout :: pageHead('Edit Blog')">
 
 </head>
 
@@ -22,7 +22,9 @@
                         </div>
                     </div>
                     <!-- end page title -->
-                    <form id="createblog-form" autocomplete="off" class="needs-validation" novalidate="">
+                    <form id="createblog-form" autocomplete="off" class="needs-validation" novalidate=""
+                        enctype="multipart/form-data" method="post" th:object="${blogsdto}"
+                        th:action="@{/admin/apps-ecommerce-create-blog/save}">
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="card">
@@ -30,10 +32,11 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="blog-title-input">Blog ID</label>
                                             <input type="hidden" class="form-control" id="formAction" name="formAction"
-                                                value="add">
+                                                value="add"
+                                                >
                                             <input type="text" class="form-control d-none" id="blog-id-input">
                                             <input type="text" class="form-control" id="blog-title-input" value=""
-                                                placeholder="Enter blog ID" required="">
+                                                placeholder="Enter blog ID" required="" th:field="*{BlogId}">
                                             <div class="invalid-feedback">Please Enter a blog ID.</div>
                                         </div>
                                         <div class="mb-3">
@@ -42,15 +45,14 @@
                                                 value="add">
                                             <input type="text" class="form-control d-none" id="blog-id-input">
                                             <input type="text" class="form-control" id="blog-title-input" value=""
-                                                placeholder="Enter blog title" required="">
+                                                placeholder="Enter blog title" required="" th:field="*{BlogTitle}">
                                             <div class="invalid-feedback">Please Enter a blog title.</div>
                                         </div>
                                         <div>
-                                            <label>Description</label>
-
-                                            <div id="ckeditor-classic" style="display: none;">
-
-                                            </div>
+                                            <label for="product-description-input">Product Description</label>
+                                            <textarea id="product-description-input" name="description"
+                                                class="form-control" placeholder="Enter product description" required=""
+                                                th:field="*{BlogDescription}"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -80,7 +82,7 @@
                                                         </label>
                                                         <input class="form-control d-none" value=""
                                                             id="product-image-input" type="file"
-                                                            accept="image/png, image/gif, image/jpeg">
+                                                            accept="image/png, image/gif, image/jpeg" th:field="*{BlogImage}">
                                                     </div>
                                                     <div class="avatar-lg">
                                                         <div class="avatar-title bg-light rounded">
@@ -153,14 +155,14 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="author-input">Author ID</label>
                                             <input type="text" class="form-control" id="author-input"
-                                                placeholder="Enter an author id" required="">
+                                                placeholder="Enter an author id" required="" th:field="*{BlogPostBy}">
                                             <div class="invalid-feedback">Please Enter an author id.
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="tag-input">Tag</label>
                                             <input type="text" class="form-control" id="tag-input"
-                                                placeholder="Enter tags" required="">
+                                                placeholder="Enter tags" required="" th:field="*{Blogtag}">
                                             <div class="invalid-feedback">Please Enter tags.
                                             </div>
                                         </div>
@@ -177,10 +179,9 @@
                                             <label for="choices-publish-status-input" class="form-label">Status</label>
 
                                             <select class="form-select" id="choices-publish-status-input"
-                                                data-choices="" data-choices-search-false="">
-                                                <option value="Published" selected="">Published</option>
-                                                <option value="Scheduled">Scheduled</option>
-                                                <option value="Draft">Draft</option>
+                                                data-choices="" data-choices-search-false="" th:field="*{BlogStatus}">
+                                                <option value="Published" selected="">View</option>
+                                                <option value="Scheduled">Hidden</option>
                                             </select>
                                         </div>
                                         <div class="mb-3">
@@ -205,6 +206,17 @@
             </div>
         </section>
     </div>
+
+    <script>
+        // Get the current date
+        const currentDate = new Date();
+
+        // Format the date as 'dd.mm.yyyy'
+        const formattedDate = currentDate.toLocaleDateString('en-GB').split('/').join('.');
+
+        // Set the value of the input field
+        document.getElementById('datepicker-publish-input').value = formattedDate;
+    </script>
 
 </body>
 

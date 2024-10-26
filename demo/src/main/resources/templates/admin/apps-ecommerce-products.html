@@ -4,6 +4,7 @@
 
 
 <head th:replace="admin/layout :: pageHead('Products')">
+    <meta http-equiv="refresh" content="5">
 
 </head>
 
@@ -140,7 +141,7 @@
                                                         <td class="name">[[${product.ProductName}]]</td>
                                                         <td class="image">
                                                             <div class="avatar-sm bg-light rounded p-1">
-                                                                <img th:src="@{'/images/' + ${product.ProductMainImage}}"
+                                                                <img th:src="@{'/productimages/' + ${product.ProductMainImage}}"
                                                                     alt="" class="img-fluid d-block">
                                                             </div>
                                                         </td>

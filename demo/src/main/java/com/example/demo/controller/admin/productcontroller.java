@@ -1,11 +1,13 @@
 package com.example.demo.controller.admin;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,12 +23,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.model.blogs;
+import com.example.demo.model.productimages;
 import com.example.demo.model.products;
 import com.example.demo.model.productsdto;
 import com.example.demo.repository.adminrepository;
 import com.example.demo.repository.blogrepository;
 import com.example.demo.repository.customerrepository;
 import com.example.demo.repository.orderrepository;
+import com.example.demo.repository.productimagerepository;
 import com.example.demo.repository.productrepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -50,62 +55,125 @@ public class productcontroller {
     @Autowired
     blogrepository blogrepo;
 
+    @Autowired productimagerepository productimagerepo;
+
+    // list product
+
+    @GetMapping("apps-ecommerce-products")
+    public String blog(Model model) {
+        List<products> products = (List<products>) productrepo.findAll();
+        model.addAttribute("products", products);
+        return ("admin/apps-ecommerce-products");
+    }
+
     // add product
 
     @GetMapping("apps-ecommerce-add-product")
-    public String addproduct(Model model) {
-        productsdto productsdto = new productsdto();
-        model.addAttribute("productsdto", productsdto);
-        return ("admin/apps-ecommerce-add-product");
+    public String addProduct(Model model) {
+        productsdto productsDto = new productsdto();
+        model.addAttribute("productsdto", productsDto);
+        return "admin/apps-ecommerce-add-product";
     }
 
+    // Handle the submission of the product form
     @PostMapping("apps-ecommerce-add-product/save")
-    public String saveproduct(@ModelAttribute("productsdto") productsdto productsdto, BindingResult result) {
-        if (result.hasErrors()) {
-            // Xử lý lỗi nếu có
-        }
-
-        if (productsdto.getProductMainImage().isEmpty()) {
-            result.addError(new FieldError("productsdto", "ProductMainImage", "ProductMainImage is required"));
-        }
-
+    public String saveProduct(@ModelAttribute("productsdto") productsdto productsDto, BindingResult result) {
         if (result.hasErrors()) {
             return "admin/apps-ecommerce-add-product";
         }
 
-        MultipartFile image = productsdto.getProductMainImage();
-        Date createtime = new Date();
-        String storagefilename = createtime.getTime() + "_" + image.getOriginalFilename();
-
-        // Sử dụng đường dẫn tuyệt đối
-        String uploaddir = System.getProperty("user.dir") + "demo/src/main/resources/static/productimages";
-        Path uploadpath = Paths.get(uploaddir).toAbsolutePath(); // Đảm bảo đường dẫn là tuyệt đối
-
-        try {
-            // Kiểm tra nếu thư mục không tồn tại, thì tạo thư mục mới
-            if (!Files.exists(uploadpath)) {
-                Files.createDirectories(uploadpath);
-            }
-
-            // Lưu ảnh vào thư mục đã chỉ định
-            try (InputStream inputStream = image.getInputStream()) {
-                Files.copy(inputStream, uploadpath.resolve(storagefilename), StandardCopyOption.REPLACE_EXISTING);
-            }
-        } catch (Exception e) {
-            System.out.println("Error occurred while saving image: " + e.getMessage());
+        // Validate main image
+        if (productsDto.getProductMainImage() == null || productsDto.getProductMainImage().isEmpty()) {
+            result.addError(new FieldError("productsdto", "productMainImage", "Product main image is required"));
+            return "admin/apps-ecommerce-add-product";
         }
 
-        products pro = new products();
-        pro.setProductId(productsdto.getProductId());
-        pro.setProductName(productsdto.getProductName());
-        pro.setProductPrice(productsdto.getProductPrice());
-        pro.setProductDescription(productsdto.getProductDescription());
-        pro.setProductCategory(productsdto.getProductCategory());
-        pro.setProductQuantity(productsdto.getProductQuantity());
-        pro.setProductMainImage(storagefilename); // Lưu tên file ảnh
-        // pro.setCreateTime(createtime); // Uncomment nếu cần thiết
-        productrepo.save(pro);
+        // Process main image
+        MultipartFile mainImage = productsDto.getProductMainImage();
+        String storageMainImageFilename = mainImage.getOriginalFilename();
 
+        String uploadDirMain = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\productimages";
+        Path uploadPathMain = Paths.get(uploadDirMain);
+
+        try {
+            // Create directory if it does not exist
+            if (!Files.exists(uploadPathMain)) {
+                Files.createDirectories(uploadPathMain);
+            }
+
+            // Save main image
+            try (InputStream inputStream = mainImage.getInputStream()) {
+                Path targetMainPath = uploadPathMain.resolve(storageMainImageFilename);
+                if (!Files.exists(targetMainPath)) {
+                    Files.copy(inputStream, targetMainPath, StandardCopyOption.REPLACE_EXISTING);
+                } else {
+                    System.out.println("Main image already exists: " + targetMainPath);
+                }
+            }
+
+            // Declare an array to hold filenames for other images
+            String[] otherImageFilenames = new String[4];
+
+            // Handle other images if they exist
+            if (productsDto.getProductOtherImages() != null && productsDto.getProductOtherImages().length > 0) {
+                MultipartFile[] otherImages = productsDto.getProductOtherImages();
+
+                for (int i = 0; i < otherImages.length && i < 4; i++) {
+                    MultipartFile otherImage = otherImages[i];
+                    String otherImageFilename = otherImage.getOriginalFilename();
+                    otherImageFilenames[i] = otherImageFilename; // Store filename for DB
+
+                    // Save other images
+                    String uploadDirOther = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\otherimages";
+                    Path uploadPathOther = Paths.get(uploadDirOther);
+
+                    if (!Files.exists(uploadPathOther)) {
+                        Files.createDirectories(uploadPathOther);
+                    }
+
+                    try (InputStream otherImageInputStream = otherImage.getInputStream()) {
+                        Path targetOtherPath = uploadPathOther.resolve(otherImageFilename);
+                        if (!Files.exists(targetOtherPath)) {
+                            Files.copy(otherImageInputStream, targetOtherPath, StandardCopyOption.REPLACE_EXISTING);
+                        } else {
+                            System.out.println("Other image already exists: " + targetOtherPath);
+                        }
+                    }
+                }
+            }
+
+            // Create and save the product
+            products pro = new products();
+            pro.setProductId(productsDto.getProductId());
+            pro.setProductName(productsDto.getProductName());
+            pro.setProductPrice(productsDto.getProductPrice());
+            pro.setProductDescription(productsDto.getProductDescription());
+            pro.setProductCategory(productsDto.getProductCategory());
+            pro.setProductQuantity(productsDto.getProductQuantity());
+            pro.setProductMainImage(storageMainImageFilename);
+
+            // Save the product to the repository
+            productrepo.save(pro);
+
+            // Save the product images
+            productimages productImage = new productimages();
+            productImage.setProductId(pro.getProductId()); // Set the foreign key
+            productImage.setMainImage(storageMainImageFilename);
+            productImage.setOtherImage1(otherImageFilenames.length > 0 ? otherImageFilenames[0] : null);
+            productImage.setOtherImage2(otherImageFilenames.length > 1 ? otherImageFilenames[1] : null);
+            productImage.setOtherImage3(otherImageFilenames.length > 2 ? otherImageFilenames[2] : null);
+            productImage.setOtherImage4(otherImageFilenames.length > 3 ? otherImageFilenames[3] : null);
+
+            // Save the product images to the repository
+            productimagerepo.save(productImage);
+
+        } catch (IOException e) {
+            System.out.println("Error occurred while saving image: " + e.getMessage());
+            result.addError(new FieldError("productsdto", "productMainImage", "Unable to save the image. Try again."));
+            return "admin/apps-ecommerce-add-product";
+        }
+
+        // Redirect to the product listing page after saving
         return "redirect:/admin/apps-ecommerce-products";
     }
 
@@ -150,5 +218,7 @@ public class productcontroller {
 
         return "redirect:/admin/apps-ecommerce-products";
     }
+
+
 
 }

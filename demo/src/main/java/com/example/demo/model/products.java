@@ -13,6 +13,7 @@ import jakarta.persistence.*;
 public class products {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", length = 10)
     private int ProductId;
 
