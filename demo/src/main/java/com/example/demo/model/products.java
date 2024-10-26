@@ -1,10 +1,8 @@
 package com.example.demo.model;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
 
@@ -13,6 +11,7 @@ import jakarta.persistence.*;
 public class products {
 
     @Id
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", length = 10)
     private int ProductId;
 
@@ -27,9 +26,6 @@ public class products {
 
     @Column(name = "mainimage", length = 2083)
     private String ProductMainImage;
-
-    @Column(name = "otherimages", length = 2083)
-    private String ProductOtherImages;
 
     @Column(name = "price")
     private double ProductPrice;
@@ -99,15 +95,7 @@ public class products {
     public void setProductMainImage(String productMainImage) {
         ProductMainImage = productMainImage;
     }
-
-    public String getProductOtherImages() {
-        return ProductOtherImages;
-    }
-
-    public void setProductOtherImages(String productOtherImages) {
-        ProductOtherImages = productOtherImages;
-    }
-
+    
     public double getProductPrice() {
         return ProductPrice;
     }
