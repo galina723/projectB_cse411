@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class productotherimages {
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", length = 10)
     private int ImageId;
 

@@ -3,12 +3,12 @@
     data-sidebar-image="none" data-preloader="disable" xmlns:th="http://www.thymeleaf.org">
 
 
-<head th:replace="admin/layout :: pageHead('Products')">
+<head th:replace="~{admin/layout :: pageHead('Products')}">
 </head>
 
 <body>
 
-    <div th:replace="admin/layout :: body">
+    <div th:replace="~{admin/layout :: body}">
         <section th:fragment="mainContent">
             <div class="page-content">
                 <div class="container-fluid">
@@ -56,7 +56,7 @@
                                             <div class="col-xl-6">
                                                 <div class="search-box">
                                                     <input type="text" class="form-control search"
-                                                        placeholder="Search for customer, email, phone, status or something...">
+                                                        placeholder="Search for product...">
                                                     <i class="ri-search-line search-icon"></i>
                                                 </div>
                                             </div>
@@ -132,10 +132,7 @@
                                                                     id="checkAll" value="option">
                                                             </div>
                                                         </th>
-                                                        <td class="id">
-                                                            <a
-                                                                href="/admin/apps-ecommerce-product-details">[[${product.ProductId}]]</a>
-                                                        </td>
+                                                        <td class="id">[[${product.ProductId}]]</td>
                                                         <td class="name">[[${product.ProductName}]]</td>
                                                         <td class="image">
                                                             <div class="avatar-sm bg-light rounded p-1">

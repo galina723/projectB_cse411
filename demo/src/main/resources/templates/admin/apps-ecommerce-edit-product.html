@@ -3,13 +3,13 @@
     data-sidebar-image="none" data-preloader="disable" xmlns:th="http://www.thymeleaf.org">
 
 
-<head th:replace="admin/layout :: pageHead('Edit Product')">
+<head th:replace="~{admin/layout :: pageHead('Edit Product')}">
 
 </head>
 
 <body>
 
-    <div th:replace="admin/layout :: body">
+    <div th:replace="~{admin/layout :: body}">
         <section th:fragment="mainContent">
             <div class="page-content">
                 <div class="container-fluid">
@@ -64,16 +64,13 @@
                                         <h5 class="card-title mb-0">Product Gallery</h5>
                                     </div>
                                     <div class="card-body">
-                                        <div class="mb-4">
-                                            <h5 class="fs-14 mb-1">Product Image</h5>
-                                            <p class="text-muted">Add Product main Image.</p>
+                                        <div class="container mt-4">
+                                            <h5 class="fs-14 mb-1">Product Main Image</h5>
+                                            <p class="text-muted">Add a main image for the product.</p>
                                             <div class="text-center">
                                                 <div class="position-relative d-inline-block">
                                                     <div class="position-absolute top-100 start-100 translate-middle">
-                                                        <label for="product-image-input" class="mb-0"
-                                                            data-bs-toggle="tooltip" data-bs-placement="right"
-                                                            aria-label="Select Image"
-                                                            data-bs-original-title="Select Image">
+                                                        <label for="product-image-input" class="mb-0">
                                                             <div class="avatar-xs">
                                                                 <div
                                                                     class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
@@ -81,65 +78,51 @@
                                                                 </div>
                                                             </div>
                                                         </label>
-                                                        <input class="form-control d-none" value=""
-                                                            id="product-image-input" type="file"
-                                                            accept="image/png, image/gif, image/jpeg"
-                                                            th:field="*{ProductMainImage}">
+                                                        <input class="form-control d-none" id="product-image-input"
+                                                            type="file" accept="image/png, image/gif, image/jpeg"
+                                                            th:field="*{ProductMainImage}"
+                                                            onchange="previewMainImage(event)">
                                                     </div>
                                                     <div class="avatar-lg">
                                                         <div class="avatar-title bg-light rounded">
-                                                            <img th:src="${existingImage}" alt="" id="product-img"
-                                                                class="avatar-md h-auto">
+                                                            <img th:src="${existingImage}" id="product-img"
+                                                                class="img-fluid" alt="Main Product Image"
+                                                                style="max-height: 200px; width: auto; display: block;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="mt-4">
+                                                <h5 class="fs-14 mb-1">Product Gallery</h5>
+                                                <p class="text-muted">Add additional images for the product.</p>
+
+                                                <div class="dropzone">
+                                                    <div class="fallback">
+                                                        <input type="file" multiple required
+                                                            accept="image/png, image/gif, image/jpeg"
+                                                            th:field="*{ProductOtherImages}"
+                                                            id="product-other-images-input" style="display: none;"
+                                                            onchange="updateImageCount()">
+                                                    </div>
+                                                    <div class="dz-message needsclick text-center"
+                                                        onclick="document.getElementById('product-other-images-input').click();">
+                                                        <div class="mb-3">
+                                                            <i class="display-4 text-muted ri-upload-cloud-2-fill"
+                                                                style="cursor: pointer;"></i>
+                                                        </div>
+                                                        <h5>Drop files here or click to upload.</h5>
+                                                        <p id="file-name" class="text-muted mt-2"
+                                                            style="font-size: 0.875rem;">No file chosen</p>
+                                                        <div class="mt-3">
+                                                            <h6 id="gallery-image-count"
+                                                                th:text="'You have ' + ${#lists.size(galleryImageUrls)} + ' image(s) in the gallery.'">
+                                                            </h6>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div>
-                                            <h5 class="fs-14 mb-1">Product Gallery</h5>
-                                            <p class="text-muted">Add Product Gallery Images.</p>
-
-                                            <div class="dropzone dz-clickable">
-                                                <div class="dz-message needsclick">
-                                                    <div class="mb-3">
-                                                        <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
-                                                    </div>
-
-                                                    <h5>Drop files here or click to upload.</h5>
-                                                </div>
-                                            </div>
-
-                                            <ul class="list-unstyled mb-0" id="dropzone-preview">
-                                                <li class="mt-2" id="dropzone-preview-list">
-                                                    <!-- This is used as the file preview template -->
-                                                    <div class="border rounded">
-                                                        <div class="d-flex p-2">
-                                                            <div class="flex-shrink-0 me-3">
-                                                                <div class="avatar-sm bg-light rounded">
-                                                                    <!-- Display image thumbnail -->
-                                                                    <img data-dz-thumbnail
-                                                                        class="img-fluid rounded d-block" src="#"
-                                                                        alt="Product-Image" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-grow-1">
-                                                                <div class="pt-1">
-                                                                    <h5 class="fs-14 mb-1" data-dz-name>&nbsp;</h5>
-                                                                    <p class="fs-13 text-muted mb-0" data-dz-size></p>
-                                                                    <strong class="error text-danger"
-                                                                        data-dz-errormessage></strong>
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-shrink-0 ms-3">
-                                                                <button data-dz-remove
-                                                                    class="btn btn-sm btn-danger">Delete</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-
                                     </div>
                                 </div>
                                 <!-- end card -->
@@ -200,7 +183,7 @@
                                             <input type="text" id="datepicker-publish-input" class="form-control"
                                                 placeholder="Enter publish date" data-provider="flatpickr"
                                                 data-date-format="yyyy-MM-dd" data-enable-time=""
-                                                th:field="*{CreateTime}">
+                                                th:field="*{CreateTime}" readonly>
                                         </div>
 
                                     </div>
@@ -235,8 +218,48 @@
             </div>
         </section>
     </div>
+    <script>
+        function previewMainImage(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
 
+            reader.onload = function (e) {
+                const img = document.getElementById('product-img');
+                img.src = e.target.result;
+                img.style.display = 'block'; // Show the image
+            };
 
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+
+        document.getElementById('product-other-images-input').addEventListener('change', function () {
+            const fileNameDisplay = document.getElementById('file-name');
+            if (this.files.length > 0) {
+                fileNameDisplay.innerText = this.files.length + " file(s) chosen";
+                fileNameDisplay.style.display = "block";
+            } else {
+                fileNameDisplay.innerText = "No file chosen";
+                fileNameDisplay.style.display = "block";
+            }
+        });
+
+        function updateImageCount() {
+            const input = document.getElementById('product-other-images-input');
+            const countDisplay = document.getElementById('gallery-image-count');
+
+            const existingCount = parseInt(countDisplay.innerText.match(/\d+/)[0]);
+            const newCount = input.files.length;
+
+            // Hide the count message if new images are being added
+            if (newCount > 0) {
+                countDisplay.style.display = 'none'; // Hide the existing count message
+            } else {
+                countDisplay.style.display = 'block'; // Show the existing count message if no new files
+            }
+        }
+    </script>
 </body>
 
 

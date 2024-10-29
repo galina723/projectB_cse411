@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import java.sql.Date;
 import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 public class productsdto {
