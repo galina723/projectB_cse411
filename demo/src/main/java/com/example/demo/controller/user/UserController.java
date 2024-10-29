@@ -6,9 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.model.*;
-import com.example.demo.model.productsdto;
+import com.example.demo.otherfunction.encryption;
 
 import org.springframework.ui.Model;
 import com.example.demo.repository.customerrepository;
@@ -28,15 +29,43 @@ public class UserController {
 
     @GetMapping("register")
     public String register(Model model) {
-        customers customer = new customers();
+        model.addAttribute("customers", new customers());
         return "user/register";
     }
 
-    @PostMapping("register/save")
-    public String savecustomer(@ModelAttribute customers customer) {
-        customerrepo.save(customer);
+    @PostMapping("/register/save")
+    public String saveCustomer(@ModelAttribute customers customer) {
+        // Mã hóa mật khẩu trước khi lưu
+        String hashedPassword = encryption.encrypt(customer.getCustomerPassword());
+        customer.setCustomerPassword(hashedPassword);
+        customer.setCustomerStatus("active");
 
+        customerrepo.save(customer);
         return "redirect:/user/login";
+    }
+
+    @GetMapping("login")
+    public String login(Model model) {
+        model.addAttribute("customers", new customers());
+        return "user/login";
+    }
+
+    @PostMapping("/login/success")
+    public String loginSubmit(@RequestParam("customerEmail") String email,
+                              @RequestParam("CustomerPassword") String password,
+                              Model model) {
+
+        customers custo = customerrepo.findByCustomerEmail(email);
+        if (custo == null) {
+            return "redirect:/user/register";
+        } else {
+            if (encryption.encrypt(password).equals(custo.getCustomerPassword())) {
+                return "redirect:/user/index";
+            } else {
+                model.addAttribute("loginError", "Invalid email or password");
+                return "user/login";
+            }
+        }
     }
 
     @GetMapping("404")
@@ -82,11 +111,6 @@ public class UserController {
     @GetMapping("forgot-password")
     public String forgotpassword() {
         return "user/forgot-password";
-    }
-
-    @GetMapping("login")
-    public String login() {
-        return "user/login";
     }
 
     @GetMapping("my-account")

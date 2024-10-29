@@ -145,7 +145,7 @@
                                                                     data-bs-toggle="tooltip" data-bs-trigger="hover"
                                                                     data-bs-placement="top" aria-label="Edit"
                                                                     data-bs-original-title="Edit">
-                                                                    <a th:href="@{/admin/set-current-product-id/{id}(id=${product.ProductId})}"
+                                                                    <a th:href="@{/admin/set-current-product-id/{id}(id=${category.CategoryId})}"
                                                                         class="text-primary d-inline-block edit-item-btn">
                                                                         <i class="ri-pencil-fill fs-16"></i>
                                                                     </a>
@@ -157,7 +157,7 @@
                                                                     title="Remove">
                                                                     <a class="text-danger d-inline-block remove-item-btn"
                                                                         data-bs-toggle="modal" href="#deleteRecordModal"
-                                                                        th:attr="data-id=${product.ProductId}">
+                                                                        th:attr="data-id=${category.CategoryId}">
                                                                         <i class="ri-delete-bin-5-fill fs-16"></i>
                                                                     </a>
                                                                 </li>

@@ -26,11 +26,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.demo.model.*;
 import com.example.demo.repository.adminrepository;
 import com.example.demo.repository.blogrepository;
+import com.example.demo.repository.categoriesrepository;
 import com.example.demo.repository.customerrepository;
 import com.example.demo.repository.orderrepository;
 import com.example.demo.repository.productrepository;
 
 import jakarta.servlet.http.HttpSession;
+
+
+@Controller
+@RequestMapping("/admin")
 public class categorycontroller {
 
     @Autowired
@@ -47,5 +52,34 @@ public class categorycontroller {
 
     @Autowired
     blogrepository blogrepo;
+
+    @Autowired
+    categoriesrepository caterepo;
+
+    //show list
+    @GetMapping("apps-ecommerce-category")
+    public String categories(Model model) {
+        List<categories> categories = (List<categories>) caterepo.findAll();
+        model.addAttribute("categories", categories);
+        return "admin/apps-ecommerce-category";
+    }
+
+    // add category
+    
+
+    // delete
+    @GetMapping("/categorydelete/{id}")
+    public String categorydelete(@PathVariable("id") int id, RedirectAttributes redirectAttributes) {
+        try {
+            caterepo.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Category deleted successfully!");
+        } catch (EmptyResultDataAccessException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Category not found or already deleted.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while deleting the category.");
+        }
+
+        return "redirect:/admin/apps-ecommerce-category";
+    }
 
 }

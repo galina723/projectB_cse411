@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.blogs;
 import com.example.demo.model.blogsdto;
+import com.example.demo.model.categories;
 import com.example.demo.model.products;
 import com.example.demo.model.productsdto;
 import com.example.demo.repository.*;
@@ -55,17 +56,23 @@ public class blogcontroller {
     }
 
     @GetMapping("apps-ecommerce-create-blog")
-    public String addblog(Model model) {
+    public String addproduct(Model model) {
+        List<blogs> blogs = (List<blogs>) blogrepo.findAll(); // Fetch categories from the database
+        model.addAttribute("blogs", blogs); // Add categories to the model
         blogsdto blogsdto = new blogsdto();
+        // Get the next available ProductId
+        int nextBlogId = blogrepo.findNextBlogId();
+        // Set the ProductId in the DTO
+        blogsdto.setBlogId(nextBlogId);
         model.addAttribute("blogsdto", blogsdto);
-        return "admin/apps-ecommerce-create-blog";
+        return ("admin/apps-ecommerce-create-blog");
     }
 
     @PostMapping("apps-ecommerce-create-blog/save")
-    public String saveblog(@ModelAttribute("blogsdto") blogsdto blogsdto, BindingResult result) {
+    public String saveProduct(@ModelAttribute("blogsdto") blogsdto blogsdto, BindingResult result) {
         // Check for form validation errors
         if (result.hasErrors()) {
-            return "admin/apps-ecommerce-create-blog";
+            return "admin/apps-ecommerce-create-blog"; // Return to the form if there's an error
         }
 
         // Check if the uploaded image is empty
@@ -78,7 +85,7 @@ public class blogcontroller {
         String storagefilename = image.getOriginalFilename(); // Get the original file name
 
         // Define the absolute path for the images directory
-        String uploaddir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\blogimages";
+        String uploaddir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\blogimages\\";
         // Print the upload directory for debugging
         System.out.println("Upload Directory: " + uploaddir);
 
@@ -89,8 +96,6 @@ public class blogcontroller {
             if (!Files.exists(uploadpath)) {
                 Files.createDirectories(uploadpath);
                 System.out.println("Directory created: " + uploadpath.toString());
-            } else {
-                System.out.println("Directory already exists: " + uploadpath.toString());
             }
 
             // Save the uploaded image to the directory
@@ -112,7 +117,7 @@ public class blogcontroller {
         } catch (IOException e) {
             // Handle file saving error
             System.out.println("Error occurred while saving image: " + e.getMessage());
-            result.addError(new FieldError("blogsdto", "BlogImage", "Unable to save the image. Try again."));
+            result.addError(new FieldError("blogsdto", "ProductMainImage", "Unable to save the image. Try again."));
             return "admin/apps-ecommerce-create-blog";
         }
 
@@ -125,7 +130,7 @@ public class blogcontroller {
         bl.setBlogCreateDate(blogsdto.getBlogCreateDate());
         bl.setBlogPostBy(blogsdto.getBlogPostBy());
         bl.setBlogtag(blogsdto.getBlogtag());
-        bl.setBlogImage(storagefilename); // Save the image filename in the database
+        bl.setBlogImage(storagefilename);
 
         // Save the product to the repository
         blogrepo.save(bl);
@@ -166,11 +171,11 @@ public class blogcontroller {
     public String deleteblog(@PathVariable("id") int id, RedirectAttributes redirectAttributes) {
         try {
             blogrepo.deleteById(id);
-            redirectAttributes.addFlashAttribute("successMessage", "Product deleted successfully!");
+            redirectAttributes.addFlashAttribute("successMessage", "Blog deleted successfully!");
         } catch (EmptyResultDataAccessException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Product not found or already deleted.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Blog not found or already deleted.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while deleting the product.");
+            redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while deleting the blog.");
         }
 
         return "redirect:/admin/apps-ecommerce-blogs";

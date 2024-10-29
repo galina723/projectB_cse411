@@ -72,7 +72,7 @@ public class productcontroller {
         String storagefilename = image.getOriginalFilename(); // Get the original file name
 
         // Define the absolute path for the images directory
-        String uploaddir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\productimages";
+        String uploaddir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\productimages";
         // Print the upload directory for debugging
         System.out.println("Upload Directory: " + uploaddir);
 
@@ -182,7 +182,7 @@ public class productcontroller {
         // Check if a new image is uploaded
         MultipartFile image = productsdto.getProductMainImage();
         if (image != null && !image.isEmpty()) {
-            String uploadDir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\productimages";
+            String uploadDir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\productimages";
             Path uploadPath = Paths.get(uploadDir);
             String storageFilename = image.getOriginalFilename();
 
