@@ -7,13 +7,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+
 import com.example.demo.model.*;
 import com.example.demo.repository.adminrepository;
 import com.example.demo.repository.blogrepository;
 import com.example.demo.repository.customerrepository;
 import com.example.demo.repository.orderrepository;
 import com.example.demo.repository.productrepository;
-
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -38,31 +39,6 @@ public class AdminController {
         return ("admin/index");
     }
 
-    @GetMapping("apps-ecommerce-blog-details")
-    public String blogdetail() {
-        return ("admin/apps-ecommerce-blog-details");
-    }
-
-    @GetMapping("apps-ecommerce-blog")
-    public String blog(Model model) {
-
-        List<blogs> blogs = (List<blogs>) blogrepo.findAll();
-        model.addAttribute("blogs", blogs);
-        return ("admin/apps-ecommerce-blog");
-    }
-
-    @GetMapping("apps-ecommerce-create-blog")
-    public String createblog(Model model) {
-        productsdto productsdto = new productsdto();
-        model.addAttribute("productsdto", productsdto);
-        return ("admin/apps-ecommerce-create-blog");
-    }
-
-    @GetMapping("apps-ecommerce-edit-blog")
-    public String editblog() {
-        return ("admin/apps-ecommerce-edit-blog");
-    }
-
     @GetMapping("apps-ecommerce-customers")
     public String customers(Model model) {
 
@@ -70,6 +46,7 @@ public class AdminController {
         model.addAttribute("customers", customers);
         return ("admin/apps-ecommerce-customers");
     }
+    
 
     @GetMapping("apps-ecommerce-order-details")
     public String orderdetail() {
@@ -79,11 +56,6 @@ public class AdminController {
     @GetMapping("apps-ecommerce-orders")
     public String orders() {
         return ("admin/apps-ecommerce-orders");
-    }
-
-    @GetMapping("apps-ecommerce-product-details")
-    public String productdetail() {
-        return ("admin/apps-ecommerce-product-details");
     }
 
     @GetMapping("apps-ecommerce-seller-details")
@@ -107,11 +79,6 @@ public class AdminController {
     @GetMapping("pages-profile-settings")
     public String setting() {
         return ("admin/pages-profile-settings");
-    }
-
-    @GetMapping("apps-ecommerce-category")
-    public String category() {
-        return ("admin/apps-ecommerce-category");
     }
 
 }

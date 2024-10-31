@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -12,7 +11,7 @@ import jakarta.persistence.*;
 public class blogs {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", length = 10, nullable = false)
     private int BlogId;
 

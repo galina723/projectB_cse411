@@ -121,7 +121,7 @@
                                             </tr>
                                             </thead>
                                             <tbody class="list form-check-all" th:each="customer : ${customers}">
-                                            <tr>
+                                            <tr th:each="customer : ${customers}">
                                                 <th scope="row">
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="checkbox"
@@ -131,7 +131,7 @@
                                                 <td class="id">[[${customer.CustomerId}]]</td>
                                                 <td class="name">[[${customer.CustomerName}]]</td>
                                                 <td class="email">[[${customer.CustomerEmail}]]</td>
-                                                <td class="phone">[[[${customer.CustomerPhone}]]]</td>
+                                                <td class="phone">[[${customer.CustomerPhone}]]</td>
                                                 <td class="address">[[${customer.CustomerAddress}]]</td>
                                                 <td class="city">[[${customer.CustomerCity}]]</td>
                                                 <td class="province">[[${customer.CustomerProvince}]]</td>
