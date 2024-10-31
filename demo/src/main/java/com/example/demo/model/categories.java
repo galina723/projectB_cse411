@@ -7,9 +7,38 @@ import jakarta.persistence.*;
 public class categories {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", length = 10, nullable = false)
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", length = 10)
     private int CategoryId;
+
+    @Column(name = "name", length = 50)
+    private String CategoryName;
+
+    @Column(name = "quantity")
+    @Transient
+    private int CategoryQuantity;
+
+    @Column(name = "status")
+    private String CategoryStatus;
+
+    @Column(name = "isActive")
+    private boolean isActive;
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public String getCategoryStatus() {
+        return CategoryStatus;
+    }
+
+    public void setCategoryStatus(String categoryStatus) {
+        CategoryStatus = categoryStatus;
+    }
 
     public int getCategoryId() {
         return CategoryId;
@@ -18,9 +47,6 @@ public class categories {
     public void setCategoryId(int categoryId) {
         CategoryId = categoryId;
     }
-
-    @Column(name = "name", length = 50, nullable = false)
-    private String CategoryName;
 
     public String getCategoryName() {
         return CategoryName;
@@ -31,9 +57,6 @@ public class categories {
         CategoryName = categoryName;
     }
 
-    @Column(name = "quantity")
-    private int CategoryQuantity;
-
     public int getCategoryQuantity() {
         return CategoryQuantity;
     }
@@ -41,16 +64,4 @@ public class categories {
     public void setCategoryQuantity(int categoryQuantity) {
         CategoryQuantity = categoryQuantity;
     }
-
-    @Column(name = "status")
-    private Boolean CategoryStatus;
-
-    public Boolean getCategoryStatus() {
-        return CategoryStatus;
-    }
-
-    public void setCategoryStatus(Boolean categoryStatus) {
-        CategoryStatus = categoryStatus;
-    }
-
 }

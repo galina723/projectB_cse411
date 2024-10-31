@@ -43,33 +43,32 @@ public class productcontroller {
 
     @GetMapping("apps-ecommerce-add-product")
     public String addproduct(Model model) {
-        List<categories> categories = (List<categories>) caterepo.findAll(); // Fetch categories from the database
-        model.addAttribute("categories", categories); // Add categories to the model
+        List<categories> categories = caterepo.findAllByIsActiveTrue();
+        model.addAttribute("categories", categories);
+
         productsdto productsdto = new productsdto();
-        // Get the next available ProductId
         int nextProductId = productrepo.findNextProductId();
-        // Set the ProductId in the DTO
         productsdto.setProductId(nextProductId);
+
         model.addAttribute("productsdto", productsdto);
         return ("admin/apps-ecommerce-add-product");
     }
 
     @PostMapping("apps-ecommerce-add-product")
     public String saveProduct(@ModelAttribute("productsdto") productsdto productsdto, BindingResult result) {
-
         if (result.hasErrors()) {
             return "admin/apps-ecommerce-add-product";
         }
 
         if (productsdto.getProductMainImage().isEmpty()) {
             result.addError(new FieldError("productsdto", "ProductMainImage", "ProductMainImage is required"));
-            return "admin/apps-ecommerce-add-product"; 
+            return "admin/apps-ecommerce-add-product";
         }
 
         MultipartFile image = productsdto.getProductMainImage();
-        String storagefilename = image.getOriginalFilename(); 
+        String storagefilename = image.getOriginalFilename();
 
-        String uploaddir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\productimages";
+        String uploaddir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\productimages";
 
         Path uploadpath = Paths.get(uploaddir);
 
@@ -81,7 +80,6 @@ public class productcontroller {
             try (InputStream inputStream = image.getInputStream()) {
                 Path targetPath = uploadpath.resolve(storagefilename);
 
-                // Only copy the file if it does not already exist
                 if (!Files.exists(targetPath)) {
                     Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
                 } else {
@@ -90,13 +88,11 @@ public class productcontroller {
             }
 
         } catch (IOException e) {
-            // Handle file saving error
             System.out.println("Error occurred while saving image: " + e.getMessage());
             result.addError(new FieldError("productsdto", "ProductMainImage", "Unable to save the image. Try again."));
             return "admin/apps-ecommerce-add-product";
         }
 
-        // Create a new product entity and set its fields
         products pro = new products();
         pro.setProductId(productsdto.getProductId());
         pro.setProductName(productsdto.getProductName());
@@ -107,7 +103,6 @@ public class productcontroller {
         pro.setProductMainImage(storagefilename);
         pro.setProductStatus(productsdto.getProductStatus());
 
-        // Save the product to the repository
         products savedProduct = productrepo.save(pro);
         // Process and save gallery images
         List<MultipartFile> galleryImages = productsdto.getProductOtherImages();
@@ -115,7 +110,7 @@ public class productcontroller {
         if (galleryImages != null && !galleryImages.isEmpty()) {
             for (MultipartFile galleryImage : galleryImages) {
                 if (galleryImage.isEmpty()) {
-                    continue; // Skip empty images
+                    continue;
                 }
 
                 String galleryImageFilename = galleryImage.getOriginalFilename();
@@ -124,7 +119,6 @@ public class productcontroller {
                 try (InputStream inputStream = galleryImage.getInputStream()) {
                     Files.copy(inputStream, galleryImagePath, StandardCopyOption.REPLACE_EXISTING);
 
-                    // Save gallery image in `productimages` table
                     productotherimages productImage = new productotherimages();
                     productImage.setProduct(savedProduct);
                     productImage.setProductImage(galleryImageFilename);
@@ -137,20 +131,19 @@ public class productcontroller {
             System.out.println("No gallery images provided.");
         }
 
-        // Redirect to the product listing page after successful save
         return "redirect:/admin/apps-ecommerce-products";
     }
 
     @GetMapping("/set-current-product-id/{id}")
     public String setCurrentProductId(@PathVariable("id") int id, HttpSession session) {
-        session.setAttribute("currentProductId", id); // Store as Integer
+        session.setAttribute("currentProductId", id);
         return "redirect:/admin/apps-ecommerce-edit-product";
     }
 
     @GetMapping("/apps-ecommerce-edit-product")
     public String showEditForm(HttpSession session, Model model) {
-        List<categories> categories = (List<categories>) caterepo.findAll(); // Fetch categories from the database
-        model.addAttribute("categories", categories); // Add categories to the model
+        List<categories> categories = caterepo.findAllByIsActiveTrue();
+        model.addAttribute("categories", categories);
         Integer productId = (Integer) session.getAttribute("currentProductId");
         if (productId == null) {
             model.addAttribute("errorMessage", "No product selected!");
@@ -177,7 +170,6 @@ public class productcontroller {
         // Pass the existing image URL to the model for displaying in the view
         model.addAttribute("existingImage", "/productimages/" + product.getProductMainImage());
 
-        // Fetch and add gallery images to the model
         List<productotherimages> galleryImages = productimagerepo.findByProduct(product);
         List<String> galleryImageUrls = galleryImages.stream()
                 .map(image -> "/productimages/" + image.getProductImage())
@@ -189,48 +181,42 @@ public class productcontroller {
 
     @PostMapping("/apps-ecommerce-edit-product")
     public String saveEditedProduct(@ModelAttribute("productsdto") productsdto productsdto, BindingResult result) {
-
         if (result.hasErrors()) {
-            return "admin/apps-ecommerce-edit-product"; // Return to form if there are errors
+            return "admin/apps-ecommerce-edit-product";
         }
 
         products pro = productrepo.findById(productsdto.getProductId()).orElse(null);
         if (pro == null) {
             result.addError(new FieldError("productsdto", "productId", "Product not found!"));
-            return "admin/apps-ecommerce-edit-product"; // Return to the form if the product is not found
+            return "admin/apps-ecommerce-edit-product";
         }
 
-        String uploadDir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\productimages";
+        String uploadDir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\productimages";
         Path uploadPath = Paths.get(uploadDir);
 
-        // Check if a new image is uploaded
         MultipartFile image = productsdto.getProductMainImage();
         if (image != null && !image.isEmpty()) {
             String storageFilename = image.getOriginalFilename();
-
             try {
                 if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath); // Create directory if it doesn't exist
+                    Files.createDirectories(uploadPath);
                 }
                 try (InputStream inputStream = image.getInputStream()) {
                     Path targetPath = uploadPath.resolve(storageFilename);
                     Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
                 }
-                pro.setProductMainImage(storageFilename); // Save only the filename in the entity
+                pro.setProductMainImage(storageFilename);
             } catch (IOException e) {
                 result.addError(
                         new FieldError("productsdto", "ProductMainImage", "Unable to save the image. Try again."));
-                return "admin/apps-ecommerce-edit-product"; // Return to the form on error
+                return "admin/apps-ecommerce-edit-product";
             }
         } else {
             // If no new image is uploaded, keep the existing image
             pro.setProductMainImage(pro.getProductMainImage());
         }
 
-        // Fetch existing gallery images
         List<productotherimages> existingGalleryImages = productimagerepo.findByProduct(pro);
-
-        // New gallery images from the DTO
         List<MultipartFile> galleryImages = productsdto.getProductOtherImages(); // All uploaded images
 
         // Check if new images are uploaded
@@ -241,7 +227,7 @@ public class productcontroller {
         if (hasNewImages) {
             // Delete old gallery images from the database
             for (productotherimages existingImage : existingGalleryImages) {
-                productimagerepo.delete(existingImage); // Delete from database
+                productimagerepo.delete(existingImage);
             }
 
             // Save the new gallery images
@@ -258,21 +244,19 @@ public class productcontroller {
                             Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
                         }
 
-                        // Save the new gallery image in the database
                         productotherimages newImage = new productotherimages();
-                        newImage.setProduct(pro); // Set the product reference
-                        newImage.setProductImage(galleryImageFilename); // Set the image filename
-                        productimagerepo.save(newImage); // Save the new image
+                        newImage.setProduct(pro);
+                        newImage.setProductImage(galleryImageFilename);
+                        productimagerepo.save(newImage);
                     } catch (IOException e) {
                         result.addError(new FieldError("productsdto", "productOtherImages",
                                 "Unable to save the new gallery image. Try again."));
-                        return "admin/apps-ecommerce-edit-product"; // Return to the form on error
+                        return "admin/apps-ecommerce-edit-product";
                     }
                 }
             }
         }
 
-        // Set other fields
         pro.setProductName(productsdto.getProductName());
         pro.setProductPrice(productsdto.getProductPrice());
         pro.setProductDescription(productsdto.getProductDescription());
@@ -281,13 +265,12 @@ public class productcontroller {
         pro.setProductStatus(productsdto.getProductStatus());
         pro.setCreateTime(productsdto.getCreateTime());
 
-        productrepo.save(pro); // Save the updated product
+        productrepo.save(pro);
 
-        return "redirect:/admin/apps-ecommerce-products"; // Redirect to the product listing page
+        return "redirect:/admin/apps-ecommerce-products";
     }
 
     // delete product
-
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") int id, RedirectAttributes redirectAttributes) {
         try {

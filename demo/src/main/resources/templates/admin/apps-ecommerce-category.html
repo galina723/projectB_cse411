@@ -3,13 +3,13 @@
     data-sidebar-image="none" data-preloader="disable" xmlns:th="http://www.thymeleaf.org">
 
 
-<head th:replace="admin/layout :: pageHead('Products')">
+<head th:replace="~{admin/layout :: pageHead('Category')}">
 
 </head>
 
 <body>
 
-    <div th:replace="admin/layout :: body">
+    <div th:replace="~{admin/layout :: body}">
         <section th:fragment="mainContent">
             <div class="page-content">
                 <div class="container-fluid">
@@ -40,8 +40,7 @@
                                                         class="ri-delete-bin-2-line"></i></button>
 
                                                 <button type="button" class="btn btn-success add-btn"
-                                                    data-bs-toggle="modal" id="create-btn"
-                                                    href="#showModal"><i
+                                                    data-bs-toggle="modal" id="create-btn" href="#showModal"><i
                                                         class="ri-add-line align-bottom me-1"></i> Add Category</button>
 
 
@@ -129,14 +128,14 @@
                                                                     id="checkAll" value="option">
                                                             </div>
                                                         </th>
-                                                        <td class="id">
-                                                            <a href="#">[[${category.CategoryId}]]</a>
-                                                        </td>
+                                                        <td class="id">[[${category.CategoryId}]]</td>
                                                         <td class="name">[[${category.CategoryName}]]</td>
                                                         <td class="quantity">[[${category.CategoryQuantity}]]</td>
                                                         <td class="status">
-                                                            <span
+                                                            <span th:if="${category.CategoryStatus == 'Active'}"
                                                                 class="badge bg-success-subtle text-success text-uppercase">Active</span>
+                                                            <span th:if="${category.CategoryStatus == 'Block'}"
+                                                                class="badge bg-danger-subtle text-danger text-uppercase">Block</span>
                                                         </td>
                                                         <td>
                                                             <ul class="list-inline hstack gap-2 mb-0">
@@ -145,8 +144,10 @@
                                                                     data-bs-toggle="tooltip" data-bs-trigger="hover"
                                                                     data-bs-placement="top" aria-label="Edit"
                                                                     data-bs-original-title="Edit">
-                                                                    <a th:href="@{/admin/set-current-product-id/{id}(id=${category.CategoryId})}"
-                                                                        class="text-primary d-inline-block edit-item-btn">
+                                                                    <a href="#editRecordModal"
+                                                                        class="text-primary d-inline-block edit-category-btn"
+                                                                        data-bs-toggle="modal" th:attr="data-id=${category.categoryId}, data-name=${category.categoryName},
+                                                                        data-status=${category.categoryStatus}">
                                                                         <i class="ri-pencil-fill fs-16"></i>
                                                                     </a>
                                                                 </li>
@@ -155,11 +156,18 @@
                                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                                     data-bs-trigger="hover" data-bs-placement="top"
                                                                     title="Remove">
-                                                                    <a class="text-danger d-inline-block remove-item-btn"
+                                                                    <a th:if="${category.categoryQuantity == 0}"
+                                                                        class="text-danger d-inline-block remove-item-btn"
                                                                         data-bs-toggle="modal" href="#deleteRecordModal"
-                                                                        th:attr="data-id=${category.CategoryId}">
+                                                                        th:attr="data-id=${category.categoryId}, data-name=${category.categoryName},
+                                                                        data-status=${category.categoryStatus}">
                                                                         <i class="ri-delete-bin-5-fill fs-16"></i>
                                                                     </a>
+                                                                    <span th:if="${category.categoryQuantity > 0}"
+                                                                        class="text-muted"
+                                                                        title="Cannot delete: Quantity > 0">
+                                                                        <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                                    </span>
                                                                 </li>
                                                             </ul>
                                                         </td>
@@ -186,33 +194,26 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close" id="close-modal"></button>
                                                     </div>
-                                                    <form class="tablelist-form" autocomplete="off">
+                                                    <form th:action="@{/admin/addCategory}" method="post"
+                                                        th:object="${categoriesdto}" autocomplete="off">
                                                         <div class="modal-body">
-                                                            <input type="hidden" id="id-field" />
-
-                                                            <div class="mb-3" id="modal-id" style="display: none;">
-                                                                <label for="id-field1" class="form-label">ID</label>
-                                                                <input type="text" id="id-field1" class="form-control"
-                                                                    placeholder="ID" readonly />
-                                                            </div>
-
                                                             <div class="mb-3">
                                                                 <label for="customername-field"
                                                                     class="form-label">Category Name</label>
                                                                 <input type="text" id="customername-field"
-                                                                    class="form-control" placeholder="Enter name"
-                                                                    required />
-                                                                <div class="invalid-feedback">Please enter a customer
+                                                                    name="categoryName" class="form-control"
+                                                                    placeholder="Enter name" required
+                                                                    th:field="*{CategoryName}" />
+                                                                <div class="invalid-feedback">Please enter a category
                                                                     name.</div>
                                                             </div>
 
-                                                            <div>
+                                                            <div class="mb-3">
                                                                 <label for="status-field"
                                                                     class="form-label">Status</label>
-                                                                <select class="form-control" data-choices
-                                                                    data-choices-search-false name="status-field"
-                                                                    id="status-field" required>
-                                                                    <option value="">Status</option>
+                                                                <select class="form-control" name="status"
+                                                                    id="status-field" required
+                                                                    th:field="*{CategoryStatus}">
                                                                     <option value="Active">Active</option>
                                                                     <option value="Block">Block</option>
                                                                 </select>
@@ -223,9 +224,50 @@
                                                                 <button type="button" class="btn btn-light"
                                                                     data-bs-dismiss="modal">Close</button>
                                                                 <button type="submit" class="btn btn-success"
-                                                                    id="add-btn">Add Customer</button>
-                                                                <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
+                                                                    id="add-btn">Add Category</button>
                                                             </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal fade" id="editRecordModal" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header bg-light p-3">
+                                                        <h5 class="modal-title">Edit Category</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <form th:action="@{/admin/editCategory}" method="post"
+                                                        th:object="${categoriesdto}" autocomplete="off">
+                                                        <div class="modal-body">
+                                                            <input type ="hidden" name="CategoryId" th:field="*{CategoryId}"
+                                                                id="categoryIdField" />
+                                                            <div class="mb-3">
+                                                                <label for="categoryname-field"
+                                                                    class="form-label">Category Name</label>
+                                                                <input type="text" id="categoryname-field"
+                                                                    name="CategoryName" class="form-control"
+                                                                    th:field="*{CategoryName}" required />
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="status-field"
+                                                                    class="form-label">Status</label>
+                                                                <select class="form-control" name="CategoryStatus"
+                                                                    id="status-field" th:field="*{CategoryStatus}"
+                                                                    required>
+                                                                    <option value="Active">Active</option>
+                                                                    <option value="Block">Block</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-light"
+                                                                data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-success">Update
+                                                                Category</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -291,7 +333,35 @@
             </div>
         </section>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteModal = document.getElementById('deleteRecordModal');
 
+            deleteModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const categoryId = button.getAttribute('data-id');
+
+                const form = document.getElementById('deleteRecordForm');
+                form.setAttribute('action', '/admin/deleteCategory/' + categoryId);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const editButtons = document.querySelectorAll('.edit-category-btn');
+
+            editButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const categoryId = this.getAttribute('data-id');
+                    const categoryName = this.getAttribute('data-name');
+                    const categoryStatus = this.getAttribute('data-status');
+
+                    document.getElementById('categoryIdField').value = categoryId;
+                    document.getElementById('categoryname-field').value = categoryName;
+                    document.getElementById('status-field').value = categoryStatus;
+                });
+            });
+        });
+    </script>
 </body>
 
 

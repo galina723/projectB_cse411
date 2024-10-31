@@ -7,15 +7,7 @@ var checkAll = document.getElementById("checkAll"), perPage = (checkAll && (chec
     }
     )]
 }
-    , deleteRecord = document.addEventListener('DOMContentLoaded', function () {
-        const deleteModal = document.getElementById('deleteRecordModal');
-        deleteModal.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget;
-            const productId = button.getAttribute('data-id');
-            const form = document.getElementById('deleteRecordForm');
-            form.setAttribute('action', '/admin/delete/' + productId);
-        });
-    }), customerList = new List("customerList", options).on("updated", function (e) {
+    , customerList = new List("customerList", options).on("updated", function (e) {
         0 == e.matchingItems.length ? document.getElementsByClassName("noresult")[0].style.display = "block" : document.getElementsByClassName("noresult")[0].style.display = "none"; var t = 1 == e.i, a = e.i > e.matchingItems.length - e.page; document.querySelector(".pagination-prev.disabled") && document.querySelector(".pagination-prev.disabled").classList.remove("disabled"), document.querySelector(".pagination-next.disabled") && document.querySelector(".pagination-next.disabled").classList.remove("disabled"), t && document.querySelector(".pagination-prev").classList.add("disabled"), a && document.querySelector(".pagination-next").classList.add("disabled"), e.matchingItems.length <= perPage ? document.querySelector(".pagination-wrap").style.display = "none" : document.querySelector(".pagination-wrap").style.display = "flex", e.matchingItems.length == perPage && document.querySelector(".pagination.listjs-pagination").firstElementChild.children[0].click(), 0 < e.matchingItems.length ? document.getElementsByClassName("noresult")[0].style.display = "none" : document.getElementsByClassName("noresult")[0].style.display = "block"
     }
     ); const xhttp = new XMLHttpRequest; xhttp.onload = function () {
