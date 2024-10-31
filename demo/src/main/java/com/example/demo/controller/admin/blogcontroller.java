@@ -55,14 +55,16 @@ public class blogcontroller {
         return ("admin/apps-ecommerce-blog");
     }
 
+    // add blog
+
     @GetMapping("apps-ecommerce-create-blog")
     public String addproduct(Model model) {
-        List<blogs> blogs = (List<blogs>) blogrepo.findAll(); // Fetch categories from the database
-        model.addAttribute("blogs", blogs); // Add categories to the model
+        List<blogs> blogs = (List<blogs>) blogrepo.findAll();
+        model.addAttribute("blogs", blogs);
         blogsdto blogsdto = new blogsdto();
-        // Get the next available ProductId
+
         int nextBlogId = blogrepo.findNextBlogId();
-        // Set the ProductId in the DTO
+
         blogsdto.setBlogId(nextBlogId);
         model.addAttribute("blogsdto", blogsdto);
         return ("admin/apps-ecommerce-create-blog");
@@ -70,42 +72,35 @@ public class blogcontroller {
 
     @PostMapping("apps-ecommerce-create-blog/save")
     public String saveProduct(@ModelAttribute("blogsdto") blogsdto blogsdto, BindingResult result) {
-        // Check for form validation errors
         if (result.hasErrors()) {
-            return "admin/apps-ecommerce-create-blog"; // Return to the form if there's an error
+            return "admin/apps-ecommerce-create-blog";
         }
 
-        // Check if the uploaded image is empty
         if (blogsdto.getBlogImage().isEmpty()) {
             result.addError(new FieldError("blogsdto", "BlogImage", "BlogImage is required"));
-            return "admin/apps-ecommerce-create-blog"; // Return to the form if there's an error
+            return "admin/apps-ecommerce-create-blog";
         }
 
         MultipartFile image = blogsdto.getBlogImage();
-        String storagefilename = image.getOriginalFilename(); // Get the original file name
+        String storagefilename = image.getOriginalFilename();
 
-        // Define the absolute path for the images directory
         String uploaddir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\blogimages\\";
-        // Print the upload directory for debugging
+
         System.out.println("Upload Directory: " + uploaddir);
 
         Path uploadpath = Paths.get(uploaddir);
 
         try {
-            // Ensure the directory exists, if not, create it
+
             if (!Files.exists(uploadpath)) {
                 Files.createDirectories(uploadpath);
                 System.out.println("Directory created: " + uploadpath.toString());
             }
 
-            // Save the uploaded image to the directory
             try (InputStream inputStream = image.getInputStream()) {
                 Path targetPath = uploadpath.resolve(storagefilename);
 
-                // Print target path for debugging
                 System.out.println("Target File Path: " + targetPath.toString());
-
-                // Only copy the file if it does not already exist
                 if (!Files.exists(targetPath)) {
                     Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
                     System.out.println("File successfully saved at: " + targetPath.toString());
@@ -115,13 +110,12 @@ public class blogcontroller {
             }
 
         } catch (IOException e) {
-            // Handle file saving error
+
             System.out.println("Error occurred while saving image: " + e.getMessage());
             result.addError(new FieldError("blogsdto", "ProductMainImage", "Unable to save the image. Try again."));
             return "admin/apps-ecommerce-create-blog";
         }
 
-        // Create a new product entity and set its fields
         blogs bl = new blogs();
         bl.setBlogId(blogsdto.getBlogId());
         bl.setBlogTitle(blogsdto.getBlogTitle());
@@ -167,7 +161,7 @@ public class blogcontroller {
 
     // delete product
 
-    @GetMapping("/blogdelete/{id}")
+    @GetMapping("/deleteblog/{id}")
     public String deleteblog(@PathVariable("id") int id, RedirectAttributes redirectAttributes) {
         try {
             blogrepo.deleteById(id);

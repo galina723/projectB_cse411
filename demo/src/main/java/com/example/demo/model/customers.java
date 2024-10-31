@@ -17,14 +17,14 @@ public class customers {
     private int CustomerId;
 
     @Column(name = "email", length = 50)
-    private String customerEmail;
+    private String cemail;
 
-    public String getcustomerEmail() {
-        return customerEmail;
+    public String getCemail() {
+        return cemail;
     }
 
-    public void setcustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
+    public void setCemail(String cemail) {
+        this.cemail = cemail;
     }
 
     @Column(name = "name", length = 50)

@@ -56,32 +56,28 @@ public class productcontroller {
 
     @PostMapping("apps-ecommerce-add-product")
     public String saveProduct(@ModelAttribute("productsdto") productsdto productsdto, BindingResult result) {
-        // Check for form validation errors
+
         if (result.hasErrors()) {
             return "admin/apps-ecommerce-add-product";
         }
 
-        // Check if the uploaded image is empty
         if (productsdto.getProductMainImage().isEmpty()) {
             result.addError(new FieldError("productsdto", "ProductMainImage", "ProductMainImage is required"));
-            return "admin/apps-ecommerce-add-product"; // Return to the form if there's an error
+            return "admin/apps-ecommerce-add-product"; 
         }
 
         MultipartFile image = productsdto.getProductMainImage();
-        String storagefilename = image.getOriginalFilename(); // Get the original file name
+        String storagefilename = image.getOriginalFilename(); 
 
-        // Define the absolute path for the images directory
-        String uploaddir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\productimages";
+        String uploaddir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\productimages";
 
         Path uploadpath = Paths.get(uploaddir);
 
         try {
-            // Ensure the directory exists, if not, create it
             if (!Files.exists(uploadpath)) {
                 Files.createDirectories(uploadpath);
             }
 
-            // Save the uploaded image to the directory
             try (InputStream inputStream = image.getInputStream()) {
                 Path targetPath = uploadpath.resolve(storagefilename);
 
@@ -204,7 +200,7 @@ public class productcontroller {
             return "admin/apps-ecommerce-edit-product"; // Return to the form if the product is not found
         }
 
-        String uploadDir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\productimages";
+        String uploadDir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\productimages";
         Path uploadPath = Paths.get(uploadDir);
 
         // Check if a new image is uploaded

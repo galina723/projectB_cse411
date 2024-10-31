@@ -46,7 +46,7 @@
                                         </p>
                                         <p>
                                             <label>Email <span>*</span></label>
-                                            <input type="text" th:field="*{customerEmail}">
+                                            <input type="text" th:field="*{cemail}">
                                         </p>
 
                                         <p>
@@ -77,17 +77,18 @@
                                         <p>
                                             <label for="country">Province <span>*</span></label>
                                             <select class="form-select" name="country" id="country" th:field="*{CustomerProvince}">
-                                                <option value="2">Bình Dương</option>
-                                                <option value="3">Bình Phước</option>
-                                                <option value="4">Tây Ninh</option>
-                                                <option value="5">Đồng Nai</option>
-                                                <option value="6">Thành phố Hồ Chí Minh</option>
-                                                <option value="7">Bà Rịa Vũng Tàu</option>
-                                                <option value="8">Long An</option>
-                                                <option value="9">Bình Thuận</option>
-                                                <option value="10">Hà Nội</option>
+                                                <option value="Bình Dương">Bình Dương</option>
+                                                <option value="Bình Phước">Bình Phước</option>
+                                                <option value="Tây Ninh">Tây Ninh</option>
+                                                <option value="Đồng Nai">Đồng Nai</option>
+                                                <option value="Thành phố Hồ Chí Minh">Thành phố Hồ Chí Minh</option>
+                                                <option value="Bà Rịa Vũng Tàu">Bà Rịa Vũng Tàu</option>
+                                                <option value="Long An">Long An</option>
+                                                <option value="Bình Thuận">Bình Thuận</option>
+                                                <option value="Hà Nội">Hà Nội</option>
                                             </select>
                                         </p>
+                                        
                                         <div class="login_submit">
                                             <a href="/user/login">Have an account?</a>
                                             <button type="submit">Register</button>

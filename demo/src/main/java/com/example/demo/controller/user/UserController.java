@@ -1,12 +1,15 @@
 package com.example.demo.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.*;
 import com.example.demo.otherfunction.encryption;
@@ -29,7 +32,13 @@ public class UserController {
 
     @GetMapping("register")
     public String register(Model model) {
-        model.addAttribute("customers", new customers());
+
+        customers customer = new customers();
+        // Get the next available ProductId
+        int nextCustomerId = customerrepo.findNextCustomerId();
+        // Set the ProductId in the DTO
+        customer.setCustomerId(nextCustomerId);
+        model.addAttribute("customers", customer);
         return "user/register";
     }
 
@@ -51,11 +60,11 @@ public class UserController {
     }
 
     @PostMapping("/login/success")
-    public String loginSubmit(@RequestParam("customerEmail") String email,
+    public String loginSubmit(@RequestParam("cemail") String email,
                               @RequestParam("CustomerPassword") String password,
                               Model model) {
 
-        customers custo = customerrepo.findByCustomerEmail(email);
+        customers custo = customerrepo.findByCemail(email);
         if (custo == null) {
             return "redirect:/user/register";
         } else {
@@ -66,6 +75,26 @@ public class UserController {
                 return "user/login";
             }
         }
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id") int id, RedirectAttributes redirectAttributes) {
+        try {
+            customers custo = customerrepo.findById(id).orElse(null);
+            customerrepo.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Product deleted successfully!");
+        } catch (EmptyResultDataAccessException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Product not found or already deleted.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while deleting the product.");
+        }
+
+        return "redirect:/admin/apps-ecommerce-customers";
+    }
+
+    @GetMapping("forgot-password")
+    public String forgotpassword() {
+        return "user/forgot-password";
     }
 
     @GetMapping("404")
@@ -106,11 +135,6 @@ public class UserController {
     @GetMapping("faq")
     public String faq() {
         return "user/faq";
-    }
-
-    @GetMapping("forgot-password")
-    public String forgotpassword() {
-        return "user/forgot-password";
     }
 
     @GetMapping("my-account")

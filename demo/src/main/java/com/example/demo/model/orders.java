@@ -1,10 +1,5 @@
 package com.example.demo.model;
-
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.sql.Date;
-import java.time.LocalDateTime;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -19,7 +14,6 @@ public class orders {
     @Column(name = "customerid", length = 10, nullable = false)
     private String CustomerId;
 
-    @CreationTimestamp
     @Column(name = "date", nullable = false)
     private Date OrderDate;
 
