@@ -68,7 +68,7 @@ public class productcontroller {
         MultipartFile image = productsdto.getProductMainImage();
         String storagefilename = image.getOriginalFilename();
 
-        String uploaddir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\productimages";
+        String uploaddir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\productimages";
 
         Path uploadpath = Paths.get(uploaddir);
 
@@ -191,7 +191,7 @@ public class productcontroller {
             return "admin/apps-ecommerce-edit-product";
         }
 
-        String uploadDir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\productimages";
+        String uploadDir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\productimages";
         Path uploadPath = Paths.get(uploadDir);
 
         MultipartFile image = productsdto.getProductMainImage();

@@ -40,7 +40,7 @@ public class ExportController {
     @GetMapping("/export/customers/pdf")
     public void exportcustomerToPDF(HttpServletResponse response) throws IOException {
         List<customers> custo = (List<com.example.demo.model.customers>) customerrepo.findAll();
-        pdfExportService.exportCustomerToPDF(response, custo);
+        ExportPDFService.exportCustomerToPDF(response, custo);
     }
 
     @GetMapping("/export/products/csv")

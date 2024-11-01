@@ -62,7 +62,7 @@
                             <a href="javascript:void(0)"><i class="icon-menu"></i></a>
                         </div>
                         <div class="offcanvas_menu_wrapper">
-                            <div class="canvas_close">
+                            <!-- <div class="canvas_close">
                                 <a href="javascript:void(0)"><i class="ion-android-close"></i></a>
                             </div>
                             <div class="header_contact_info">
@@ -72,8 +72,8 @@
                                             demo@example.com</a></li>
 
                                 </ul>
-                            </div>
-                            <div class="language_currency">
+                            </div> -->
+                            <!-- <div class="language_currency">
                                 <ul>
 
                                     <li class="currency"><a href="#"> USD $ </a>
@@ -90,7 +90,7 @@
                                         </ul>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> -->
 
                             <div id="menu" class="text-left ">
                                 <ul class="offcanvas_main_menu">
@@ -130,7 +130,7 @@
 
         <header>
             <div class="main_header">
-                <div class="header_top">
+                <!-- <div class="header_top">
                     <div class="container-fluid">
                         <div class="row align-items-center">
                             <div class="col-lg-5 col-md-5">
@@ -165,7 +165,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="header_middle sticky-header">
                     <div class="container-fluid">
                         <div class="row align-items-center">
@@ -276,45 +276,13 @@
             <section th:insert="~{::mainContent}"></section>
         </main>
 
-        <!--newsletter area start-->
-        <div class="newsletter_area">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-3 col-md-5">
-                        <div class="newsletter_title">
-                            <h3>Join Our Newsletter</h3>
-                        </div>
-                    </div>
-                    <div class="col-lg-5 col-md-7">
-                        <div class="newsletter_desc">
-                            <p>Get the latest updates on new products and upcoming sales</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-12">
-                        <div class="subscribe_form">
-                            <form id="mc-form" class="mc-form footer-newsletter">
-                                <input id="mc-email" type="email" autocomplete="off" placeholder="Your email address" />
-                                <button id="mc-submit"><i class="icon-envelope-letter icons"></i></button>
-                            </form>
-                            <!-- mailchimp-alerts Start -->
-                            <div class="mailchimp-alerts text-centre">
-                                <div class="mailchimp-submitting"></div><!-- mailchimp-submitting end -->
-                                <div class="mailchimp-success"></div><!-- mailchimp-success end -->
-                                <div class="mailchimp-error"></div><!-- mailchimp-error end -->
-                            </div><!-- mailchimp-alerts end -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--newsletter area end-->
 
         <!--footer area start-->
         <footer class="footer_widgets">
             <div class="container">
                 <div class="footer_top">
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-7">
+                        <div class="col-lg-3 col-md-3 col-sm-3">
                             <div class="widgets_container footer_contact">
                                 <h3>About us</h3>
                                 <div class="footer_desc">
@@ -327,7 +295,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-4 col-sm-5">
+                        <div class="col-lg-3 col-md-3 col-sm-3">
                             <div class="widgets_container widget_menu">
                                 <h3>Custom Links</h3>
                                 <div class="footer_menu">
@@ -342,7 +310,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-4 col-sm-3">
+                        <div class="col-lg-3 col-md-4 col-sm-3">
                             <div class="widgets_container widget_menu">
                                 <h3>My Account</h3>
                                 <div class="footer_menu">
@@ -371,14 +339,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-4 col-sm-4">
-                            <div class="widgets_container widget_menu">
-                                <h3>My Account</h3>
-                                <div class="footer_payment">
-                                    <img src="/user/assets/img/icon/payment2.png" alt="">
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
                 <div class="footer_bottom">
@@ -530,7 +491,7 @@
                                                 <li class="pinterest"><a href="#"><i class="fa fa-pinterest"></i></a>
                                                 </li>
                                                 <li class="google-plus"><a href="#"><i
-                                                            class="fa fa-google-plus"></i></a>
+                                                    class="fa fa-google-plus"></i></a>
                                                 </li>
                                                 <li class="linkedin"><a href="#"><i class="fa fa-linkedin"></i></a></li>
                                             </ul>
@@ -544,47 +505,6 @@
             </div>
         </div>
         <!-- modal area end-->
-
-        <!--news letter popup start-->
-        <div class="newletter-popup">
-            <div id="boxes" class="newletter-container">
-                <div id="dialog" class="window">
-                    <div id="popup2">
-                        <span class="b-close"><span>close</span></span>
-                    </div>
-                    <div class="box">
-                        <div class="newletter-title">
-                            <h2>Newsletter</h2>
-                        </div>
-                        <div class="box-content newleter-content">
-                            <label class="newletter-label">Enter your email address to subscribe our notification of our
-                                new
-                                post &amp; features by email.</label>
-                            <div id="frm_subscribe">
-                                <form name="subscribe" id="subscribe_popup">
-                                    <!-- <span class="required">*</span><span>Enter you email address here...</span>-->
-                                    <input type="text" value="" name="subscribe_pemail" id="subscribe_pemail"
-                                        placeholder="Enter you email address here...">
-                                    <input type="hidden" value="" name="subscribe_pname" id="subscribe_pname">
-                                    <div id="notification"></div>
-                                    <a class="theme-btn-outlined"
-                                        onclick="email_subscribepopup()"><span>Subscribe</span></a>
-                                </form>
-                                <div class="subscribe-bottom">
-                                    <input type="checkbox" id="newsletter_popup_dont_show_again">
-                                    <label for="newsletter_popup_dont_show_again">Don't show this popup again</label>
-                                </div>
-                            </div>
-                            <!-- /#frm_subscribe -->
-                        </div>
-                        <!-- /.box-content -->
-                    </div>
-                </div>
-
-            </div>
-            <!-- /.box -->
-        </div>
-        <!--news letter popup start-->
 
 
         <!-- JS

@@ -41,17 +41,14 @@
                                 <h2>login</h2>
                                 <form action="#" method="post" th:action="@{/user/login/success}" th:object="${customers}">
                                     <p>
-                                        <label>Email <span>*</span></label>
-                                        <input type="text" th:field="*{cemail}">
+                                        <label>Email<span style="color: red;">*</span></label>
+                                        <input type="text" th:field="*{cemail}" required="Add">
                                     </p>
                                     <p>
-                                        <label>Passwords <span>*</span></label>
-                                        <input type="password" th:field="*{CustomerPassword}">
+                                        <label>Passwords<span style="color: red;">*</span></label>
+                                        <input type="password" th:field="*{CustomerPassword}" required="Add">
                                     </p>
-                                    <div class="login_submit"><label for="remember">
-                                            <input id="remember" type="checkbox">
-                                            Remember me
-                                        </label>
+                                    <div class="login_submit">
                                         <a href="/user/forgot-password">Lost your password?</a>
                                         <button type="button" onclick="window.location.href='/user/register';">Register
                                         </button>

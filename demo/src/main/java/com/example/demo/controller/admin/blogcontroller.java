@@ -126,10 +126,9 @@ public class blogcontroller {
         bl.setBlogtag(blogsdto.getBlogtag());
         bl.setBlogImage(storagefilename);
 
-        // Save the product to the repository
+
         blogrepo.save(bl);
 
-        // Redirect to the product listing page after successful save
         return "redirect:/admin/apps-ecommerce-blog";
     }
 

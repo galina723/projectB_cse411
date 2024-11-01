@@ -33,61 +33,38 @@
             <div class="container">
                 <div class="row">
                     <!--login area start-->
-                    <div class="col-lg-12 col-md-12">
+                    <div class="col-lg-3 col-md-3"></div>
+                    <div class="col-lg-6 col-md-12">
                         <div class="account_form">
                             <h2>Register</h2>
                             <form action="#" method="post" enctype="multipart/form-data" th:action="@{/user/register/save}" th:object="${customers}">
                                 <div class="row">
                                     <!-- Column 1: Full Name, Email, Password, Confirm Password -->
-                                    <div class="col-lg-6 col-md-6">
+                                    <div class="col-lg-12 col-md-6">
                                         <p>
-                                            <label>Full Name <span>*</span></label>
-                                            <input type="text" th:field="*{CustomerName}">
+                                            <label>Full Name<span style="color: red;">*</span></label>
+                                            <input type="text" th:field="*{CustomerName}" required="Add">
                                         </p>
                                         <p>
-                                            <label>Email <span>*</span></label>
-                                            <input type="text" th:field="*{cemail}">
-                                        </p>
-
-                                        <p>
-                                            <label>Password <span>*</span></label>
-                                            <input type="password" th:field="*{CustomerPassword}">
+                                            <label>Email<span style="color: red;">*</span></label>
+                                            <input type="text" th:field="*{cemail}" required="Add">
                                         </p>
 
                                         <p>
-                                            <label>Confirm Password <span>*</span></label>
-                                            <input type="password">
+                                            <label>Password<span style="color: red;">*</span></label>
+                                            <input type="password" th:field="*{CustomerPassword}" required="Add">
                                         </p>
-                                    </div>
 
-                                    <!-- Column 2: Phone, Address, City, Province and Button -->
-                                    <div class="col-lg-6 col-md-6">
                                         <p>
-                                            <label>Phone <span>*</span></label>
-                                            <input type="text" th:field="*{CustomerPhone}">
+                                            <label>Confirm Password<span style="color: red;">*</span></label>
+                                            <input type="password" required="Add">
                                         </p>
+                                    
                                         <p>
-                                            <label>Address <span>*</span></label>
-                                            <input type="text" th:field="*{CustomerAddress}">
+                                            <label>Phone<span style="color: red;">*</span></label>
+                                            <input type="text" th:field="*{CustomerPhone}" required="Add">
                                         </p>
-                                        <p>
-                                            <label>City <span>*</span></label>
-                                            <input type="text" th:field="*{CustomerCity}">
-                                        </p>
-                                        <p>
-                                            <label for="country">Province <span>*</span></label>
-                                            <select class="form-select" name="country" id="country" th:field="*{CustomerProvince}">
-                                                <option value="Bình Dương">Bình Dương</option>
-                                                <option value="Bình Phước">Bình Phước</option>
-                                                <option value="Tây Ninh">Tây Ninh</option>
-                                                <option value="Đồng Nai">Đồng Nai</option>
-                                                <option value="Thành phố Hồ Chí Minh">Thành phố Hồ Chí Minh</option>
-                                                <option value="Bà Rịa Vũng Tàu">Bà Rịa Vũng Tàu</option>
-                                                <option value="Long An">Long An</option>
-                                                <option value="Bình Thuận">Bình Thuận</option>
-                                                <option value="Hà Nội">Hà Nội</option>
-                                            </select>
-                                        </p>
+                                        
                                         
                                         <div class="login_submit">
                                             <a href="/user/login">Have an account?</a>
@@ -98,6 +75,7 @@
                             </form>
                         </div>
                     </div>
+                    <div class="col-lg-3 col-md-3"></div>
                     <!--login area end-->
                 </div>
             </div>
