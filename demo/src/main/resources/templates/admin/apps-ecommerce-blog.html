@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
     data-sidebar-image="none" data-preloader="disable" xmlns:th="http://www.thymeleaf.org">
-
+<!-- <meta http-equiv="refresh" content="5"> -->
 
 <head th:replace="admin/layout :: pageHead('Blog')">
 
@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                <h4 class="mb-sm-0">Blog Management</h4>
+                                <h4 class="mb-sm-0">Blog</h4>
                             </div>
                         </div>
                     </div>
@@ -80,7 +80,7 @@
                                                                 name="choices-single-default" id="idStatus">
                                                                 <option value="">Status</option>
                                                                 <option value="all" selected="">All</option>
-                                                                <option value="Active">View</option>
+                                                                <option value="Active">Published</option>
                                                                 <option value="Block">Hidden</option>
                                                             </select>
                                                         </div>
@@ -117,8 +117,7 @@
                                                         <th class="sort" data-sort="id">ID</th>
                                                         <th class="sort" data-sort="title">Title</th>
                                                         <th class="sort" data-sort="image">Image</th>
-                                                        <th class="sort" data-sort="description">Description</th>
-                                                        <th class="sort" data-sort="date">Creating Date</th>
+                                                        <th class="sort" data-sort="date">Created Date</th>
                                                         <th class="sort" data-sort="author">Author</th>
                                                         <th class="sort" data-sort="tag">Tag</th>
                                                         <th class="sort" data-sort="status">Status</th>
@@ -139,19 +138,21 @@
                                                         <td class="title">[[${blog.BlogTitle}]]</td>
                                                         <td class="image img-fluid d">
                                                             <div class="avatar-sm bg-light rounded p-1">
-                                                                <img th:src="@{'/images/' + ${blog.BlogImage}}" alt="" class="img-fluid d-block">
+                                                                <img th:src="@{'/blogimages/' + ${blog.BlogImage}}"
+                                                                    alt="" class="img-fluid d-block">
                                                             </div>
                                                         </td>
-                                                        <td class="description">
-                                                            [[${blog.BlogDescription}]]
-                                                        </td>
+
                                                         <td class="date">
                                                             [[${blog.BlogCreateDate}]]
                                                         </td>
                                                         <td class="author">[[${blog.BlogPostBy}]]</td>
                                                         <td class="tag">[[${blog.Blogtag}]]</td>
-                                                        <td class="status"><span
-                                                                class="badge bg-success-subtle text-success text-uppercase">[[${blog.BlogStatus}]]</span>
+                                                        <td class="status">
+                                                            <span th:if="${blog.BlogStatus == 'Published'}"
+                                                                class="badge bg-success-subtle text-success text-uppercase">Published</span>
+                                                            <span th:if="${blog.BlogStatus == 'Hidden'}"
+                                                                class="badge bg-danger-subtle text-danger text-uppercase">Hidden</span>
                                                         </td>
                                                         <td>
                                                             <ul class="list-inline hstack gap-2 mb-0">
@@ -159,8 +160,9 @@
                                                                     data-bs-toggle="tooltip" data-bs-trigger="hover"
                                                                     data-bs-placement="top" aria-label="Edit"
                                                                     data-bs-original-title="Edit">
-                                                                    <a href="/admin/apps-ecommerce-edit-blog"
-                                                                        class="text-primary d-inline-block edit-item-btn">
+                                                                    <a th:href="@{/admin/set-current-blog-id/{id}(id=${blog.BlogId})}"
+                                                                        class=" text-primary d-inline-block
+                                                                        edit-item-btn">
                                                                         <i class="ri-pencil-fill fs-16"></i>
                                                                     </a>
                                                                 </li>
@@ -168,8 +170,8 @@
                                                                     data-bs-trigger="hover" data-bs-placement="top"
                                                                     aria-label="Remove" data-bs-original-title="Remove">
                                                                     <a class="text-danger d-inline-block remove-item-btn"
-                                                                        data-bs-toggle="modal"
-                                                                        href="#deleteRecordModal">
+                                                                        data-bs-toggle="modal" href="#deleteRecordModal"
+                                                                        th:attr="data-id=${blog.BlogId}">
                                                                         <i class="ri-delete-bin-5-fill fs-16"></i>
                                                                     </a>
                                                                 </li>
@@ -228,9 +230,10 @@
                                                         <button type="button" class="btn w-sm btn-light"
                                                             data-bs-dismiss="modal">Close
                                                         </button>
-                                                        <button type="button" class="btn w-sm btn-danger"
-                                                            id="delete-record">Yes, Delete It!
-                                                        </button>
+                                                        <form id="deleteRecordForm" method="get">
+                                                            <button type="submit" class="btn w-sm btn-danger"
+                                                                id="delete-record">Yes, Delete It!</button>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -250,6 +253,17 @@
     </section>
     </div>
 
+    <script>
+        var deleteRecord = document.addEventListener('DOMContentLoaded', function () {
+            const deleteModal = document.getElementById('deleteRecordModal');
+            deleteModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const blogId = button.getAttribute('data-id');
+                const form = document.getElementById('deleteRecordForm');
+                form.setAttribute('action', '/admin/deleteblog/' + blogId);
+            });
+        });
+    </script>
 </body>
 
 
