@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -12,29 +13,29 @@ public class blogs {
 
     @Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", length = 10, nullable = false)
+    @Column(name = "id", length = 10)
     private int BlogId;
 
-    @Column(name = "title", length = 50, nullable = false)
+    @Column(name = "title", length = 50)
     private String BlogTitle;
 
-    @Column(name = "description", columnDefinition = "TEXT", nullable = false)
+    @Column(name = "description", columnDefinition = "TEXT")
     private String BlogDescription;
 
-    @Column(name = "status", length = 50, nullable = false)
+    @Column(name = "status", length = 50)
     private String BlogStatus;
 
     @CreationTimestamp
-    @Column(name = "createtime", updatable = false)
+    @Column(name = "createtime")
     private Date BlogCreateDate;
 
-    @Column(name = "postby", length = 50, nullable = false)
+    @Column(name = "postby", length = 50)
     private String BlogPostBy;
 
-    @Column(name = "tag", length = 50, nullable = false)
+    @Column(name = "tag", length = 50)
     private String Blogtag;
 
-    @Column(name = "image", length = 2083, nullable = false)
+    @Column(name = "image", length = 2083)
     private String BlogImage;
 
     public int getBlogId() {

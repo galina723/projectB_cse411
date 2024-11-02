@@ -52,6 +52,7 @@ public class categories {
         return CategoryName;
     }
 
+
     public void setCategoryName(String categoryName) {
         CategoryName = categoryName;
     }

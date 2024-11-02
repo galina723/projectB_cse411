@@ -13,31 +13,39 @@ public class customers {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", length = 10, nullable = false)
+    @Column(name = "id", length = 10)
     private int CustomerId;
 
-    @Column(name = "email", length = 50, nullable = false)
-    private String CustomerEmail;
+    @Column(name = "email", length = 50)
+    private String cemail;
 
-    @Column(name = "name", length = 50, nullable = false)
+    public String getCemail() {
+        return cemail;
+    }
+
+    public void setCemail(String cemail) {
+        this.cemail = cemail;
+    }
+
+    @Column(name = "name", length = 50)
     private String CustomerName;
 
-    @Column(name = "password", length = 50, nullable = false)
+    @Column(name = "password", length = 50)
     private String CustomerPassword;
 
-    @Column(name = "address", length = 255, nullable = false)
+    @Column(name = "address", length = 255)
     private String CustomerAddress;
 
-    @Column(name = "city", length = 50, nullable = false)
+    @Column(name = "city", length = 50)
     private String CustomerCity;
 
-    @Column(name = "province", length = 50, nullable = false)
+    @Column(name = "province", length = 50)
     private String CustomerProvince;
 
-    @Column(name = "phone", length = 50, nullable = false)
+    @Column(name = "phone", length = 50)
     private String CustomerPhone;
 
-    @Column(name = "status", length = 50, nullable = false)
+    @Column(name = "status", length = 50)
     private String CustomerStatus;
 
     public int getCustomerId() {
@@ -48,13 +56,6 @@ public class customers {
         CustomerId = customerId;
     }
 
-    public String getCustomerEmail() {
-        return CustomerEmail;
-    }
-
-    public void setCustomerEmail(String customerEmail) {
-        CustomerEmail = customerEmail;
-    }
 
     public String getCustomerName() {
         return CustomerName;
