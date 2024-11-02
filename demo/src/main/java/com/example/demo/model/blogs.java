@@ -12,7 +12,7 @@ import jakarta.persistence.*;
 public class blogs {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", length = 10)
     private int BlogId;
 

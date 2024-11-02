@@ -113,8 +113,8 @@
                                                             </div>
                                                         </th>
                                                         <th class="sort" data-sort="id">ID</th>
-                                                        <th class="sort" data-sort="name">Name</th>
-                                                        <th class="sort" data-sort="image">Main Image</th>
+                                                        <th class="sort" data-sort="customer_name">Name</th>
+                                                        <th class="image">Main Image</th>
                                                         <th class="sort" data-sort="category">Category</th>
                                                         <th class="sort" data-sort="price">Price</th>
                                                         <th class="sort" data-sort="quantity">Quantity</th>
@@ -132,7 +132,7 @@
                                                             </div>
                                                         </th>
                                                         <td class="id">[[${product.ProductId}]]</td>
-                                                        <td class="name">[[${product.ProductName}]]</td>
+                                                        <td class="customer_name">[[${product.ProductName}]]</td>
                                                         <td class="image">
                                                             <div class="avatar-sm bg-light rounded p-1">
                                                                 <img th:src="@{'/productimages/' + ${product.ProductMainImage}}"

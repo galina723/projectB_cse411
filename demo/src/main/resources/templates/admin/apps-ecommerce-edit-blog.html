@@ -22,18 +22,20 @@
                         </div>
                     </div>
                     <!-- end page title -->
-                    <form id="createblog-form" autocomplete="off" class="needs-validation" novalidate="">
+                    <form id="createblog-form" autocomplete="off" class="needs-validation" novalidate=""
+                        enctype="multipart/form-data" method="post" th:object="${blogsdto}"
+                        th:action="@{/admin/apps-ecommerce-edit-blog}">
                         <div class="row">
                             <div class="col-lg-8">
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="mb-3">
+                                        <div class="mb-3 d-none">
                                             <label class="form-label" for="blog-title-input">Blog ID</label>
                                             <input type="hidden" class="form-control" id="formAction" name="formAction"
                                                 value="add">
                                             <input type="text" class="form-control d-none" id="blog-id-input">
                                             <input type="text" class="form-control" id="blog-title-input" value=""
-                                                placeholder="Enter blog ID" required="">
+                                                placeholder="Enter blog ID" required="" th:field="*{BlogId}">
                                             <div class="invalid-feedback">Please Enter a blog ID.</div>
                                         </div>
                                         <div class="mb-3">
@@ -42,15 +44,14 @@
                                                 value="add">
                                             <input type="text" class="form-control d-none" id="blog-id-input">
                                             <input type="text" class="form-control" id="blog-title-input" value=""
-                                                placeholder="Enter blog title" required="">
+                                                placeholder="Enter blog title" required="" th:field="*{BlogTitle}">
                                             <div class="invalid-feedback">Please Enter a blog title.</div>
                                         </div>
                                         <div>
-                                            <label>Description</label>
-
-                                            <div id="ckeditor-classic" style="display: none;">
-
-                                            </div>
+                                            <label for="product-description-input">Description</label>
+                                            <textarea id="product-description-input" name="description"
+                                                class="form-control" placeholder="Enter product description" required=""
+                                                th:field="*{BlogDescription}"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -58,19 +59,16 @@
 
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 class="card-title mb-0">Blog Gallery</h5>
+                                        <h5 class="card-title mb-0">Featured Blog Image</h5>
                                     </div>
                                     <div class="card-body">
-                                        <div class="mb-4">
+                                        <div class="container mt-4">
                                             <h5 class="fs-14 mb-1">Blog Image</h5>
-                                            <p class="text-muted">Add Image.</p>
+                                            <p class="text-muted">Add Blog Image.</p>
                                             <div class="text-center">
                                                 <div class="position-relative d-inline-block">
                                                     <div class="position-absolute top-100 start-100 translate-middle">
-                                                        <label for="product-image-input" class="mb-0"
-                                                            data-bs-toggle="tooltip" data-bs-placement="right"
-                                                            aria-label="Select Image"
-                                                            data-bs-original-title="Select Image">
+                                                        <label for="product-image-input" class="mb-0">
                                                             <div class="avatar-xs">
                                                                 <div
                                                                     class="avatar-title bg-light border rounded-circle text-muted cursor-pointer">
@@ -78,70 +76,29 @@
                                                                 </div>
                                                             </div>
                                                         </label>
-                                                        <input class="form-control d-none" value=""
-                                                            id="product-image-input" type="file"
-                                                            accept="image/png, image/gif, image/jpeg">
+                                                        <input class="form-control d-none" id="product-image-input"
+                                                            type="file" accept="image/png, image/gif, image/jpeg"
+                                                            th:field="*{BlogImage}" onchange="previewMainImage(event)">
                                                     </div>
                                                     <div class="avatar-lg">
                                                         <div class="avatar-title bg-light rounded">
-                                                            <img src="#" id="product-img" class="avatar-md h-auto">
+                                                            <img th:src="${existingImage}" id="blog-img"
+                                                                class="img-fluid" alt="Image"
+                                                                style="max-height: 200px; width: auto; display: block;">
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div style="display: none;">
-                                            <h5 class="fs-14 mb-1">Product Gallery</h5>
-                                            <p class="text-muted">Add Product Gallery Images.</p>
-
-                                            <div class="dropzone dz-clickable">
-
-                                                <div class="dz-message needsclick">
-                                                    <div class="mb-3">
-                                                        <i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
-                                                    </div>
-
-                                                    <h5>Drop files here or click to upload.</h5>
-                                                </div>
-                                            </div>
-
-                                            <ul class="list-unstyled mb-0" id="dropzone-preview">
-                                                <li class="mt-2" id="dropzone-preview-list">
-                                                    <!-- This is used as the file preview template -->
-                                                    <div class="border rounded">
-                                                        <div class="d-flex p-2">
-                                                            <div class="flex-shrink-0 me-3">
-                                                                <div class="avatar-sm bg-light rounded">
-                                                                    <img data-dz-thumbnail
-                                                                        class="img-fluid rounded d-block" src="#"
-                                                                        alt="Product-Image" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-grow-1">
-                                                                <div class="pt-1">
-                                                                    <h5 class="fs-14 mb-1" data-dz-name>&nbsp;</h5>
-                                                                    <p class="fs-13 text-muted mb-0" data-dz-size></p>
-                                                                    <strong class="error text-danger"
-                                                                        data-dz-errormessage></strong>
-                                                                </div>
-                                                            </div>
-                                                            <div class="flex-shrink-0 ms-3">
-                                                                <button data-dz-remove
-                                                                    class="btn btn-sm btn-danger">Delete</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                            <!-- end dropzon-preview -->
                                         </div>
                                     </div>
                                 </div>
+
                                 <!-- end card -->
                                 <div class="text-end mb-3">
                                     <button type="submit" class="btn btn-success w-sm">Submit</button>
                                 </div>
                             </div>
+
                             <!-- end col -->
 
                             <div class="col-lg-4">
@@ -153,14 +110,14 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="author-input">Author ID</label>
                                             <input type="text" class="form-control" id="author-input"
-                                                placeholder="Enter an author id" required="">
+                                                placeholder="Enter an author id" required="" th:field="*{BlogPostBy}">
                                             <div class="invalid-feedback">Please Enter an author id.
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="tag-input">Tag</label>
                                             <input type="text" class="form-control" id="tag-input"
-                                                placeholder="Enter tags" required="">
+                                                placeholder="Enter tags" required="" th:field="*{Blogtag}">
                                             <div class="invalid-feedback">Please Enter tags.
                                             </div>
                                         </div>
@@ -177,18 +134,18 @@
                                             <label for="choices-publish-status-input" class="form-label">Status</label>
 
                                             <select class="form-select" id="choices-publish-status-input"
-                                                data-choices="" data-choices-search-false="">
+                                                data-choices="" data-choices-search-false="" th:field="*{BlogStatus}">
                                                 <option value="Published" selected="">Published</option>
-                                                <option value="Scheduled">Scheduled</option>
-                                                <option value="Draft">Draft</option>
+                                                <option value="Hidden">Hidden</option>
                                             </select>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="datepicker-publish-input" class="form-label">Publish Date &amp;
+                                            <label for="datepicker-publish-input" class="form-label">Publish Date
+                                                &amp;
                                                 Time</label>
                                             <input type="text" id="datepicker-publish-input" class="form-control"
                                                 placeholder="Enter publish date" data-provider="flatpickr"
-                                                data-date-format="d.m.y" data-enable-time="">
+                                                data-date-format="d.m.y" data-enable-time="" readonly th:field="*{BlogCreateDate}">
                                         </div>
 
                                     </div>
@@ -205,6 +162,29 @@
             </div>
         </section>
     </div>
+
+    <script>
+        // Get the current date and format it as 'yyyy-MM-dd'
+        const formattedDate = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`;
+
+        // Set the value of the input field
+        document.getElementById('datepicker-publish-input').value = formattedDate;
+
+        function previewMainImage(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = document.getElementById('blog-img');
+                img.src = e.target.result;
+                img.style.display = 'block';
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
 
 </body>
 

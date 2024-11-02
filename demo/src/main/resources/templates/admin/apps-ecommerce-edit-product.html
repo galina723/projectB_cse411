@@ -30,6 +30,16 @@
                             <div class="col-lg-8">
                                 <div class="card">
                                     <div class="card-body">
+                                        <div class="mb-3 d-none">
+                                            <label class="form-label" for="product-title-input">Product ID</label>
+                                            <input type="hidden" class="form-control" id="formAction" name="formAction"
+                                                value="add">
+                                            <input type="text" class="form-control d-none" id="product-id-input">
+                                            <input type="text" class="form-control" id="product-title-input" value=""
+                                                placeholder="Enter product ID" required="" th:field="*{ProductId}"
+                                                readonly>
+                                            <div class="invalid-feedback">Please Enter a product ID.</div>
+                                        </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="product-title-input">Product Name</label>
                                             <input type="hidden" class="form-control" id="formAction" name="formAction"
@@ -216,7 +226,7 @@
             reader.onload = function (e) {
                 const img = document.getElementById('product-img');
                 img.src = e.target.result;
-                img.style.display = 'block'; // Show the image
+                img.style.display = 'block';
             };
 
             if (file) {
@@ -242,11 +252,10 @@
             const existingCount = parseInt(countDisplay.innerText.match(/\d+/)[0]);
             const newCount = input.files.length;
 
-            // Hide the count message if new images are being added
             if (newCount > 0) {
-                countDisplay.style.display = 'none'; // Hide the existing count message
+                countDisplay.style.display = 'none'; 
             } else {
-                countDisplay.style.display = 'block'; // Show the existing count message if no new files
+                countDisplay.style.display = 'block'; 
             }
         }
     </script>

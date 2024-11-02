@@ -1,5 +1,8 @@
 package com.example.demo.controller.user;
 
+import java.util.List;
+import java.util.Locale.Category;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
@@ -15,6 +18,8 @@ import com.example.demo.model.*;
 import com.example.demo.otherfunction.encryption;
 
 import org.springframework.ui.Model;
+
+import com.example.demo.repository.categoriesrepository;
 import com.example.demo.repository.customerrepository;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -24,6 +29,9 @@ public class UserController {
 
     @Autowired
     private customerrepository customerrepo;
+
+    @Autowired
+    private categoriesrepository caterepo;
 
     @GetMapping("index")
     public String index() {
@@ -61,8 +69,8 @@ public class UserController {
 
     @PostMapping("/login/success")
     public String loginSubmit(@RequestParam("cemail") String email,
-                              @RequestParam("CustomerPassword") String password,
-                              Model model) {
+            @RequestParam("CustomerPassword") String password,
+            Model model) {
 
         customers custo = customerrepo.findByCemail(email);
         if (custo == null) {
@@ -148,7 +156,9 @@ public class UserController {
     }
 
     @GetMapping("shop")
-    public String shop() {
+    public String shop(Model model) {
+        List<categories> categories = (List<com.example.demo.model.categories>) caterepo.findAll();
+        model.addAttribute("categories", categories);
         return "user/shop";
     }
 

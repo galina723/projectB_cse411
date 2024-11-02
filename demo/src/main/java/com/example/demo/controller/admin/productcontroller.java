@@ -32,6 +32,7 @@ public class productcontroller {
     @Autowired
     productimagesrepository productimagerepo;
 
+
     // add product
 
     @GetMapping("apps-ecommerce-products")
