@@ -34,25 +34,18 @@
                                         </div>
                                         <div class="col-sm-auto">
                                             <div class="d-flex flex-wrap align-items-start gap-2">
-                                                <!-- Delete Multiple Button -->
-                                                <button class="btn btn-soft-danger" id="remove-actions" onclick="deleteMultiple()">
-                                                    <i class="ri-delete-bin-2-line"></i>
-                                                </button>
-                                        
-                                                <!-- Export Button with Dropdown Options -->
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="ri-file-download-line align-bottom me-1"></i> Export
+                                                <button class="btn btn-soft-danger" id="remove-actions"
+                                                    onclick="deleteMultiple()"><i
+                                                        class="ri-delete-bin-2-line"></i></button>
+                                                <form action="/admin/apps-ecommerce-add-product" method="get">
+                                                    <button type="submit" class="btn btn-success add-btn">
+                                                        <i class="ri-add-line align-bottom me-1"></i> Add Product
                                                     </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li>
-                                                            <a class="dropdown-item" href="/export/products/csv" target="_blank">Export as CSV</a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item" href="/export/products/pdf" target="_blank">Export as PDF</a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
+                                                </form>
+
+                                                <button type="button" class="btn btn-info"><i
+                                                        class="ri-file-download-line align-bottom me-1"></i>
+                                                    Export</button>
                                             </div>
                                         </div>
                                     </div>
