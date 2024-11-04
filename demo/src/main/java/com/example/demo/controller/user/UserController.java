@@ -1,7 +1,7 @@
 package com.example.demo.controller.user;
 
 import java.util.List;
-import java.util.Locale.Category;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -19,9 +19,9 @@ import com.example.demo.otherfunction.encryption;
 
 import org.springframework.ui.Model;
 
-import com.example.demo.repository.categoriesrepository;
-import com.example.demo.repository.customerrepository;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.example.demo.repository.*;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/user")
@@ -32,6 +32,12 @@ public class UserController {
 
     @Autowired
     private categoriesrepository caterepo;
+
+    @Autowired
+    private productrepository productrepo;
+
+    @Autowired
+    private productimagesrepository productimagerepo;
 
     @GetMapping("index")
     public String index() {
@@ -150,15 +156,31 @@ public class UserController {
         return "user/my-account";
     }
 
-    @GetMapping("product-details")
-    public String productdetail() {
+    @GetMapping("product-details/{id}")
+    public String productDetail(@PathVariable("id") int id, Model model) {
+        products products = productrepo.findById(id).orElse(null);
+        List<productotherimages> galleryImages = productimagerepo.findByProduct(products);
+        List<String> galleryImageUrls = galleryImages.stream()
+                .map(image -> "/productimages/" + image.getProductImage())
+                .collect(Collectors.toList());
+        model.addAttribute("galleryImageUrls", galleryImageUrls);
+        model.addAttribute("products", products);
         return "user/product-details";
     }
 
-    @GetMapping("shop")
-    public String shop(Model model) {
-        List<categories> categories = (List<com.example.demo.model.categories>) caterepo.findAll();
+    @GetMapping("/shop")
+    public String shop(@RequestParam(value = "category", required = false) String categoryName, Model model) {
+        // Load all categories
+        List<categories> categories = (List<categories>) caterepo.findAll();
         model.addAttribute("categories", categories);
+
+        List<products> products;
+        if (categoryName != null && !categoryName.isEmpty()) {
+            products = productrepo.findProductsByCategory(categoryName);
+        } else {
+            products = (List<products>) productrepo.findAll();
+        }
+        model.addAttribute("products", products);
         return "user/shop";
     }
 

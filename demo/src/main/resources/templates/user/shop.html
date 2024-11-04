@@ -2,13 +2,13 @@
 <html class="no-js" lang="en" xmlns:th="https://www.thymeleaf.org/">
 
 
-<head th:replace="user/layout :: pageHead('Shop')">
+<head th:replace="~{user/layout :: pageHead('Shop')}">
 
 </head>
 
 <body>
 
-    <div th:replace="user/layout :: body">
+    <div th:replace="~{user/layout :: body}">
         <section th:fragment="mainContent">
             <!--breadcrumbs area start-->
             <div class="breadcrumbs_area">
@@ -38,9 +38,10 @@
                                     <div class="widget_list widget_categories">
                                         <h3>Category</h3>
                                         <ul>
+                                            <li><a href="/user/shop">All</a></li>
                                             <li th:each="category : ${categories}">
                                                 <a th:text="${category.CategoryName}"
-                                                    th:href="@{'/shop?category=' + ${category.CategoryId}}"></a>
+                                                    th:href="@{'/user/shop?category=' + ${category.CategoryName}}"></a>
                                             </li>
                                         </ul>
                                     </div>
@@ -85,13 +86,13 @@
                             </div>
                             <!--shop toolbar end-->
                             <div class="row shop_wrapper">
-                                <div class="col-lg-3 col-md-3 col-sm-6 col-12 ">
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-12 " th:each="product : ${products}">
                                     <div class="single_product">
                                         <div class="product_thumb">
-                                            <a class="primary_img" href="/user/product-details"><img
-                                                    src="../user/assets/img/product/product2.jpg" alt=""></a>
-                                            <a class="secondary_img" href="/user/product-details"><img
-                                                    src="../user/assets/img/product/product1.jpg" alt=""></a>
+                                            <a class="primary_img"
+                                                th:href="@{'/user/product-details/'+ ${product.ProductId}}"><img
+                                                    th:src="@{'/productimages/'+ ${product.ProductMainImage}}"
+                                                    alt=""></a>
                                             <div class="label_product">
                                                 <span class="label_sale">-20%</span>
                                             </div>
@@ -102,19 +103,16 @@
                                                     <li class="wishlist"><a href="/user/wishlist"
                                                             title="Add to Wishlist"><i class="icon-heart icons"></i></a>
                                                     </li>
-                                                    <li class="quick_button"><a href="#" data-bs-toggle="modal"
-                                                            data-bs-target="#modal_box" title="quick view"> <i
-                                                                class="icon-eye icons"></i></a></li>
+
                                                 </ul>
                                             </div>
                                         </div>
                                         <div class="product_content grid_content">
-                                            <h4 class="product_name"><a href="/user/product-details">Water and Wind
-                                                    Resistant
-                                                    Insulated</a></h4>
+                                            <h4 class="product_name"><a
+                                                    th:href="@{'/user/product-details/'+ ${product.ProductId}}"
+                                                    th:text="${product.ProductName}">[[${product.ProductName}]]</a></h4>
                                             <div class="price_box">
-                                                <span class="old_price">$98.00</span>
-                                                <span class="current_price">$52.00</span>
+                                                <span class="current_price">$[[${product.ProductPrice}]]</span>
                                             </div>
                                             <div class="product_rating">
                                                 <ul>
@@ -124,36 +122,6 @@
                                                     <li><a href="#"><i class="ion-android-star"></i></a></li>
                                                     <li><a href="#"><i class="ion-android-star"></i></a></li>
                                                 </ul>
-                                            </div>
-                                        </div>
-                                        <div class="product_content list_content">
-                                            <h4 class="product_name"><a href="/user/product-details">Water and Wind
-                                                    Resistant
-                                                    Insulated</a></h4>
-                                            <div class="price_box">
-                                                <span class="old_price">$98.00</span>
-                                                <span class="current_price">$52.00</span>
-                                            </div>
-                                            <div class="product_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="product_desc">
-                                                <p>Nunc facilisis sagittis ullamcorper. Proin lectus ipsum, gravida et
-                                                    mattis
-                                                    vulputate, tristique ut lectus. Sed et lorem nunc. Vestibulum ante
-                                                    ipsum
-                                                    primis in faucibus orci luctus et ultrices posuere cubilia Curae;
-                                                    Aenean
-                                                    eleifend laoreet congue. Viva..</p>
-                                            </div>
-                                            <div class="product_availability">
-                                                <p>Availability: <span>297 In Stock</span></p>
                                             </div>
                                         </div>
                                     </div>

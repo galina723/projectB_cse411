@@ -28,8 +28,6 @@ public class ExportController {
     @Autowired
     private productrepository productrepo;
 
-    @Autowired
-    private ExportPDFService pdfExportService;
 
     @GetMapping("/export/customers/csv")
     public void exportCSVcustomer(HttpServletResponse response) throws IOException {

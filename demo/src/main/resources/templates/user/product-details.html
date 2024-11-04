@@ -1,190 +1,147 @@
 <!doctype html>
 <html class="no-js" lang="en" xmlns:th="https://www.thymeleaf.org/">
 
-<head th:replace="user/layout :: pageHead('Product Details')">
+<head th:replace="~{user/layout :: pageHead('Product Details')}">
 
 </head>
 
 <body>
 
-<div th:replace="user/layout :: body">
-    <section th:fragment="mainContent">
-        <!--breadcrumbs area start-->
-        <div class="breadcrumbs_area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="breadcrumb_content">
-                            <h3>product</h3>
-                            <ul>
-                                <li><a href="/user/index">home</a></li>
-                                <li>product details</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--breadcrumbs area end-->
-
-        <!--product details start-->
-        <div class="product_details mb-60">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-5 col-md-5">
-                        <div class="product-details-tab">
-                            <div id="img-1" class="zoomWrapper single-zoom">
-                                <a href="#">
-                                    <img id="zoom1" src="../user/assets/img/product/productbig4.jpg"
-                                         data-zoom-image="assets/img/product/productbig4.jpg" alt="big-1">
-                                </a>
-                            </div>
-                            <div class="single-zoom-thumb">
-                                <ul class="s-tab-zoom owl-carousel single-product-active" id="gallery_01">
-                                    <li>
-                                        <a href="#" class="elevatezoom-gallery active" data-update=""
-                                           data-image="assets/img/product/productbig4.jpg"
-                                           data-zoom-image="assets/img/product/productbig4.jpg">
-                                            <img src="../user/assets/img/product/productbig4.jpg" alt="zo-th-1"/>
-                                        </a>
-
-                                    </li>
-                                    <li>
-                                        <a href="#" class="elevatezoom-gallery active" data-update=""
-                                           data-image="assets/img/product/productbig1.jpg"
-                                           data-zoom-image="assets/img/product/productbig1.jpg">
-                                            <img src="../user/assets/img/product/productbig1.jpg" alt="zo-th-1"/>
-                                        </a>
-
-                                    </li>
-                                    <li>
-                                        <a href="#" class="elevatezoom-gallery active" data-update=""
-                                           data-image="assets/img/product/productbig2.jpg"
-                                           data-zoom-image="assets/img/product/productbig2.jpg">
-                                            <img src="../user/assets/img/product/productbig2.jpg" alt="zo-th-1"/>
-                                        </a>
-
-                                    </li>
-                                    <li>
-                                        <a href="#" class="elevatezoom-gallery active" data-update=""
-                                           data-image="assets/img/product/productbig3.jpg"
-                                           data-zoom-image="assets/img/product/productbig3.jpg">
-                                            <img src="../user/assets/img/product/productbig3.jpg" alt="zo-th-1"/>
-                                        </a>
-
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-7 col-md-7">
-                        <div class="product_d_right">
-                            <form action="#">
-                                <div class="productd_title_nav">
-                                    <h1><a href="#">Lorem ipsum dolor sit amet elit</a></h1>
-
-                                </div>
-
-                                <div class=" product_ratting">
-                                    <ul>
-                                        <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                        <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                        <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                        <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                        <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                        <li class="review"><a href="#"> (customer review ) </a></li>
-                                    </ul>
-                                </div>
-                                <div class="price_box">
-                                    <span class="old_price">$56.00</span>
-                                    <span class="current_price">$48.00</span>
-                                </div>
-                                <div class="product_desc">
-                                    <p>eget velit. Donec ac tempus ante. Fusce ultricies massa massa. Fusce aliquam,
-                                        purus eget sagittis vulputate, sapien libero hendrerit est, sed commodo
-                                        augue nisi non neque. Lorem ipsum dolor sit amet, consectetur adipiscing
-                                        elit. Sed tempor, lorem et placerat vestibulum, metus nisi posuere nisl, in
-                                    </p>
-                                </div>
-
-                                <div class="product_variant quantity">
-                                    <label>quantity</label>
-                                    <input min="1" max="100" value="1" type="number">
-                                    <button class="button" type="submit">add to cart</button>
-
-                                </div>
-                                <div class=" product_d_action">
-                                    <ul>
-                                        <li><a href="#" title="Add to wishlist">+ Add to Wishlist</a></li>
-
-                                    </ul>
-                                </div>
-                                <div class="product_meta">
-                                    <span>Category: <a href="#">Clothing</a></span>
-                                </div>
-
-                            </form>
-                            <div class="priduct_social">
+    <div th:replace="~{user/layout :: body}">
+        <section th:fragment="mainContent">
+            <!--breadcrumbs area start-->
+            <div class="breadcrumbs_area">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="breadcrumb_content">
+                                <h3>product</h3>
                                 <ul>
-                                    <li><a class="facebook" href="#" title="facebook"><i class="fa fa-facebook"></i>
-                                        Like</a></li>
-                                    <li><a class="twitter" href="#" title="twitter"><i class="fa fa-twitter"></i>
-                                        tweet</a></li>
-                                    <li><a class="pinterest" href="#" title="pinterest"><i
-                                            class="fa fa-pinterest"></i> save</a></li>
-                                    <li><a class="google-plus" href="#" title="google +"><i
-                                            class="fa fa-google-plus"></i> share</a></li>
-                                    <li><a class="linkedin" href="#" title="linkedin"><i class="fa fa-linkedin"></i>
-                                        linked</a></li>
+                                    <li><a href="/user/index">home</a></li>
+                                    <li>product details</li>
                                 </ul>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!--product details end-->
+            <!--breadcrumbs area end-->
 
-        <!--product info start-->
-        <div class="product_d_info mb-57">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="product_d_inner">
-                            <div class="product_info_button">
-                                <ul class="nav" role="tablist">
-                                    <li>
-                                        <a class="active" data-bs-toggle="tab" href="#info" role="tab"
-                                           aria-controls="info" aria-selected="false">Description</a>
-                                    </li>
+            <!--product details start-->
+            <div class="product_details mb-60">
+                <div class="container">
+                    <div class="row" th:each="product : ${products}">
+                        <div class="col-lg-5 col-md-5">
+                            <div class="product-details-tab">
+                                <div id="img-1" class="zoomWrapper single-zoom">
+                                    <a href="#">
+                                        <img id="zoom1" th:src="@{'/productimages/'+${product.ProductMainImage}}"
+                                            data-zoom-image="assets/img/product/productbig4.jpg" alt="big-1">
+                                    </a>
+                                </div>
+                                <div class="single-zoom-thumb">
+                                    <ul class="s-tab-zoom owl-carousel single-product-active" id="gallery_01">
+                                        <li th:each="image:${galleryImageUrls}">
+                                            <a href="#" class="elevatezoom-gallery active" data-update=""
+                                                th:data-image="${image}"
+                                                th:data-zoom-image="${image}">
+                                                <img th:src="${image}" alt="zo-th-1" />
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7 col-md-7">
+                            <div class="product_d_right">
+                                <form action="#">
+                                    <div class="productd_title_nav">
+                                        <h1><a href="#">[[${product.ProductName}]]</a></h1>
 
-                                    <li>
+                                    </div>
+
+                                    <div class=" product_ratting">
+                                        <ul>
+                                            <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                            <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                            <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                            <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                            <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                            <li class="review"><a href="#"> (customer review ) </a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="price_box">
+                                        <span class="current_price">[[${product.ProductPrice}]]</span>
+                                    </div>
+
+
+                                    <div class="product_variant quantity">
+                                        <label>quantity</label>
+                                        <input min="1" max="100" value="1" type="number">
+                                        <button class="button" type="submit">add to cart</button>
+
+                                    </div>
+                                    <div class=" product_d_action">
+                                        <ul>
+                                            <li><a href="#" title="Add to wishlist">+ Add to Wishlist</a></li>
+
+                                        </ul>
+                                    </div>
+                                    <div class="product_meta">
+                                        <span>Category: <a href="#">[[${product.ProductCategory}]]</a></span>
+                                    </div>
+
+                                </form>
+                                <div class="priduct_social">
+                                    <ul>
+                                        <li><a class="facebook" href="#" title="facebook"><i class="fa fa-facebook"></i>
+                                                Like</a></li>
+                                        <li><a class="twitter" href="#" title="twitter"><i class="fa fa-twitter"></i>
+                                                tweet</a></li>
+                                        <li><a class="pinterest" href="#" title="pinterest"><i
+                                                    class="fa fa-pinterest"></i> save</a></li>
+                                        <li><a class="google-plus" href="#" title="google +"><i
+                                                    class="fa fa-google-plus"></i> share</a></li>
+                                        <li><a class="linkedin" href="#" title="linkedin"><i class="fa fa-linkedin"></i>
+                                                linked</a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--product details end-->
+
+            <!--product info start-->
+            <div class="product_d_info mb-57">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12" th:each="product : ${products}">
+                            <div class="product_d_inner">
+                                <div class="product_info_button">
+                                    <ul class="nav" role="tablist">
+                                        <li>
+                                            <a class="active" data-bs-toggle="tab" href="#info" role="tab"
+                                                aria-controls="info" aria-selected="false">Description</a>
+                                        </li>
+
+                                        <!-- <li>
                                         <a data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews"
                                            aria-selected="false">Reviews (1)</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="tab-content">
-                                <div class="tab-pane fade show active" id="info" role="tabpanel">
-                                    <div class="product_info_content">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla
-                                            augue nec est tristique auctor. Donec non est at libero vulputate
-                                            rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi,
-                                            vulputate adipiscing cursus eu, suscipit id nulla.</p>
-                                        <p>Pellentesque aliquet, sem eget laoreet ultrices, ipsum metus feugiat sem,
-                                            quis fermentum turpis eros eget velit. Donec ac tempus ante. Fusce
-                                            ultricies massa massa. Fusce aliquam, purus eget sagittis vulputate,
-                                            sapien libero hendrerit est, sed commodo augue nisi non neque. Lorem
-                                            ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, lorem et
-                                            placerat vestibulum, metus nisi posuere nisl, in accumsan elit odio quis
-                                            mi. Cras neque metus, consequat et blandit et, luctus a nunc. Etiam
-                                            gravida vehicula tellus, in imperdiet ligula euismod eget.</p>
-                                    </div>
+                                    </li> -->
+                                    </ul>
                                 </div>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="info" role="tabpanel">
+                                        <div class="product_info_content">
+                                            <p>[[${product.ProductDescription}]]</p>
+                                        </div>
+                                    </div>
 
 
-                                <div class="tab-pane fade" id="reviews" role="tabpanel">
+                                    <!-- <div class="tab-pane fade" id="reviews" role="tabpanel">
                                     <div class="reviews_wrapper">
                                         <h2>1 review for Donec eu furniture</h2>
                                         <div class="reviews_comment_box">
@@ -249,525 +206,261 @@
                                             </form>
                                         </div>
                                     </div>
+                                </div> -->
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!--product info end-->
+            <!--product info end-->
 
-        <!--product area start-->
-        <section class="product_area related_products mb-55">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="section_title psec_title">
-                            <h2>Related Products</h2>
-                            <p>Browse the collection of our category products. </p>
+            <!--product area start-->
+            <section class="product_area related_products mb-55">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="section_title psec_title">
+                                <h2>Related Products</h2>
+                                <p>Browse the collection of our category products. </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="product_carousel product_column4 owl-carousel">
+                            <div class="col-lg-3">
+                                <article class="single_product">
+                                    <figure>
+                                        <div class="product_thumb">
+                                            <a class="primary_img" href="/user/product-details"><img
+                                                    src="../user/assets/img/product/product1.jpg" alt=""></a>
+                                            <a class="secondary_img" href="/user/product-details"><img
+                                                    src="../user/assets/img/product/product2.jpg" alt=""></a>
+                                            <div class="label_product">
+                                                <span class="label_sale">-20%</span>
+                                            </div>
+                                            <div class="action_links">
+                                                <ul>
+                                                    <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
+                                                                class="icon-bag icons"></i></a></li>
+                                                    <li class="wishlist"><a href="/user/wishlist"
+                                                            title="Add to Wishlist"><i class="icon-heart icons"></i></a>
+                                                    </li>
+                                                    <li class="compare"><a href="#" title="Add to Compare"><i
+                                                                class="icon-shuffle icons"></i></a></li>
+                                                    <li class="quick_button"><a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#modal_box" title="quick view"> <i
+                                                                class="icon-eye icons"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <figcaption class="product_content">
+                                            <h4 class="product_name"><a href="/user/product-details">Juicy Couture
+                                                    Tricot
+                                                    Logo Stripe Jacket</a></h4>
+                                            <div class="price_box">
+                                                <span class="old_price">$35.00</span>
+                                                <span class="current_price">$28.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </figcaption>
+                                    </figure>
+                                </article>
+                            </div>
+                            <div class="col-lg-3">
+                                <article class="single_product">
+                                    <figure>
+                                        <div class="product_thumb">
+                                            <a class="primary_img" href="/user/product-details"><img
+                                                    src="../user/assets/img/product/product7.jpg" alt=""></a>
+                                            <a class="secondary_img" href="/user/product-details"><img
+                                                    src="../user/assets/img/product/product8.jpg" alt=""></a>
+                                            <div class="label_product">
+                                                <span class="label_sale">-20%</span>
+                                            </div>
+                                            <div class="action_links">
+                                                <ul>
+                                                    <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
+                                                                class="icon-bag icons"></i></a></li>
+                                                    <li class="wishlist"><a href="/user/wishlist"
+                                                            title="Add to Wishlist"><i class="icon-heart icons"></i></a>
+                                                    </li>
+                                                    <li class="compare"><a href="#" title="Add to Compare"><i
+                                                                class="icon-shuffle icons"></i></a></li>
+                                                    <li class="quick_button"><a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#modal_box" title="quick view"> <i
+                                                                class="icon-eye icons"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <figcaption class="product_content">
+                                            <h4 class="product_name"><a href="/user/product-details">Calvin Klein Jeans
+                                                    Reflective Logo Full</a></h4>
+                                            <div class="price_box">
+                                                <span class="old_price">$56.00</span>
+                                                <span class="current_price">$48.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </figcaption>
+                                    </figure>
+                                </article>
+                            </div>
+                            <div class="col-lg-3">
+                                <article class="single_product">
+                                    <figure>
+                                        <div class="product_thumb">
+                                            <a class="primary_img" href="/user/product-details"><img
+                                                    src="../user/assets/img/product/product9.jpg" alt=""></a>
+                                            <a class="secondary_img" href="/user/product-details"><img
+                                                    src="../user/assets/img/product/product10.jpg" alt=""></a>
+                                            <div class="action_links">
+                                                <ul>
+                                                    <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
+                                                                class="icon-bag icons"></i></a></li>
+                                                    <li class="wishlist"><a href="/user/wishlist"
+                                                            title="Add to Wishlist"><i class="icon-heart icons"></i></a>
+                                                    </li>
+                                                    <li class="compare"><a href="#" title="Add to Compare"><i
+                                                                class="icon-shuffle icons"></i></a></li>
+                                                    <li class="quick_button"><a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#modal_box" title="quick view"> <i
+                                                                class="icon-eye icons"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <figcaption class="product_content">
+                                            <h4 class="product_name"><a href="/user/product-details">Juicy Couture Juicy
+                                                    Quilted Terry Track</a></h4>
+                                            <div class="price_box">
+                                                <span class="old_price">$67.00</span>
+                                                <span class="current_price">$57.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </figcaption>
+                                    </figure>
+                                </article>
+                            </div>
+                            <div class="col-lg-3">
+                                <article class="single_product">
+                                    <figure>
+                                        <div class="product_thumb">
+                                            <a class="primary_img" href="/user/product-details"><img
+                                                    src="../user/assets/img/product/product13.jpg" alt=""></a>
+                                            <a class="secondary_img" href="/user/product-details"><img
+                                                    src="../user/assets/img/product/product14.jpg" alt=""></a>
+                                            <div class="label_product">
+                                                <span class="label_sale">-20%</span>
+                                            </div>
+                                            <div class="action_links">
+                                                <ul>
+                                                    <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
+                                                                class="icon-bag icons"></i></a></li>
+                                                    <li class="wishlist"><a href="/user/wishlist"
+                                                            title="Add to Wishlist"><i class="icon-heart icons"></i></a>
+                                                    </li>
+                                                    <li class="compare"><a href="#" title="Add to Compare"><i
+                                                                class="icon-shuffle icons"></i></a></li>
+                                                    <li class="quick_button"><a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#modal_box" title="quick view"> <i
+                                                                class="icon-eye icons"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <figcaption class="product_content">
+                                            <h4 class="product_name"><a href="/user/product-details">New Balance Fresh
+                                                    Foam LAZR v1 Sport</a></h4>
+                                            <div class="price_box">
+                                                <span class="old_price">$47.00</span>
+                                                <span class="current_price">$37.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </figcaption>
+                                    </figure>
+                                </article>
+                            </div>
+                            <div class="col-lg-3">
+                                <article class="single_product">
+                                    <figure>
+                                        <div class="product_thumb">
+                                            <a class="primary_img" href="/user/product-details"><img
+                                                    src="../user/assets/img/product/product4.jpg" alt=""></a>
+                                            <a class="secondary_img" href="/user/product-details"><img
+                                                    src="../user/assets/img/product/product3.jpg" alt=""></a>
+                                            <div class="action_links">
+                                                <ul>
+                                                    <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
+                                                                class="icon-bag icons"></i></a></li>
+                                                    <li class="wishlist"><a href="/user/wishlist"
+                                                            title="Add to Wishlist"><i class="icon-heart icons"></i></a>
+                                                    </li>
+                                                    <li class="compare"><a href="#" title="Add to Compare"><i
+                                                                class="icon-shuffle icons"></i></a></li>
+                                                    <li class="quick_button"><a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#modal_box" title="quick view"> <i
+                                                                class="icon-eye icons"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <figcaption class="product_content">
+                                            <h4 class="product_name"><a href="/user/product-details">Trans-Weight Hooded
+                                                    Wind and Water</a></h4>
+                                            <div class="price_box">
+                                                <span class="old_price">$45.00</span>
+                                                <span class="current_price">$35.00</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                </ul>
+                                            </div>
+                                        </figcaption>
+                                    </figure>
+                                </article>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="product_carousel product_column4 owl-carousel">
-                        <div class="col-lg-3">
-                            <article class="single_product">
-                                <figure>
-                                    <div class="product_thumb">
-                                        <a class="primary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product1.jpg" alt=""></a>
-                                        <a class="secondary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product2.jpg" alt=""></a>
-                                        <div class="label_product">
-                                            <span class="label_sale">-20%</span>
-                                        </div>
-                                        <div class="action_links">
-                                            <ul>
-                                                <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
-                                                        class="icon-bag icons"></i></a></li>
-                                                <li class="wishlist"><a href="/user/wishlist"
-                                                                        title="Add to Wishlist"><i
-                                                        class="icon-heart icons"></i></a>
-                                                </li>
-                                                <li class="compare"><a href="#" title="Add to Compare"><i
-                                                        class="icon-shuffle icons"></i></a></li>
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#modal_box"
-                                                                            title="quick view"> <i
-                                                        class="icon-eye icons"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <figcaption class="product_content">
-                                        <h4 class="product_name"><a href="/user/product-details">Juicy Couture
-                                            Tricot
-                                            Logo Stripe Jacket</a></h4>
-                                        <div class="price_box">
-                                            <span class="old_price">$35.00</span>
-                                            <span class="current_price">$28.00</span>
-                                        </div>
-                                        <div class="product_rating">
-                                            <ul>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </article>
-                        </div>
-                        <div class="col-lg-3">
-                            <article class="single_product">
-                                <figure>
-                                    <div class="product_thumb">
-                                        <a class="primary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product7.jpg" alt=""></a>
-                                        <a class="secondary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product8.jpg" alt=""></a>
-                                        <div class="label_product">
-                                            <span class="label_sale">-20%</span>
-                                        </div>
-                                        <div class="action_links">
-                                            <ul>
-                                                <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
-                                                        class="icon-bag icons"></i></a></li>
-                                                <li class="wishlist"><a href="/user/wishlist"
-                                                                        title="Add to Wishlist"><i
-                                                        class="icon-heart icons"></i></a>
-                                                </li>
-                                                <li class="compare"><a href="#" title="Add to Compare"><i
-                                                        class="icon-shuffle icons"></i></a></li>
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#modal_box"
-                                                                            title="quick view"> <i
-                                                        class="icon-eye icons"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <figcaption class="product_content">
-                                        <h4 class="product_name"><a href="/user/product-details">Calvin Klein Jeans
-                                            Reflective Logo Full</a></h4>
-                                        <div class="price_box">
-                                            <span class="old_price">$56.00</span>
-                                            <span class="current_price">$48.00</span>
-                                        </div>
-                                        <div class="product_rating">
-                                            <ul>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </article>
-                        </div>
-                        <div class="col-lg-3">
-                            <article class="single_product">
-                                <figure>
-                                    <div class="product_thumb">
-                                        <a class="primary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product9.jpg" alt=""></a>
-                                        <a class="secondary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product10.jpg" alt=""></a>
-                                        <div class="action_links">
-                                            <ul>
-                                                <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
-                                                        class="icon-bag icons"></i></a></li>
-                                                <li class="wishlist"><a href="/user/wishlist"
-                                                                        title="Add to Wishlist"><i
-                                                        class="icon-heart icons"></i></a>
-                                                </li>
-                                                <li class="compare"><a href="#" title="Add to Compare"><i
-                                                        class="icon-shuffle icons"></i></a></li>
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#modal_box"
-                                                                            title="quick view"> <i
-                                                        class="icon-eye icons"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <figcaption class="product_content">
-                                        <h4 class="product_name"><a href="/user/product-details">Juicy Couture Juicy
-                                            Quilted Terry Track</a></h4>
-                                        <div class="price_box">
-                                            <span class="old_price">$67.00</span>
-                                            <span class="current_price">$57.00</span>
-                                        </div>
-                                        <div class="product_rating">
-                                            <ul>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </article>
-                        </div>
-                        <div class="col-lg-3">
-                            <article class="single_product">
-                                <figure>
-                                    <div class="product_thumb">
-                                        <a class="primary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product13.jpg" alt=""></a>
-                                        <a class="secondary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product14.jpg" alt=""></a>
-                                        <div class="label_product">
-                                            <span class="label_sale">-20%</span>
-                                        </div>
-                                        <div class="action_links">
-                                            <ul>
-                                                <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
-                                                        class="icon-bag icons"></i></a></li>
-                                                <li class="wishlist"><a href="/user/wishlist"
-                                                                        title="Add to Wishlist"><i
-                                                        class="icon-heart icons"></i></a>
-                                                </li>
-                                                <li class="compare"><a href="#" title="Add to Compare"><i
-                                                        class="icon-shuffle icons"></i></a></li>
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#modal_box"
-                                                                            title="quick view"> <i
-                                                        class="icon-eye icons"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <figcaption class="product_content">
-                                        <h4 class="product_name"><a href="/user/product-details">New Balance Fresh
-                                            Foam LAZR v1 Sport</a></h4>
-                                        <div class="price_box">
-                                            <span class="old_price">$47.00</span>
-                                            <span class="current_price">$37.00</span>
-                                        </div>
-                                        <div class="product_rating">
-                                            <ul>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </article>
-                        </div>
-                        <div class="col-lg-3">
-                            <article class="single_product">
-                                <figure>
-                                    <div class="product_thumb">
-                                        <a class="primary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product4.jpg" alt=""></a>
-                                        <a class="secondary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product3.jpg" alt=""></a>
-                                        <div class="action_links">
-                                            <ul>
-                                                <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
-                                                        class="icon-bag icons"></i></a></li>
-                                                <li class="wishlist"><a href="/user/wishlist"
-                                                                        title="Add to Wishlist"><i
-                                                        class="icon-heart icons"></i></a>
-                                                </li>
-                                                <li class="compare"><a href="#" title="Add to Compare"><i
-                                                        class="icon-shuffle icons"></i></a></li>
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#modal_box"
-                                                                            title="quick view"> <i
-                                                        class="icon-eye icons"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <figcaption class="product_content">
-                                        <h4 class="product_name"><a href="/user/product-details">Trans-Weight Hooded
-                                            Wind and Water</a></h4>
-                                        <div class="price_box">
-                                            <span class="old_price">$45.00</span>
-                                            <span class="current_price">$35.00</span>
-                                        </div>
-                                        <div class="product_rating">
-                                            <ul>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </section>
+            <!--product area end-->
+
         </section>
-        <!--product area end-->
-
-        <!--product area start-->
-        <section class="product_area upsell_products mb-60">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="section_title psec_title">
-                            <h2>Upsell Products </h2>
-                            <p>Browse the collection of our category products. </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="product_carousel product_column4 owl-carousel">
-                        <div class="col-lg-3">
-                            <article class="single_product">
-                                <figure>
-                                    <div class="product_thumb">
-                                        <a class="primary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product9.jpg" alt=""></a>
-                                        <a class="secondary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product10.jpg" alt=""></a>
-                                        <div class="action_links">
-                                            <ul>
-                                                <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
-                                                        class="icon-bag icons"></i></a></li>
-                                                <li class="wishlist"><a href="/user/wishlist"
-                                                                        title="Add to Wishlist"><i
-                                                        class="icon-heart icons"></i></a>
-                                                </li>
-                                                <li class="compare"><a href="#" title="Add to Compare"><i
-                                                        class="icon-shuffle icons"></i></a></li>
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#modal_box"
-                                                                            title="quick view"> <i
-                                                        class="icon-eye icons"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <figcaption class="product_content">
-                                        <h4 class="product_name"><a href="/user/product-details">Juicy Couture Juicy
-                                            Quilted Terry Track</a></h4>
-                                        <div class="price_box">
-                                            <span class="old_price">$67.00</span>
-                                            <span class="current_price">$57.00</span>
-                                        </div>
-                                        <div class="product_rating">
-                                            <ul>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </article>
-                        </div>
-                        <div class="col-lg-3">
-                            <article class="single_product">
-                                <figure>
-                                    <div class="product_thumb">
-                                        <a class="primary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product13.jpg" alt=""></a>
-                                        <a class="secondary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product14.jpg" alt=""></a>
-                                        <div class="label_product">
-                                            <span class="label_sale">-20%</span>
-                                        </div>
-                                        <div class="action_links">
-                                            <ul>
-                                                <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
-                                                        class="icon-bag icons"></i></a></li>
-                                                <li class="wishlist"><a href="/user/wishlist"
-                                                                        title="Add to Wishlist"><i
-                                                        class="icon-heart icons"></i></a>
-                                                </li>
-                                                <li class="compare"><a href="#" title="Add to Compare"><i
-                                                        class="icon-shuffle icons"></i></a></li>
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#modal_box"
-                                                                            title="quick view"> <i
-                                                        class="icon-eye icons"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <figcaption class="product_content">
-                                        <h4 class="product_name"><a href="/user/product-details">New Balance Fresh
-                                            Foam LAZR v1 Sport</a></h4>
-                                        <div class="price_box">
-                                            <span class="old_price">$47.00</span>
-                                            <span class="current_price">$37.00</span>
-                                        </div>
-                                        <div class="product_rating">
-                                            <ul>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </article>
-                        </div>
-                        <div class="col-lg-3">
-                            <article class="single_product">
-                                <figure>
-                                    <div class="product_thumb">
-                                        <a class="primary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product4.jpg" alt=""></a>
-                                        <a class="secondary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product3.jpg" alt=""></a>
-                                        <div class="action_links">
-                                            <ul>
-                                                <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
-                                                        class="icon-bag icons"></i></a></li>
-                                                <li class="wishlist"><a href="/user/wishlist"
-                                                                        title="Add to Wishlist"><i
-                                                        class="icon-heart icons"></i></a>
-                                                </li>
-                                                <li class="compare"><a href="#" title="Add to Compare"><i
-                                                        class="icon-shuffle icons"></i></a></li>
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#modal_box"
-                                                                            title="quick view"> <i
-                                                        class="icon-eye icons"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <figcaption class="product_content">
-                                        <h4 class="product_name"><a href="/user/product-details">Trans-Weight Hooded
-                                            Wind and Water</a></h4>
-                                        <div class="price_box">
-                                            <span class="old_price">$45.00</span>
-                                            <span class="current_price">$35.00</span>
-                                        </div>
-                                        <div class="product_rating">
-                                            <ul>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </article>
-                        </div>
-                        <div class="col-lg-3">
-                            <article class="single_product">
-                                <figure>
-                                    <div class="product_thumb">
-                                        <a class="primary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product1.jpg" alt=""></a>
-                                        <a class="secondary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product2.jpg" alt=""></a>
-                                        <div class="label_product">
-                                            <span class="label_sale">-20%</span>
-                                        </div>
-                                        <div class="action_links">
-                                            <ul>
-                                                <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
-                                                        class="icon-bag icons"></i></a></li>
-                                                <li class="wishlist"><a href="/user/wishlist"
-                                                                        title="Add to Wishlist"><i
-                                                        class="icon-heart icons"></i></a>
-                                                </li>
-                                                <li class="compare"><a href="#" title="Add to Compare"><i
-                                                        class="icon-shuffle icons"></i></a></li>
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#modal_box"
-                                                                            title="quick view"> <i
-                                                        class="icon-eye icons"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <figcaption class="product_content">
-                                        <h4 class="product_name"><a href="/user/product-details">Juicy Couture
-                                            Tricot
-                                            Logo Stripe Jacket</a></h4>
-                                        <div class="price_box">
-                                            <span class="old_price">$35.00</span>
-                                            <span class="current_price">$28.00</span>
-                                        </div>
-                                        <div class="product_rating">
-                                            <ul>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </article>
-                        </div>
-                        <div class="col-lg-3">
-                            <article class="single_product">
-                                <figure>
-                                    <div class="product_thumb">
-                                        <a class="primary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product7.jpg" alt=""></a>
-                                        <a class="secondary_img" href="/user/product-details"><img
-                                                src="../user/assets/img/product/product8.jpg" alt=""></a>
-                                        <div class="label_product">
-                                            <span class="label_sale">-20%</span>
-                                        </div>
-                                        <div class="action_links">
-                                            <ul>
-                                                <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
-                                                        class="icon-bag icons"></i></a></li>
-                                                <li class="wishlist"><a href="/user/wishlist"
-                                                                        title="Add to Wishlist"><i
-                                                        class="icon-heart icons"></i></a>
-                                                </li>
-                                                <li class="compare"><a href="#" title="Add to Compare"><i
-                                                        class="icon-shuffle icons"></i></a></li>
-                                                <li class="quick_button"><a href="#" data-bs-toggle="modal"
-                                                                            data-bs-target="#modal_box"
-                                                                            title="quick view"> <i
-                                                        class="icon-eye icons"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <figcaption class="product_content">
-                                        <h4 class="product_name"><a href="/user/product-details">Calvin Klein Jeans
-                                            Reflective Logo Full</a></h4>
-                                        <div class="price_box">
-                                            <span class="old_price">$56.00</span>
-                                            <span class="current_price">$48.00</span>
-                                        </div>
-                                        <div class="product_rating">
-                                            <ul>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                            </article>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!--product area end-->
-
-    </section>
-</div>
+    </div>
 
 </body>
 
