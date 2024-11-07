@@ -13,4 +13,7 @@ public interface productrepository extends CrudRepository<products, Integer> {
 
     @Query("SELECT p FROM products p WHERE p.ProductCategory = ?1")
     List<products> findProductsByCategory(String ProductCategory);
+
+    @Query("SELECT p FROM products p WHERE p.ProductCategory = ?1 AND p.ProductId != ?2")
+    List<products> findProductsByCategoryExcludingId(String productCategory, int productId);
 }

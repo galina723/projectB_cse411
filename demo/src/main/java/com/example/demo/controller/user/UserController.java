@@ -1,27 +1,20 @@
 package com.example.demo.controller.user;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.*;
-import com.example.demo.otherfunction.encryption;
-
-import org.springframework.ui.Model;
-
 import com.example.demo.repository.*;
 
 import jakarta.servlet.http.HttpSession;
+
+import com.example.demo.otherfunction.encryption;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -39,6 +32,9 @@ public class UserController {
     @Autowired
     private productimagesrepository productimagerepo;
 
+    @Autowired
+    private cartrepository cartrepo;
+
     @GetMapping("index")
     public String index() {
         return "user/index";
@@ -46,11 +42,9 @@ public class UserController {
 
     @GetMapping("register")
     public String register(Model model) {
-
         customers customer = new customers();
         // Get the next available ProductId
         int nextCustomerId = customerrepo.findNextCustomerId();
-        // Set the ProductId in the DTO
         customer.setCustomerId(nextCustomerId);
         model.addAttribute("customers", customer);
         return "user/register";
@@ -58,7 +52,6 @@ public class UserController {
 
     @PostMapping("/register/save")
     public String saveCustomer(@ModelAttribute customers customer) {
-        // Mã hóa mật khẩu trước khi lưu
         String hashedPassword = encryption.encrypt(customer.getCustomerPassword());
         customer.setCustomerPassword(hashedPassword);
         customer.setCustomerStatus("active");
@@ -67,7 +60,7 @@ public class UserController {
         return "redirect:/user/login";
     }
 
-    @GetMapping("login")
+    @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("customers", new customers());
         return "user/login";
@@ -75,35 +68,30 @@ public class UserController {
 
     @PostMapping("/login/success")
     public String loginSubmit(@RequestParam("cemail") String email,
-            @RequestParam("CustomerPassword") String password,
+            @RequestParam("CustomerPassword") String password, HttpSession session,
             Model model) {
 
         customers custo = customerrepo.findByCemail(email);
         if (custo == null) {
             return "redirect:/user/register";
         } else {
-            if (encryption.encrypt(password).equals(custo.getCustomerPassword())) {
+            if (encryption.matches(password, custo.getCustomerPassword())) {
+                System.out.println("Login successful. Setting session attribute...");
+                session.setAttribute("loginCustomer", custo.getCustomerId());
+                System.out.println("Session customerId: " + session.getAttribute("loginCustomer"));
                 return "redirect:/user/index";
             } else {
                 model.addAttribute("loginError", "Invalid email or password");
                 return "user/login";
             }
         }
+
     }
 
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") int id, RedirectAttributes redirectAttributes) {
-        try {
-            customers custo = customerrepo.findById(id).orElse(null);
-            customerrepo.deleteById(id);
-            redirectAttributes.addFlashAttribute("successMessage", "Product deleted successfully!");
-        } catch (EmptyResultDataAccessException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Product not found or already deleted.");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while deleting the product.");
-        }
-
-        return "redirect:/admin/apps-ecommerce-customers";
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/user/login"; // Redirect to login page after logout
     }
 
     @GetMapping("forgot-password")
@@ -132,8 +120,40 @@ public class UserController {
     }
 
     @GetMapping("cart")
-    public String cart() {
+    public String cart(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        Integer customerId = (Integer) session.getAttribute("loginCustomer");
+        System.out.println("Retrieved loginCustomer ID from session: " + customerId);
+        if (customerId == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to view your cart.");
+            return "redirect:/user/login";
+        }
+
+        List<carts> cartItems = cartrepo.findByCustomerId(customerId);
+        model.addAttribute("cartItems", cartItems);
+
         return "user/cart";
+    }
+
+    @PostMapping("cart/add")
+    public String addToCart(@RequestParam("productId") int productId,
+            @RequestParam("quantity") int quantity,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+        System.out.println("Received add to cart request for productId: " + productId + " with quantity: " + quantity);
+        Integer customerId = (Integer) session.getAttribute("loginCustomer");
+        if (customerId == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to add items to your cart.");
+            return "redirect:/user/login";
+        }
+
+        carts newCart = new carts();
+        Integer nextId = cartrepo.findNextCartId();
+        newCart.setId(nextId);
+        newCart.setCustomerId(customerId);
+        newCart.setProductId(productId);
+        newCart.setQuantity(quantity);
+        cartrepo.save(newCart);
+        return "redirect:/user/cart"; // Redirect to the cart page
     }
 
     @GetMapping("checkout")
@@ -163,6 +183,9 @@ public class UserController {
         List<String> galleryImageUrls = galleryImages.stream()
                 .map(image -> "/productimages/" + image.getProductImage())
                 .collect(Collectors.toList());
+        List<products> relatedProducts = productrepo
+                .findProductsByCategoryExcludingId(products.getProductCategory(), products.getProductId());
+        model.addAttribute("relatedProducts", relatedProducts);
         model.addAttribute("galleryImageUrls", galleryImageUrls);
         model.addAttribute("products", products);
         return "user/product-details";
@@ -188,5 +211,4 @@ public class UserController {
     public String wishlist() {
         return "user/wishlist";
     }
-
 }

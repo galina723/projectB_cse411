@@ -2,13 +2,13 @@
 <html class="no-js" lang="en" xmlns:th="https://www.thymeleaf.org/">
 
 
-<head th:replace="user/layout :: pageHead('Cart')">
+<head th:replace="~{user/layout :: pageHead('Cart')}">
 
 </head>
 
 <body>
 
-<div th:replace="user/layout :: body">
+<div th:replace="~{user/layout :: body}">
     <section th:fragment="mainContent">
         <!--breadcrumbs area start-->
         <div class="breadcrumbs_area">
