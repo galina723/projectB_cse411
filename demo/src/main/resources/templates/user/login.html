@@ -2,12 +2,12 @@
 <html class="no-js" lang="en" xmlns:th="https://www.thymeleaf.org/">
 
 
-<head th:replace="user/layout :: pageHead('Login')">
+<head th:replace="~{user/layout :: pageHead('Login')}">
 </head>
 
 <body>
 
-    <div th:replace="user/layout :: body">
+    <div th:replace="~{user/layout :: body}">
         <section th:fragment="mainContent">
 
             <!--breadcrumbs area start-->
@@ -39,7 +39,7 @@
                         <div class="col-lg-6 col-md-6">
                             <div class="account_form">
                                 <h2>login</h2>
-                                <form action="#" method="post" th:action="@{/user/login/success}"
+                                <form method="post" th:action="@{/user/login/success}"
                                     th:object="${customers}">
                                     <p>
                                         <label>Email<span style="color: red;">*</span></label>

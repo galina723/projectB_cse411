@@ -259,26 +259,21 @@
                                         <!--mini cart end-->
 
                                     </div>
-                                    <div class="header_account_list">
-                                        <div class="dropdown">
-                                            <a href="/user/login" class="nav-link">
-                                                <i class="icon-user"></i>
-                                                <span th:if="${user}" th:text="${user.cemail}">Username</span>
-                                            </a>
-                                            <button class="btn dropdown-toggle" type="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="icon-user"></i> <!-- User icon -->
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                                <li>
-                                                    <hr class="dropdown-divider">
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" th:href="@{/auth/logout}">Logout</a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                    <div class="header_account_list" th:if="${session.loginCustomer!=null}">
+                                        <a class="nav-link dropdown-toggle" href="/user/login" id="navbarDropdown"
+                                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="icon-user"></i>
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <li><a class="dropdown-item" href="#">My account</a></li>
+                                            <li>
+                                                <hr class="dropdown-divider">
+                                            </li>
+                                            <li><a class="dropdown-item" href="/user/logout">Logout</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="header_account_list" th:if="${session.loginCustomer==null}">
+                                        <a href="/user/login"><i class="icon-user"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -355,7 +350,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 <div class="footer_bottom">
@@ -507,7 +502,7 @@
                                                 <li class="pinterest"><a href="#"><i class="fa fa-pinterest"></i></a>
                                                 </li>
                                                 <li class="google-plus"><a href="#"><i
-                                                    class="fa fa-google-plus"></i></a>
+                                                            class="fa fa-google-plus"></i></a>
                                                 </li>
                                                 <li class="linkedin"><a href="#"><i class="fa fa-linkedin"></i></a></li>
                                             </ul>

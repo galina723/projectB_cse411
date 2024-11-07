@@ -57,31 +57,7 @@ public class customercontroller {
         return ("admin/index");
     }
 
-    // @GetMapping("apps-ecommerce-blog-details")
-    // public String blogdetail() {
-    // return ("admin/apps-ecommerce-blog-details");
-    // }
-
-    // @GetMapping("apps-ecommerce-blog")
-    // public String blog(Model model) {
-
-    // List<blogs> blogs = (List<blogs>) blogrepo.findAll();
-    // model.addAttribute("blogs", blogs);
-    // return ("admin/apps-ecommerce-blog");
-    // }
-
-    // @GetMapping("apps-ecommerce-create-blog")
-    // public String createblog(Model model) {
-    // productsdto productsdto = new productsdto();
-    // model.addAttribute("productsdto", productsdto);
-    // return ("admin/apps-ecommerce-create-blog");
-    // }
-
-    // @GetMapping("apps-ecommerce-edit-blog")
-    // public String editblog() {
-    // return ("admin/apps-ecommerce-edit-blog");
-    // }
-
+    
     @GetMapping("apps-ecommerce-customers")
     public String customers(Model model) {
 
