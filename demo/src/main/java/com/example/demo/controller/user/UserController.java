@@ -203,6 +203,10 @@ public class UserController {
         } else {
             products = (List<products>) productrepo.findAll();
         }
+
+        products = products.stream()
+                .filter(product -> !"block".equalsIgnoreCase(product.getProductStatus()))
+                .collect(Collectors.toList());
         model.addAttribute("products", products);
         return "user/shop";
     }
