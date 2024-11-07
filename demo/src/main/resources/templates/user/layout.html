@@ -260,9 +260,25 @@
 
                                     </div>
                                     <div class="header_account_list">
-                                        <a href="/user/login"><i class="icon-user"></i>
-                                            <span class="item_count">4</span>
-                                        </a>
+                                        <div class="dropdown">
+                                            <a href="/user/login" class="nav-link">
+                                                <i class="icon-user"></i>
+                                                <span th:if="${user}" th:text="${user.cemail}">Username</span>
+                                            </a>
+                                            <button class="btn dropdown-toggle" type="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="icon-user"></i> <!-- User icon -->
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" th:href="@{/auth/logout}">Logout</a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

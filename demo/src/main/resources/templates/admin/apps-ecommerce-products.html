@@ -112,15 +112,15 @@
                                                                     id="checkAll" value="option">
                                                             </div>
                                                         </th>
-                                                        <th class="sort" data-sort="id">ID</th>
+                                                        <th class="sortt">ID</th>
                                                         <th class="sort" data-sort="customer_name">Name</th>
                                                         <th class="image">Main Image</th>
                                                         <th class="sort" data-sort="category">Category</th>
-                                                        <th class="sort" data-sort="price">Price</th>
+                                                        <th class="sort" data-sort="phone">Price</th>
                                                         <th class="sort" data-sort="quantity">Quantity</th>
-                                                        <th class="sort" data-sort="date">Created Date</th>
-                                                        <th class="sort" data-sort="status">Status</th>
-                                                        <th class="sort" data-sort="action">Action</th>
+                                                        =<th class="sort" data-sort="date">Created Date</th>
+                                                        <th class="sort desc" data-sort="status">Status</th>
+                                                        <th class="sortt">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="list form-check-all">
@@ -259,6 +259,54 @@
                 form.setAttribute('action', '/admin/delete/' + productId);
             });
         });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let currentColumn = null;
+            let isAscending = true;
+
+            // Select all headers with the "sort" class
+            document.querySelectorAll('th.sort').forEach(header => {
+                header.addEventListener('click', () => {
+                    const table = header.closest('table');
+                    const tbody = table.querySelector('tbody');
+                    const rows = Array.from(tbody.querySelectorAll('tr'));
+                    const columnIndex = Array.from(header.parentNode.children).indexOf(header);
+
+                    // If the same column is clicked, toggle sort direction
+                    if (currentColumn === header) {
+                        isAscending = !isAscending;
+                    } else {
+                        // Otherwise, set to ascending and clear classes from other headers
+                        isAscending = true;
+                        document.querySelectorAll('th.sort').forEach(h => h.classList.remove('ascending', 'descending'));
+                        currentColumn = header;
+                    }
+
+                    // Update the header class for the sort direction
+                    header.classList.toggle('ascending', isAscending);
+                    header.classList.toggle('descending', !isAscending);
+
+                    // Sort rows based on the text content in the clicked column
+                    rows.sort((rowA, rowB) => {
+                        const cellA = rowA.children[columnIndex].textContent.trim();
+                        const cellB = rowB.children[columnIndex].textContent.trim();
+
+                        // Handle date sorting (if applicable)
+                        const comparison = !isNaN(Date.parse(cellA)) && !isNaN(Date.parse(cellB))
+                            ? new Date(cellA) - new Date(cellB)
+                            : (!isNaN(cellA) && !isNaN(cellB))
+                                ? cellA - cellB
+                                : cellA.localeCompare(cellB, undefined, { numeric: true });
+
+                        return isAscending ? comparison : -comparison;
+                    });
+
+                    // Re-attach sorted rows to the tbody
+                    rows.forEach(row => tbody.appendChild(row));
+                });
+            });
+        });
+
     </script>
 </body>
 

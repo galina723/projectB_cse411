@@ -18,6 +18,8 @@ import com.example.demo.model.*;
 import com.example.demo.otherfunction.encryption;
 
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import com.example.demo.repository.*;
 
@@ -90,6 +92,8 @@ public class UserController {
             }
         }
     }
+
+    
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") int id, RedirectAttributes redirectAttributes) {
