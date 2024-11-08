@@ -6,12 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.example.demo.model.carts;
+import com.example.demo.model.*;
 
-public interface cartrepository extends CrudRepository<carts, Integer> {
-    @Query(value = "SELECT COALESCE(MAX(id), 0) + 1 FROM cart", nativeQuery = true)
-    int findNextCartId();
+public interface cartrepository extends CrudRepository<carts, CartId> {
 
-    @Query("SELECT c FROM carts c WHERE c.customerId = :customerId")
+    @Query("SELECT c FROM carts c WHERE c.id.customerId = :customerId")
     List<carts> findByCustomerId(@Param("customerId") Integer customerId);
 }

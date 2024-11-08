@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 
 import com.example.demo.otherfunction.encryption;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -129,9 +130,60 @@ public class UserController {
         }
 
         List<carts> cartItems = cartrepo.findByCustomerId(customerId);
-        model.addAttribute("cartItems", cartItems);
+
+        // Calculate total for each cart item
+        double subtotal = 0.0;
+        List<cartsdto> cartItemDTOs = new ArrayList<>();
+        for (carts cartItem : cartItems) {
+            products product = cartItem.getProduct(); // Fetch the product details
+
+            if (product != null) { // Ensure product is not null
+                double totalPrice = product.getProductPrice() * cartItem.getQuantity(); // Calculate total price
+                subtotal += totalPrice;
+                cartsdto dto = new cartsdto();
+                dto.setProductId(product.getProductId());
+                dto.setProductName(product.getProductName()); // Assuming 'getName()' returns the product name
+                dto.setProductImage(product.getProductMainImage()); // Assuming 'getImageUrl()' returns the product
+                                                                    // image URL
+                dto.setProductPrice(product.getProductPrice());
+                dto.setQuantity(cartItem.getQuantity());
+                dto.setTotalPrice(totalPrice);
+
+                cartItemDTOs.add(dto);
+            }
+        }
+
+        double shippingFee = subtotal * 0.01;
+        double total = subtotal + shippingFee;
+
+        model.addAttribute("subtotal", subtotal);
+        model.addAttribute("shippingFee", shippingFee);
+        model.addAttribute("total", total);
+
+        model.addAttribute("cartItems", cartItemDTOs); // Pass the DTOs to the model
 
         return "user/cart";
+    }
+
+    @GetMapping("/cart/delete/{productId}")
+    public String deleteCartItem(@PathVariable Integer productId, HttpSession session,
+            RedirectAttributes redirectAttributes) {
+        Integer customerId = (Integer) session.getAttribute("loginCustomer");
+
+        if (customerId == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to modify your cart.");
+            return "redirect:/user/login";
+        }
+
+        CartId cartId = new CartId(customerId, productId);
+
+        try {
+            cartrepo.deleteById(cartId);
+            redirectAttributes.addFlashAttribute("successMessage", "Item removed from cart successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to remove item from cart.");
+        }
+        return "redirect:/user/cart"; // Redirect back to the cart
     }
 
     @PostMapping("cart/add")
@@ -146,11 +198,28 @@ public class UserController {
             return "redirect:/user/login";
         }
 
+        customers customer = customerrepo.findById(customerId).orElse(null);
+        if (customer == null) {
+            redirectAttributes.addFlashAttribute("error", "Customer not found.");
+            return "redirect:/user/cart";
+        }
+
+        // Ensure the product exists
+        products product = productrepo.findById(productId).orElse(null);
+        if (product == null) {
+            redirectAttributes.addFlashAttribute("error", "Product not found.");
+            return "redirect:/user/cart";
+        }
+
         carts newCart = new carts();
-        Integer nextId = cartrepo.findNextCartId();
-        newCart.setId(nextId);
-        newCart.setCustomerId(customerId);
-        newCart.setProductId(productId);
+        CartId cartId = new CartId();
+        cartId.setCustomerId(customerId);
+        cartId.setProductId(productId);
+        newCart.setId(cartId);
+
+        // Set the customer and product properly
+        newCart.setCustomer(customer); // Set the actual customer object
+        newCart.setProduct(product); // Set the actual product object
         newCart.setQuantity(quantity);
         cartrepo.save(newCart);
         return "redirect:/user/cart"; // Redirect to the cart page
