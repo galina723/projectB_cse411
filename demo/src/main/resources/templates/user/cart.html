@@ -30,7 +30,7 @@
             <!--shopping cart area start -->
             <div class="shopping_cart_area">
                 <div class="container">
-                    <form action="#">
+                    <form th:action="@{/user/cart/update}" method="post">
                         <div class="row">
                             <div class="col-12">
                                 <div class="table_desc">
@@ -61,13 +61,17 @@
                                                     <td class="product_name"><a href="#">[[${item.ProductName}]]</a>
                                                     </td>
                                                     <td class="product-price">$[[${item.ProductPrice}]]</td>
-                                                    <td class="product_quantity"><label>Quantity</label> <input min="1"
-                                                            max="100" th:value="${item.quantity}" type="number">
+                                                    <td class="product_quantity"><input min="1" max="100"
+                                                            th:value="${item.quantity}" type="number"
+                                                            th:name="'quantity-' + ${item.ProductId}">
                                                     </td>
                                                     <td class="product_total">$[[${item.totalPrice}]]</td>
                                                 </tr>
                                             </tbody>
                                         </table>
+                                    </div>
+                                    <div class="cart_submit">
+                                        <button type="submit">update cart</button>
                                     </div>
                                 </div>
                             </div>

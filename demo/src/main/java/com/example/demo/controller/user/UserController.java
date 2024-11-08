@@ -15,6 +15,7 @@ import com.example.demo.otherfunction.encryption;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -36,8 +37,46 @@ public class UserController {
     @Autowired
     private cartrepository cartrepo;
 
+    @ModelAttribute
+    public void addGlobalAttributes(Model model, HttpSession session) {
+        Integer customerId = (Integer) session.getAttribute("loginCustomer");
+        if (customerId != null) {
+            List<carts> cartItems = cartrepo.findByCustomerId(customerId);
+            List<cartsdto> cartItemDTOs = new ArrayList<>();
+            double subtotal = 0.0;
+
+            for (carts cartItem : cartItems) {
+                products product = cartItem.getProduct();
+                if (product != null) {
+                    double totalPrice = product.getProductPrice() * cartItem.getQuantity();
+                    subtotal += totalPrice;
+                    cartsdto dto = new cartsdto();
+                    dto.setProductId(product.getProductId());
+                    dto.setProductName(product.getProductName());
+                    dto.setProductImage(product.getProductMainImage());
+                    dto.setProductPrice(product.getProductPrice());
+                    dto.setQuantity(cartItem.getQuantity());
+                    dto.setTotalPrice(totalPrice);
+                    cartItemDTOs.add(dto);
+                }
+            }
+
+            double shippingFee = subtotal * 0.01;
+            double total = subtotal + shippingFee;
+
+            model.addAttribute("cartItems", cartItemDTOs);
+            model.addAttribute("cartItemCount", cartItemDTOs.size());
+            model.addAttribute("subtotal", subtotal);
+            model.addAttribute("total", total);
+        } else {
+            model.addAttribute("cartItemCount", 0);
+        }
+    }
+
     @GetMapping("index")
-    public String index() {
+    public String index(Model model) {
+        List<products> products = (List<products>) productrepo.findAll();
+        model.addAttribute("products", products);
         return "user/index";
     }
 
@@ -77,9 +116,8 @@ public class UserController {
             return "redirect:/user/register";
         } else {
             if (encryption.matches(password, custo.getCustomerPassword())) {
-                System.out.println("Login successful. Setting session attribute...");
                 session.setAttribute("loginCustomer", custo.getCustomerId());
-                System.out.println("Session customerId: " + session.getAttribute("loginCustomer"));
+
                 return "redirect:/user/index";
             } else {
                 model.addAttribute("loginError", "Invalid email or password");
@@ -152,16 +190,18 @@ public class UserController {
                 cartItemDTOs.add(dto);
             }
         }
-
-        double shippingFee = subtotal * 0.01;
+        double shippingFee = 0.0;
+        if (subtotal < 500) {
+            shippingFee = subtotal * 0.01;
+        }
         double total = subtotal + shippingFee;
 
         model.addAttribute("subtotal", subtotal);
         model.addAttribute("shippingFee", shippingFee);
         model.addAttribute("total", total);
 
-        model.addAttribute("cartItems", cartItemDTOs); // Pass the DTOs to the model
-
+        model.addAttribute("cartItems", cartItemDTOs);
+        model.addAttribute("cartItemCount", cartItemDTOs.size());
         return "user/cart";
     }
 
@@ -191,7 +231,6 @@ public class UserController {
             @RequestParam("quantity") int quantity,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
-        System.out.println("Received add to cart request for productId: " + productId + " with quantity: " + quantity);
         Integer customerId = (Integer) session.getAttribute("loginCustomer");
         if (customerId == null) {
             redirectAttributes.addFlashAttribute("loginRequired", "Please log in to add items to your cart.");
@@ -222,7 +261,35 @@ public class UserController {
         newCart.setProduct(product); // Set the actual product object
         newCart.setQuantity(quantity);
         cartrepo.save(newCart);
+
         return "redirect:/user/cart"; // Redirect to the cart page
+    }
+
+    @PostMapping("/cart/update")
+    public String updateCart(@RequestParam Map<String, String> params, HttpSession session,
+            RedirectAttributes redirectAttributes) {
+        Integer customerId = (Integer) session.getAttribute("loginCustomer");
+        if (customerId == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to update your cart.");
+            return "redirect:/user/login";
+        }
+
+        // Get the cart items for the current customer
+        List<carts> cartItems = cartrepo.findByCustomerId(customerId);
+
+        // Iterate over each cart item and update the quantity
+        for (carts cartItem : cartItems) {
+            String quantityParam = params.get("quantity-" + cartItem.getProduct().getProductId());
+            if (quantityParam != null) {
+                int quantity = Integer.parseInt(quantityParam);
+                if (quantity > 0) {
+                    cartItem.setQuantity(quantity); // Update the quantity
+                    cartrepo.save(cartItem); // Save the updated cart item
+                }
+            }
+        }
+
+        return "redirect:/user/cart"; // Redirect back to the cart page
     }
 
     @GetMapping("checkout")

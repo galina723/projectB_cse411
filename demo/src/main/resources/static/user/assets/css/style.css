@@ -12203,6 +12203,67 @@ textarea:-ms-input-placeholder {
   white-space: nowrap;
 }
 
+
+/* CSS for scrollable mini cart */
+.cart_gallery {
+  max-height: 200px;
+  /* Adjust height as needed */
+  overflow-y: auto;
+  padding-right: 5px;
+  /* Adds space for scrollbar */
+}
+
+/* Optional: style scrollbar for modern browsers */
+.cart_gallery::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cart_gallery::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 10px;
+}
+
+.cart_gallery::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+.add_to_cart_button {
+  background-color: white;
+  color: black;
+  border: 0.25px solid #ddd;
+  padding: 9px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+
+.add_to_cart_button:hover {
+  background-color: black;
+  color: white;
+}
+
+.wishlist_button {
+  background-color: white;
+  color: black;
+  border: 0.25px solid #ddd;
+  padding: 9px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+
+.wishlist_button:hover {
+  background-color: black;
+  color: white;
+}
+
+
 /*privacy policy css end*/
 
 /*# sourceMappingURL=style.css.map */

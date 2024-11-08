@@ -212,36 +212,43 @@
                                         </a>
                                     </div>
 
-                                    <div class="header_account_list  mini_cart_wrapper">
+                                    <div class="header_account_list  mini_cart_wrapper"
+                                        th:if="${session.loginCustomer != null}">
                                         <a href="javascript:void(0)"><i class="icon-bag"></i>
-                                            <span class="item_count">5</span>
+                                            <span class="item_count" th:text="${cartItemCount}">0</span>
                                         </a>
                                         <!--mini cart-->
                                         <div class="mini_cart">
                                             <div class="cart_gallery">
-                                                <div class="cart_item">
+                                                <div class="cart_item" th:each="cartItem : ${cartItems}">
                                                     <div class="cart_img">
-                                                        <a href="#"><img src="/user/assets/img/s-product/product.jpg"
+                                                        <a href="#"><img
+                                                                th:src="@{'/productimages/' + ${cartItem.ProductImage}}"
                                                                 alt=""></a>
                                                     </div>
                                                     <div class="cart_info">
-                                                        <a href="#">Juicy Couture Tricot</a>
-                                                        <p>1 x <span> $30.00 </span></p>
+                                                        <a
+                                                            th:href="@{/user/product-details/{id}(id=${cartItem.ProductId})}">[[${cartItem.ProductName}]]</a>
+                                                        <p>[[${cartItem.quantity}]] x <span>
+                                                                $[[${cartItem.ProductPrice}]]
+                                                            </span></p>
                                                     </div>
                                                     <div class="cart_remove">
-                                                        <a href="#"><i class="ion-ios-close-outline"></i></a>
+                                                        <a
+                                                            th:href="@{/user/cart/delete/{productId}(productId=${cartItem.ProductId})}"><i
+                                                                class="fa fa-times-circle"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="mini_cart_table">
                                                 <div class="cart_table_border">
                                                     <div class="cart_total">
-                                                        <span>Sub total:</span>
-                                                        <span class="price">$125.00</span>
+                                                        <span>Subtotal:</span>
+                                                        <span class="price">$[[${subtotal}]]</span>
                                                     </div>
                                                     <div class="cart_total mt-10">
-                                                        <span>total:</span>
-                                                        <span class="price">$125.00</span>
+                                                        <span>Total:</span>
+                                                        <span class="price">$[[${total}]]</span>
                                                     </div>
                                                 </div>
                                             </div>

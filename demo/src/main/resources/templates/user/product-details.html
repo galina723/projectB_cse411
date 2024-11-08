@@ -78,7 +78,6 @@
                                         <label>quantity</label>
                                         <input min="1" max="100" value="1" type="number" name="quantity" required>
                                         <input type="hidden" name="productId" th:value="${product.ProductId}">
-                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                         <button class="button" type="submit">add to cart</button>
                                     </div>
                                     <div class=" product_d_action">

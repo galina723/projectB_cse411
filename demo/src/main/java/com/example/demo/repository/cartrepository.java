@@ -12,4 +12,6 @@ public interface cartrepository extends CrudRepository<carts, CartId> {
 
     @Query("SELECT c FROM carts c WHERE c.id.customerId = :customerId")
     List<carts> findByCustomerId(@Param("customerId") Integer customerId);
+
+
 }

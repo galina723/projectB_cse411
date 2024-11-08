@@ -98,10 +98,26 @@
                                             </div>
                                             <div class="action_links">
                                                 <ul>
-                                                    <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
-                                                                class="icon-bag icons"></i></a></li>
-                                                    <li class="wishlist"><a href="/user/wishlist"
-                                                            title="Add to Wishlist"><i class="icon-heart icons"></i></a>
+                                                    <li class="add_to_cart" style="display: inline-block;">
+                                                        <form th:action="@{/user/cart/add}" method="POST"
+                                                            style="display: inline;">
+                                                            <input type="hidden" name="productId"
+                                                                th:value="${product.ProductId}" />
+                                                            <input type="hidden" name="quantity" value="1" />
+                                                            <button type="submit" class="add_to_cart_button">
+                                                                <i class="icon-bag icons"></i>
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                    <li class="wishlist" style="display: inline-block;">
+                                                        <form th:action="@{/user/wishlist/add}" method="POST"
+                                                            style="display: inline;">
+                                                            <input type="hidden" name="productId"
+                                                                th:value="${product.ProductId}" />
+                                                            <button type="submit" class="wishlist_button">
+                                                                <i class="icon-heart icons"></i>
+                                                            </button>
+                                                        </form>
                                                     </li>
 
                                                 </ul>

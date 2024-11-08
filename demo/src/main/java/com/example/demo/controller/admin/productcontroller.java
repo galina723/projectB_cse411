@@ -68,7 +68,7 @@ public class productcontroller {
         MultipartFile image = productsdto.getProductMainImage();
         String storagefilename = image.getOriginalFilename();
 
-        String uploaddir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\productimages";
+        String uploaddir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\productimages";
 
         Path uploadpath = Paths.get(uploaddir);
 
@@ -106,7 +106,6 @@ public class productcontroller {
         products savedProduct = productrepo.save(pro);
         // Process and save gallery images
         List<MultipartFile> galleryImages = productsdto.getProductOtherImages();
-        System.out.println("Gallery Images Size: " + (galleryImages != null ? galleryImages.size() : "null"));
         if (galleryImages != null && !galleryImages.isEmpty()) {
             for (MultipartFile galleryImage : galleryImages) {
                 if (galleryImage.isEmpty()) {
@@ -117,7 +116,9 @@ public class productcontroller {
                 Path galleryImagePath = uploadpath.resolve(galleryImageFilename);
 
                 try (InputStream inputStream = galleryImage.getInputStream()) {
-                    Files.copy(inputStream, galleryImagePath, StandardCopyOption.REPLACE_EXISTING);
+                    if (!Files.exists(galleryImagePath)) {
+                        Files.copy(inputStream, galleryImagePath, StandardCopyOption.REPLACE_EXISTING);
+                    }
 
                     productotherimages productImage = new productotherimages();
                     productImage.setProduct(savedProduct);
@@ -191,7 +192,7 @@ public class productcontroller {
             return "admin/apps-ecommerce-edit-product";
         }
 
-        String uploadDir = "E:\\doanb\\projectB_cse411\\demo\\src\\main\\resources\\static\\productimages";
+        String uploadDir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\productimages";
         Path uploadPath = Paths.get(uploadDir);
 
         MultipartFile image = productsdto.getProductMainImage();
@@ -241,8 +242,9 @@ public class productcontroller {
                         }
                         try (InputStream inputStream = galleryImage.getInputStream()) {
                             Path targetPath = uploadPath.resolve(galleryImageFilename);
-                            Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
-                        }
+                            if (!Files.exists(targetPath)) {
+                                Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
+                            }                        }
 
                         productotherimages newImage = new productotherimages();
                         newImage.setProduct(pro);
