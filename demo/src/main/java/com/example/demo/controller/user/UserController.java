@@ -1,6 +1,8 @@
 package com.example.demo.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import com.example.demo.otherfunction.encryption;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale.Category;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -75,7 +78,11 @@ public class UserController {
 
     @GetMapping("index")
     public String index(Model model) {
-        List<products> products = (List<products>) productrepo.findAll();
+        List<categories> categories = (List<categories>) caterepo.findAll();
+        model.addAttribute("categories", categories);
+        
+        Pageable pageable = PageRequest.of(0, 8);
+        List<products> products = productrepo.findTop10Products(pageable);
         model.addAttribute("products", products);
         return "user/index";
     }
