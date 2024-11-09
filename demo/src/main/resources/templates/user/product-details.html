@@ -31,7 +31,7 @@
             <div class="product_details mb-60">
                 <div class="container">
                     <div class="row" th:each="product : ${products}">
-                        <div class="col-lg-5 col-md-5">
+                        <div class="col-lg-4 col-md-5">
                             <div class="product-details-tab">
                                 <div id="img-1" class="zoomWrapper single-zoom">
                                     <a href="#">
@@ -53,7 +53,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-7 col-md-7">
+                        <div class="col-lg-8 col-md-7">
                             <div class="product_d_right">
                                 <form th:action="@{/user/cart/add}" method="post">
                                     <div class="productd_title_nav">
@@ -78,7 +78,7 @@
                                         <label>quantity</label>
                                         <input min="1" max="100" value="1" type="number" name="quantity" required>
                                         <input type="hidden" name="productId" th:value="${product.ProductId}">
-                                        <button class="button" type="submit">add to cart</button>
+                                        <button class="button" type="submit"><i class="icon-bag icons"></i></button>
                                     </div>
                                     <div class=" product_d_action">
                                         <ul>

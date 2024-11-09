@@ -15,10 +15,7 @@ import jakarta.servlet.http.HttpSession;
 
 import com.example.demo.otherfunction.encryption;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale.Category;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -39,6 +36,9 @@ public class UserController {
 
     @Autowired
     private cartrepository cartrepo;
+
+    @Autowired
+    private blogrepository blogrepo;
 
     @ModelAttribute
     public void addGlobalAttributes(Model model, HttpSession session) {
@@ -80,7 +80,7 @@ public class UserController {
     public String index(Model model) {
         List<categories> categories = (List<categories>) caterepo.findAll();
         model.addAttribute("categories", categories);
-        
+
         Pageable pageable = PageRequest.of(0, 8);
         List<products> products = productrepo.findTop10Products(pageable);
         model.addAttribute("products", products);
@@ -155,13 +155,22 @@ public class UserController {
         return "user/about";
     }
 
-    @GetMapping("blog-details")
-    public String blogdetail() {
+    @GetMapping("blog-details/{id}")
+    public String blogdetail(@PathVariable("id") int id, Model model) {
+        blogs blogs = blogrepo.findById(id).orElse(null);
+        List<blogs> recentBlogs = blogrepo.findTop3ByIdNot(id);
+        model.addAttribute("recentBlogs", recentBlogs);
+        model.addAttribute("blogs", blogs);
         return "user/blog-details";
     }
 
     @GetMapping("blog")
-    public String blog() {
+    public String blog(Model model) {
+        List<blogs> blogs = (List<blogs>) blogrepo.findAll();
+        blogs = blogs.stream()
+                .filter(blog -> !"hidden".equalsIgnoreCase(blog.getBlogStatus()))
+                .collect(Collectors.toList());
+        model.addAttribute("blogs", blogs);
         return "user/blog";
     }
 

@@ -709,7 +709,17 @@
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 ClassicEditor
-                    .create(document.querySelector('#product-description-input'))
+                    .create(document.querySelector('#product-description-input'), {
+                        toolbar: [
+                            'undo', 'redo', '|',
+                            'heading', '|',
+                            'bold', 'italic', '|',
+                            'link', 'blockQuote', 'bulletedList', 'numberedList', '|',
+                            'insertTable', '|',
+                            'Outdent', 'Indent'
+                        ],
+                        removePlugins: ['image', 'mediaEmbed']
+                    })
                     .catch(error => {
                         console.error(error);
                     });
