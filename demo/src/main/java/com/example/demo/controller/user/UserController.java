@@ -3,6 +3,8 @@ package com.example.demo.controller.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -242,43 +244,113 @@ public class UserController {
         return "redirect:/user/cart"; // Redirect back to the cart
     }
 
+    // @PostMapping("cart/add")
+    // public String addToCart(@RequestParam("productId") int productId,
+    // @RequestParam("quantity") int quantity,
+    // HttpSession session,
+    // RedirectAttributes redirectAttributes) {
+    // Integer customerId = (Integer) session.getAttribute("loginCustomer");
+    // if (customerId == null) {
+    // redirectAttributes.addFlashAttribute("loginRequired", "Please log in to add
+    // items to your cart.");
+    // return "redirect:/user/login";
+    // }
+
+    // customers customer = customerrepo.findById(customerId).orElse(null);
+    // if (customer == null) {
+    // redirectAttributes.addFlashAttribute("error", "Customer not found.");
+    // return "redirect:/user/cart";
+    // }
+
+    // // Ensure the product exists
+    // products product = productrepo.findById(productId).orElse(null);
+    // if (product == null) {
+    // redirectAttributes.addFlashAttribute("error", "Product not found.");
+    // return "redirect:/user/cart";
+    // }
+
+    // carts newCart = new carts();
+    // CartId cartId = new CartId();
+    // cartId.setCustomerId(customerId);
+    // cartId.setProductId(productId);
+    // newCart.setId(cartId);
+
+    // // Set the customer and product properly
+    // newCart.setCustomer(customer); // Set the actual customer object
+    // newCart.setProduct(product); // Set the actual product object
+    // newCart.setQuantity(quantity);
+    // cartrepo.save(newCart);
+
+    // return "redirect:/user/cart";
+    // }
+
     @PostMapping("cart/add")
-    public String addToCart(@RequestParam("productId") int productId,
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> addToCart(@RequestParam("productId") int productId,
             @RequestParam("quantity") int quantity,
-            HttpSession session,
-            RedirectAttributes redirectAttributes) {
+            HttpSession session) {
+        // Check if the user is logged in
         Integer customerId = (Integer) session.getAttribute("loginCustomer");
         if (customerId == null) {
-            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to add items to your cart.");
-            return "redirect:/user/login";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Please log in to add items to your cart."));
         }
 
+        // Fetch the customer
         customers customer = customerrepo.findById(customerId).orElse(null);
         if (customer == null) {
-            redirectAttributes.addFlashAttribute("error", "Customer not found.");
-            return "redirect:/user/cart";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Customer not found."));
         }
 
-        // Ensure the product exists
+        // Fetch the product
         products product = productrepo.findById(productId).orElse(null);
         if (product == null) {
-            redirectAttributes.addFlashAttribute("error", "Product not found.");
-            return "redirect:/user/cart";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Product not found."));
         }
 
+        // Create and save the new cart entry
         carts newCart = new carts();
         CartId cartId = new CartId();
         cartId.setCustomerId(customerId);
         cartId.setProductId(productId);
         newCart.setId(cartId);
-
-        // Set the customer and product properly
-        newCart.setCustomer(customer); // Set the actual customer object
-        newCart.setProduct(product); // Set the actual product object
+        newCart.setCustomer(customer);
+        newCart.setProduct(product);
         newCart.setQuantity(quantity);
         cartrepo.save(newCart);
 
-        return "redirect:/user/cart"; // Redirect to the cart page
+        // Prepare response data
+        List<carts> cartItems = cartrepo.findByCustomerId(customerId);
+        List<cartsdto> cartItemDTOs = new ArrayList<>();
+        double subtotal = 0.0;
+
+        for (carts cartItem : cartItems) {
+            products cartProduct = cartItem.getProduct();
+            if (cartProduct != null) {
+                double totalPrice = cartProduct.getProductPrice() * cartItem.getQuantity();
+                subtotal += totalPrice;
+
+                cartsdto dto = new cartsdto();
+                dto.setProductId(cartProduct.getProductId());
+                dto.setProductName(cartProduct.getProductName());
+                dto.setProductImage(cartProduct.getProductMainImage());
+                dto.setProductPrice(cartProduct.getProductPrice());
+                dto.setQuantity(cartItem.getQuantity());
+                dto.setTotalPrice(totalPrice);
+                cartItemDTOs.add(dto);
+            }
+        }
+
+        double shippingFee = subtotal < 500 ? subtotal * 0.01 : 0.0;
+        double total = subtotal + shippingFee;
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("cartItemCount", cartItemDTOs.size());
+        response.put("cartItems", cartItemDTOs);
+        response.put("subtotal", subtotal);
+        response.put("total", total);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/cart/update")

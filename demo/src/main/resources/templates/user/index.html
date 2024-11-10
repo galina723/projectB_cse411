@@ -130,8 +130,8 @@
                                                 <div class="action_links">
                                                     <ul>
                                                         <li class="add_to_cart" style="display: inline-block;">
-                                                            <form th:action="@{/user/cart/add}" method="POST"
-                                                                style="display: inline;">
+                                                            <form id="add-to-cart-form" th:action="@{/user/cart/add}"
+                                                                method="POST" style="display: inline;">
                                                                 <input type="hidden" name="productId"
                                                                     th:value="${product.ProductId}" />
                                                                 <input type="hidden" name="quantity" value="1" />
@@ -208,8 +208,8 @@
                                                 <div class="action_links">
                                                     <ul>
                                                         <li class="add_to_cart" style="display: inline-block;">
-                                                            <form th:action="@{/user/cart/add}" method="POST"
-                                                                style="display: inline;">
+                                                            <form id="add-to-cart-form" th:action="@{/user/cart/add}"
+                                                                method="POST" style="display: inline;">
                                                                 <input type="hidden" name="productId"
                                                                     th:value="${product.ProductId}" />
                                                                 <input type="hidden" name="quantity" value="1" />
