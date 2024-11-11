@@ -40,6 +40,10 @@
 
     <!--modernizr min js here-->
     <script th:src="@{/user/assets/js/vendor/modernizr-3.7.1.min.js}"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.2/toastify.min.css"
+        integrity="sha512-ecfz7BsZIyMBMdXTx7GU2128lQ7MTiqGJwAqCumba6v8y7YDhYEHueqy+iUtUdZsnsKhCyoCcFGGMhpwQOy6xg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -212,36 +216,38 @@
                                         </a>
                                     </div>
 
-                                    <div class="header_account_list  mini_cart_wrapper">
+                                    <div class="header_account_list  mini_cart_wrapper"
+                                        th:if="${session.loginCustomer != null}">
                                         <a href="javascript:void(0)"><i class="icon-bag"></i>
-                                            <span class="item_count">5</span>
+                                            <span class="item_count" th:text="${cartItemCount}">0</span>
                                         </a>
                                         <!--mini cart-->
                                         <div class="mini_cart">
                                             <div class="cart_gallery">
-                                                <div class="cart_item">
+                                                <div class="cart_item" th:each="cartItem : ${cartItems}">
                                                     <div class="cart_img">
-                                                        <a href="#"><img src="/user/assets/img/s-product/product.jpg"
+                                                        <a href="#"><img
+                                                                th:src="@{'/productimages/' + ${cartItem.ProductImage}}"
                                                                 alt=""></a>
                                                     </div>
                                                     <div class="cart_info">
-                                                        <a href="#">Juicy Couture Tricot</a>
-                                                        <p>1 x <span> $30.00 </span></p>
-                                                    </div>
-                                                    <div class="cart_remove">
-                                                        <a href="#"><i class="ion-ios-close-outline"></i></a>
+                                                        <a
+                                                            th:href="@{/user/product-details/{id}(id=${cartItem.ProductId})}">[[${cartItem.ProductName}]]</a>
+                                                        <p>[[${cartItem.quantity}]] x <span>
+                                                                $[[${cartItem.ProductPrice}]]
+                                                            </span></p>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="mini_cart_table">
                                                 <div class="cart_table_border">
                                                     <div class="cart_total">
-                                                        <span>Sub total:</span>
-                                                        <span class="price">$125.00</span>
+                                                        <span>Subtotal:</span>
+                                                        <span class="price">$[[${subtotal}]]</span>
                                                     </div>
                                                     <div class="cart_total mt-10">
-                                                        <span>total:</span>
-                                                        <span class="price">$125.00</span>
+                                                        <span>Total:</span>
+                                                        <span class="price">$[[${total}]]</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -549,6 +555,69 @@
 
         <!-- Main JS -->
         <script th:src="@{/user/assets/js/main.js}"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.2/toastify.min.js"
+            integrity="sha512-zrRn+TvTc4KgDOtlKOgThphx1DGCZ8zR/xGWtG/WiKp6G+/xUBWow3p2lWu8DHfdHYWfwvIY0I89b3q22POHSw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('#add-to-cart-form').forEach(form => {
+                    form.addEventListener('submit', function (e) {
+                        e.preventDefault(); // Prevent normal form submission
+
+                        const formData = new FormData(form);
+
+                        fetch(form.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                        })
+                            .then(response => response.ok ? response.json() : Promise.reject(response))
+                            .then(data => {
+                                // Update item count
+                                document.querySelector('.mini_cart_wrapper .item_count').textContent = data.cartItemCount;
+
+                                // Update mini cart UI
+                                const cartGallery = document.querySelector('.cart_gallery');
+                                cartGallery.innerHTML = data.cartItems.map(cartItem => `
+                                    <div class="cart_item">
+                                        <div class="cart_img">
+                                            <a href="#"><img src="/productimages/${cartItem.productImage}" alt=""></a>
+                                        </div>
+                                        <div class="cart_info">
+                                            <a href="/user/product-details/${cartItem.productId}">${cartItem.productName}</a>
+                                            <p>${cartItem.quantity} x <span>$${cartItem.productPrice}</span></p>
+                                        </div>
+                                    </div>
+                                `).join('');
+
+                                // Update subtotal and total
+                                document.querySelector('.cart_total .price').textContent = `$${data.subtotal.toFixed(2)}`;
+                                document.querySelector('.cart_total.mt-10 .price').textContent = `$${data.total.toFixed(2)}`;
+
+                                // Display success message
+                                Toastify({
+                                    text: "Added to cart successfully.",
+                                    duration: 1000,
+                                    gravity: "top",
+                                    position: 'right',
+                                    close: true,
+                                    backgroundColor: "#4CAF50",
+                                }).showToast();
+                            })
+                            .catch(error => {
+                                Toastify({
+                                    text: 'Error: ' + (error.statusText || 'An error occurred'),
+                                    duration: 3000,
+                                    gravity: "top",
+                                    position: 'right',
+                                    backgroundColor: "#f44336",
+                                }).showToast();
+                            });
+                    });
+                });
+            });
+        </script>
     </div>
 
 

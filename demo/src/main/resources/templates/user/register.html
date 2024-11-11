@@ -2,95 +2,168 @@
 <html class="no-js" lang="en" xmlns:th="https://www.thymeleaf.org/">
 
 
-<head th:replace="user/layout :: pageHead('Register')">
+<head th:replace="~{user/layout :: pageHead('Shop')}">
+
 </head>
 
 <body>
 
-<div th:replace="user/layout :: body">
-    <section th:fragment="mainContent">
-
-        <!--breadcrumbs area start-->
-        <div class="breadcrumbs_area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="breadcrumb_content">
-                            <h3>Register</h3>
-                            <ul>
-                                <li><a href="/user/index">home</a></li>
-                                <li>register</li>
-                            </ul>
+    <div th:replace="~{user/layout :: body}">
+        <section th:fragment="mainContent">
+            <!--breadcrumbs area start-->
+            <div class="breadcrumbs_area">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="breadcrumb_content">
+                                <h3>shop</h3>
+                                <ul>
+                                    <li><a href="/user/index">home</a></li>
+                                    <li>shop</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!--breadcrumbs area end-->
+            <!--breadcrumbs area end-->
+            <!--shop  area start-->
+            <div class="shop_area shop_reverse mb-60">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-12">
+                            <!--sidebar widget start-->
+                            <aside class="sidebar_widget">
+                                <div class="widget_inner">
+                                    <div class="widget_list widget_categories">
+                                        <h3>Category</h3>
+                                        <ul>
+                                            <li><a href="/user/shop">All</a></li>
+                                            <li th:each="category : ${categories}">
+                                                <a th:text="${category.CategoryName}"
+                                                    th:href="@{'/user/shop?category=' + ${category.CategoryName}}"></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="widget_list widget_filter">
+                                        <h3>Filter by price</h3>
+                                        <form action="#">
+                                            <div id="slider-range"></div>
+                                            <button type="submit">Filter</button>
+                                            <input type="text" name="text" id="amount" />
+                                        </form>
+                                    </div>
 
-        <!-- customer login start -->
-        <div class="customer_login">
-            <div class="container">
-                <div class="row">
-                    <!--login area start-->
-                    <div class="col-lg-3 col-md-3"></div>
-                    <div class="col-lg-6 col-md-12">
-                        <div class="account_form">
-                            <h2>Register</h2>
-                            <form action="#" method="post" enctype="multipart/form-data" th:action="@{/user/register/save}" th:object="${customers}">
-                                <div class="row">
-                                    <!-- Column 1: Full Name, Email, Password, Confirm Password -->
-                                    <div class="col-lg-12 col-md-6">
-                                        <p>
-                                            <label>Full Name<span style="color: red;">*</span></label>
-                                            <input type="text" th:field="*{CustomerName}" required="Add">
-                                        </p>
-                                        <p>
-                                            <label>Email<span style="color: red;">*</span></label>
-                                            <input type="text" th:field="*{cemail}" required="Add">
-                                        </p>
+                                </div>
+                            </aside>
+                            <!--sidebar widget end-->
+                        </div>
+                        <div class="col-lg-9 col-md-12">
+                            <!--shop wrapper start-->
 
-                                        <p>
-                                            <label>Password<span style="color: red;">*</span></label>
-                                            <input type="password" th:field="*{CustomerPassword}" required="Add">
-                                        </p>
+                            <!--shop toolbar start-->
+                            <div class="shop_toolbar_wrapper">
+                                <div class="shop_toolbar_btn">
 
-                                        <p>
-                                            <label>Confirm Password<span style="color: red;">*</span></label>
-                                            <input type="password" required="Add">
-                                        </p>
-                                    
-                                        <p>
-                                            <label>Phone<span style="color: red;">*</span></label>
-                                            <input type="text" th:field="*{CustomerPhone}" required="Add">
-                                        </p>
-                                        
-                                        
-                                        <div class="login_submit">
-                                            <a href="/user/login">Have an account?</a>
-                                            <button type="submit">Register</button>
+
+                                </div>
+                                <div class=" niceselect_option">
+                                    <form class="select_option" action="#">
+                                        <select name="orderby" id="short">
+
+                                            <option selected value="1">Sort by average rating</option>
+                                            <option value="2">Sort by popularity</option>
+                                            <option value="3">Sort by newness</option>
+                                            <option value="4">Sort by price: low to high</option>
+                                            <option value="5">Sort by price: high to low</option>
+                                            <option value="6">Product Name: Z</option>
+                                        </select>
+                                    </form>
+                                </div>
+                                <div class="123">
+
+                                </div>
+                            </div>
+                            <!--shop toolbar end-->
+                            <div class="row shop_wrapper">
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-12 " th:each="product : ${products}">
+                                    <div class="single_product">
+                                        <div class="product_thumb">
+                                            <a class="primary_img"
+                                                th:href="@{'/user/product-details/'+ ${product.ProductId}}"><img
+                                                    th:src="@{'/productimages/'+ ${product.ProductMainImage}}"
+                                                    alt=""></a>
+                                            <div class="label_product">
+                                                <span class="label_sale">-20%</span>
+                                            </div>
+                                            <div class="action_links">
+                                                <ul>
+                                                    <li class="add_to_cart" style="display: inline-block;">
+                                                        <form id="add-to-cart-form" th:action="@{/user/cart/add}"
+                                                            method="POST" style="display: inline;">
+                                                            <input type="hidden" name="productId"
+                                                                th:value="${product.ProductId}" />
+                                                            <input type="hidden" name="quantity" value="1" />
+                                                            <button type="submit" class="add_to_cart_button">
+                                                                <i class="icon-bag icons"></i>
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                    <li class="wishlist" style="display: inline-block;">
+                                                        <form th:action="@{/user/wishlist/add}" method="POST"
+                                                            style="display: inline;">
+                                                            <input type="hidden" name="productId"
+                                                                th:value="${product.ProductId}" />
+                                                            <button type="submit" class="wishlist_button">
+                                                                <i class="icon-heart icons"></i>
+                                                            </button>
+                                                        </form>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="product_content grid_content">
+                                            <h4 class="product_name"><a
+                                                    th:href="@{'/user/product-details/'+ ${product.ProductId}}"
+                                                    th:text="${product.ProductName}">[[${product.ProductName}]]</a></h4>
+                                            <div class="price_box">
+                                                <span class="current_price">$[[${product.ProductPrice}]]</span>
+                                            </div>
+                                            <div class="product_rating">
+                                                <ul>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                    <li><a href="#"><i class="ion-android-star"></i></a></li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                            <!-- <div class="shop_toolbar t_bottom">
+                                <div class="pagination">
+                                    <ul>
+                                        <li class="current">1</li>
+                                        <li><a href="#">2</a></li>
+                                        <li><a href="#">3</a></li>
+                                        <li class="next"><a href="#">next</a></li>
+                                        <li><a href="#">>></a></li>
+                                    </ul>
+                                </div>
+                            </div> -->
+                            <!--shop toolbar end-->
+                            <!--shop wrapper end-->
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-3"></div>
-                    <!--login area end-->
                 </div>
             </div>
-        </div>
-        <!-- customer login end -->
+            <!--shop  area end-->
 
-
-</div>
-</div>
-</div>
-<!-- customer login end -->
-
-</section>
-</div>
-
+        </section>
+    </div>
 </body>
 
 

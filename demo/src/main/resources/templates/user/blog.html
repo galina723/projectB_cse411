@@ -2,189 +2,68 @@
 <html class="no-js" lang="en" xmlns:th="https://www.thymeleaf.org/">
 
 
-<head th:replace="user/layout :: pageHead('Blog')">
+<head th:replace="~{user/layout :: pageHead('Blog')}">
 
 </head>
 
 <body>
 
-<div th:replace="user/layout :: body">
-    <section th:fragment="mainContent">
-        <!--breadcrumbs area start-->
-        <div class="breadcrumbs_area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="breadcrumb_content">
-                            <h3>blog</h3>
-                            <ul>
-                                <li><a href="/user/index">home</a></li>
-                                <li>blog</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--breadcrumbs area end-->
-        <!--blog area start-->
-        <div class="blog_page_section mb-60">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12">
-                        <div class="blog_wrapper">
-                            <div class="row">
-                                <div class="col-lg-3 col-md-6">
-                                    <article class="single_blog">
-                                        <figure>
-                                            <div class="blog_thumb">
-                                                <a href="/user/blog-details"><img
-                                                        src="../user/assets/img/blog/blog1.jpg" alt=""></a>
-                                            </div>
-                                            <figcaption class="blog_content">
-                                                <h4 class="post_title"><a href="/user/blog-details"> This is First
-                                                    Post For XipBlog</a></h4>
-                                                <p>
-                                                    Lorem Ipsum is simply dummy text of the printing and typesetting
-                                                    industry. Lorem Ipsum has been ...
-                                                </p>
-                                                <footer class="blog_footer">
-                                                    <a href="/user/blog-details">Read More</a>
-                                                </footer>
-                                            </figcaption>
-                                        </figure>
-                                    </article>
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <article class="single_blog">
-                                        <figure>
-                                            <div class="blog_thumb">
-                                                <a href="/user/blog-details"><img
-                                                        src="../user/assets/img/blog/blog2.jpg" alt=""></a>
-                                            </div>
-                                            <figcaption class="blog_content">
-                                                <h4 class="post_title"><a href="/user/blog-details"> This is Secound
-                                                    Post For XipBlog</a></h4>
-                                                <p>
-                                                    Lorem Ipsum is simply dummy text of the printing and typesetting
-                                                    industry. Lorem Ipsum has been ...
-                                                </p>
-                                                <footer class="blog_footer">
-                                                    <a href="/user/blog-details">Read More</a>
-                                                </footer>
-                                            </figcaption>
-                                        </figure>
-                                    </article>
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <article class="single_blog">
-                                        <figure>
-                                            <div class="blog_thumb">
-                                                <a href="/user/blog-details"><img
-                                                        src="../user/assets/img/blog/blog3.jpg" alt=""></a>
-                                            </div>
-                                            <figcaption class="blog_content">
-                                                <h4 class="post_title"><a href="/user/blog-details"> This is Third
-                                                    Post For XipBlog</a></h4>
-                                                <p>
-                                                    Lorem Ipsum is simply dummy text of the printing and typesetting
-                                                    industry. Lorem Ipsum has been ...
-                                                </p>
-                                                <footer class="blog_footer">
-                                                    <a href="/user/blog-details">Read More</a>
-                                                </footer>
-                                            </figcaption>
-                                        </figure>
-                                    </article>
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <article class="single_blog">
-                                        <figure>
-                                            <div class="blog_thumb">
-                                                <a href="/user/blog-details"><img
-                                                        src="../user/assets/img/blog/blog4.jpg" alt=""></a>
-                                            </div>
-                                            <figcaption class="blog_content">
-                                                <h4 class="post_title"><a href="/user/blog-details"> This is Fourth
-                                                    Post For XipBlog</a></h4>
-                                                <p>
-                                                    Lorem Ipsum is simply dummy text of the printing and typesetting
-                                                    industry. Lorem Ipsum has been ...
-                                                </p>
-                                                <footer class="blog_footer">
-                                                    <a href="/user/blog-details">Read More</a>
-                                                </footer>
-                                            </figcaption>
-                                        </figure>
-                                    </article>
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <article class="single_blog">
-                                        <figure>
-                                            <div class="blog_thumb">
-                                                <a href="/user/blog-details"><img
-                                                        src="../user/assets/img/blog/blog1.jpg" alt=""></a>
-                                            </div>
-                                            <figcaption class="blog_content">
-                                                <h4 class="post_title"><a href="/user/blog-details"> This is Five
-                                                    Post For XipBlog</a></h4>
-                                                <p>
-                                                    Lorem Ipsum is simply dummy text of the printing and typesetting
-                                                    industry. Lorem Ipsum has been ...
-                                                </p>
-                                                <footer class="blog_footer">
-                                                    <a href="/user/blog-details">Read More</a>
-                                                </footer>
-                                            </figcaption>
-                                        </figure>
-                                    </article>
-                                </div>
-                                <div class="col-lg-3 col-md-6">
-                                    <article class="single_blog">
-                                        <figure>
-                                            <div class="blog_thumb">
-                                                <a href="/user/blog-details"><img
-                                                        src="../user/assets/img/blog/blog2.jpg" alt=""></a>
-                                            </div>
-                                            <figcaption class="blog_content">
-                                                <h4 class="post_title"><a href="/user/blog-details"> This is Six
-                                                    Post
-                                                    For XipBlog</a></h4>
-                                                <p>
-                                                    Lorem Ipsum is simply dummy text of the printing and typesetting
-                                                    industry. Lorem Ipsum has been ...
-                                                </p>
-                                                <footer class="blog_footer">
-                                                    <a href="/user/blog-details">Read More</a>
-                                                </footer>
-                                            </figcaption>
-                                        </figure>
-                                    </article>
-                                </div>
-                            </div>
-                        </div>
-                        <!--blog pagination area start-->
-                        <div class="blog_pagination">
-                            <div class="pagination">
+    <div th:replace="~{user/layout :: body}">
+        <section th:fragment="mainContent">
+            <!--breadcrumbs area start-->
+            <div class="breadcrumbs_area">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="breadcrumb_content">
+                                <h3>blog</h3>
                                 <ul>
-                                    <li class="current">1</li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li class="next"><a href="#">next</a></li>
-                                    <li><a href="#">>></a></li>
+                                    <li><a href="/user/index">home</a></li>
+                                    <li>blog</li>
                                 </ul>
                             </div>
                         </div>
-                        <!--blog pagination area end-->
                     </div>
-                
                 </div>
             </div>
-        </div>
-        <!--blog area end-->
-
-    </section>
-</div>
+            <!--breadcrumbs area end-->
+            <!--blog area start-->
+            <div class="blog_page_section mb-60">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="blog_wrapper">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-6" th:each="blog : ${blogs}">
+                                        <article class="single_blog">
+                                            <figure>
+                                                <div class="blog_thumb">
+                                                    <a th:href="@{/user/blog-details/{id}(id=${blog.BlogId})}">
+                                                        <img th:src="@{'/blogimages/' + ${blog.BlogImage}}" alt=""></a>
+                                                </div>
+                                                <figcaption class="blog_content">
+                                                    <h4 class="post_title"><a
+                                                            th:href="@{/user/blog-details/{id}(id=${blog.BlogId})}">
+                                                            [[${blog.BlogTitle}]]</a></h4>
+                                                    <p th:text="${#strings.abbreviate(blog.BlogDescription, 100)}">
+                                                    </p>
+                                                    <footer class="blog_footer">
+                                                        <a th:href="@{/user/blog-details/{id}(id=${blog.BlogId})}">Read
+                                                            More</a>
+                                                    </footer>
+                                                </figcaption>
+                                            </figure>
+                                        </article>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--blog area end-->
+        </section>
+    </div>
 </body>
 
 

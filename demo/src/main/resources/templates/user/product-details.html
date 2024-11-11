@@ -31,7 +31,7 @@
             <div class="product_details mb-60">
                 <div class="container">
                     <div class="row" th:each="product : ${products}">
-                        <div class="col-lg-5 col-md-5">
+                        <div class="col-lg-4 col-md-5">
                             <div class="product-details-tab">
                                 <div id="img-1" class="zoomWrapper single-zoom">
                                     <a href="#">
@@ -53,9 +53,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-7 col-md-7">
+                        <div class="col-lg-8 col-md-7">
                             <div class="product_d_right">
-                                <form th:action="@{/user/cart/add}" method="post">
+                                <form id="add-to-cart-form" th:action="@{/user/cart/add}" method="post">
                                     <div class="productd_title_nav">
                                         <h1><a href="#">[[${product.ProductName}]]</a></h1>
 
@@ -78,8 +78,7 @@
                                         <label>quantity</label>
                                         <input min="1" max="100" value="1" type="number" name="quantity" required>
                                         <input type="hidden" name="productId" th:value="${product.ProductId}">
-                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                        <button class="button" type="submit">add to cart</button>
+                                        <button class="button" type="submit"><i class="icon-bag icons"></i></button>
                                     </div>
                                     <div class=" product_d_action">
                                         <ul>
@@ -92,7 +91,7 @@
                                     </div>
 
                                 </form>
-                                <div class="priduct_social">
+                                <div class="product_social">
                                     <ul>
                                         <li><a class="facebook" href="#" title="facebook"><i class="fa fa-facebook"></i>
                                                 Like</a></li>
@@ -136,7 +135,7 @@
                                 <div class="tab-content">
                                     <div class="tab-pane fade show active" id="info" role="tabpanel">
                                         <div class="product_info_content">
-                                            <p>[[${product.ProductDescription}]]</p>
+                                            <p th:utext="${product.ProductDescription}"></p>
                                         </div>
                                     </div>
 
