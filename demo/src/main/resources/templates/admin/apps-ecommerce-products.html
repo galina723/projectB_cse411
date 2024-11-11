@@ -166,9 +166,15 @@
                                                                 <li class="list-inline-item" data-bs-toggle="tooltip"
                                                                     data-bs-trigger="hover" data-bs-placement="top"
                                                                     title="Remove">
-                                                                    <a class="text-danger d-inline-block remove-item-btn"
+                                                                    <a th:if="${#lists.contains(productIdsInCart, product.productId)}"
+                                                                        class="text-muted"
+                                                                        title="Cannot delete: Product is in cart">
+                                                                        <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                                    </a>
+                                                                    <a th:if="${!#lists.contains(productIdsInCart, product.productId)}"
+                                                                        class="text-danger d-inline-block remove-item-btn"
                                                                         data-bs-toggle="modal" href="#deleteRecordModal"
-                                                                        th:attr="data-id=${product.ProductId}">
+                                                                        th:attr="data-id=${product.productId}">
                                                                         <i class="ri-delete-bin-5-fill fs-16"></i>
                                                                     </a>
                                                                 </li>

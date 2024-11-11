@@ -32,11 +32,20 @@ public class productcontroller {
     @Autowired
     productimagesrepository productimagerepo;
 
+    @Autowired
+    cartrepository cartrepo;
+
     // add product
 
     @GetMapping("apps-ecommerce-products")
     public String products(Model model) {
         List<products> productList = (List<products>) productrepo.findAll();
+
+        List<Integer> productIdsInCart = new ArrayList<>();
+        cartrepo.findAll().forEach(cart -> {
+            productIdsInCart.add(cart.getProduct().getProductId());
+        });
+        model.addAttribute("productIdsInCart", productIdsInCart);
         model.addAttribute("products", productList);
         return "admin/apps-ecommerce-products";
     }
@@ -244,7 +253,8 @@ public class productcontroller {
                             Path targetPath = uploadPath.resolve(galleryImageFilename);
                             if (!Files.exists(targetPath)) {
                                 Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
-                            }                        }
+                            }
+                        }
 
                         productotherimages newImage = new productotherimages();
                         newImage.setProduct(pro);
@@ -276,6 +286,12 @@ public class productcontroller {
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") int id, RedirectAttributes redirectAttributes) {
         try {
+            boolean isInCart = cartrepo.existsByProductId(id);
+            if (isInCart) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Product is in a cart and cannot be deleted.");
+                return "redirect:/admin/apps-ecommerce-products";
+            }
+
             products product = productrepo.findById(id).orElse(null);
             List<productotherimages> p = productimagerepo.findByProduct(product);
             for (productotherimages image : p) {

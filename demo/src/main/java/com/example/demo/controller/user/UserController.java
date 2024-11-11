@@ -85,6 +85,10 @@ public class UserController {
 
         Pageable pageable = PageRequest.of(0, 8);
         List<products> products = productrepo.findTop10Products(pageable);
+
+        products = products.stream()
+                .filter(product -> !"block".equalsIgnoreCase(product.getProductStatus()))
+                .collect(Collectors.toList());
         model.addAttribute("products", products);
         return "user/index";
     }
@@ -243,46 +247,6 @@ public class UserController {
         }
         return "redirect:/user/cart"; // Redirect back to the cart
     }
-
-    // @PostMapping("cart/add")
-    // public String addToCart(@RequestParam("productId") int productId,
-    // @RequestParam("quantity") int quantity,
-    // HttpSession session,
-    // RedirectAttributes redirectAttributes) {
-    // Integer customerId = (Integer) session.getAttribute("loginCustomer");
-    // if (customerId == null) {
-    // redirectAttributes.addFlashAttribute("loginRequired", "Please log in to add
-    // items to your cart.");
-    // return "redirect:/user/login";
-    // }
-
-    // customers customer = customerrepo.findById(customerId).orElse(null);
-    // if (customer == null) {
-    // redirectAttributes.addFlashAttribute("error", "Customer not found.");
-    // return "redirect:/user/cart";
-    // }
-
-    // // Ensure the product exists
-    // products product = productrepo.findById(productId).orElse(null);
-    // if (product == null) {
-    // redirectAttributes.addFlashAttribute("error", "Product not found.");
-    // return "redirect:/user/cart";
-    // }
-
-    // carts newCart = new carts();
-    // CartId cartId = new CartId();
-    // cartId.setCustomerId(customerId);
-    // cartId.setProductId(productId);
-    // newCart.setId(cartId);
-
-    // // Set the customer and product properly
-    // newCart.setCustomer(customer); // Set the actual customer object
-    // newCart.setProduct(product); // Set the actual product object
-    // newCart.setQuantity(quantity);
-    // cartrepo.save(newCart);
-
-    // return "redirect:/user/cart";
-    // }
 
     @PostMapping("cart/add")
     @ResponseBody

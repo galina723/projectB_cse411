@@ -18294,9 +18294,16 @@ span.flatpickr-weekday {
     right: -35px
 }
 
-.logo-lg img{
+.logo-lg img {
     height: 60px;
     max-width: none;
     padding-top: 5px;
 }
+
+.btn-danger:disabled {
+    background-color: gray !important;
+    border-color: gray !important;
+    cursor: not-allowed;
+}
+
 /*# sourceMappingURL=app.min.css.map */

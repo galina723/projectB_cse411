@@ -13,5 +13,6 @@ public interface cartrepository extends CrudRepository<carts, CartId> {
     @Query("SELECT c FROM carts c WHERE c.id.customerId = :customerId")
     List<carts> findByCustomerId(@Param("customerId") Integer customerId);
 
-
+    @Query("SELECT COUNT(c) > 0 FROM carts c WHERE c.id.productId = :productId")
+    boolean existsByProductId(@Param("productId") Integer productId);
 }
