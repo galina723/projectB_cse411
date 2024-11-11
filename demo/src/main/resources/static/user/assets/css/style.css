@@ -7340,18 +7340,18 @@ textarea:-ms-input-placeholder {
   height: 42px;
   line-height: 42px;
   text-transform: capitalize;
-  min-width: 270px;
+  min-width: auto;
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
   .product_variant.quantity button {
-    min-width: 240px;
+    min-width: auto;
   }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .product_variant.quantity button {
-    min-width: 170px;
+    min-width: auto;
   }
 }
 
@@ -8016,12 +8016,12 @@ textarea:-ms-input-placeholder {
 }
 
 .product_sidebar .product_variant.quantity button {
-  min-width: 200px;
+  min-width: auto;
 }
 
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
   .product_sidebar .product_variant.quantity button {
-    min-width: 140px;
+    min-width: auto;
   }
 }
 
@@ -12201,6 +12201,90 @@ textarea:-ms-input-placeholder {
 
 .input_box button {
   white-space: nowrap;
+}
+
+
+/* CSS for scrollable mini cart */
+.cart_gallery {
+  max-height: 200px;
+  /* Adjust height as needed */
+  overflow-y: auto;
+  padding-right: 5px;
+  /* Adds space for scrollbar */
+}
+
+/* Optional: style scrollbar for modern browsers */
+.cart_gallery::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cart_gallery::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 10px;
+}
+
+.cart_gallery::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+.add_to_cart_button {
+  background-color: white;
+  color: black;
+  border: 0.25px solid #ddd;
+  padding: 9px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+
+.add_to_cart_button:hover {
+  background-color: black;
+  color: white;
+}
+
+.wishlist_button {
+  background-color: white;
+  color: black;
+  border: 0.25px solid #ddd;
+  padding: 9px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+}
+
+.wishlist_button:hover {
+  background-color: black;
+  color: white;
+}
+
+.product_info_content ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+.product_info_content blockquote {
+  border-left: 4px solid #ccc;
+  padding-left: 15px;
+  color: #555;
+  font-style: italic;
+}
+
+.product_social ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: left;
+}
+
+.product_social ul li {
+  margin-right: 10px;
 }
 
 /*privacy policy css end*/

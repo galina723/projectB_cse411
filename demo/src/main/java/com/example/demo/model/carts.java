@@ -1,54 +1,34 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "cart")
-public class carts {
-    
-    @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class carts implements Serializable {
 
-    @Column(name = "customerId", nullable = false)
-    private int customerId;
-
-    @Column(name = "productId", nullable = false)
-    private int productId;
+    @EmbeddedId
+    private CartId id;
 
     @ManyToOne
-    @JoinColumn(name = "customerId", insertable = false, updatable = false)
+    @MapsId("customerId")
+    @JoinColumn(name = "customerId", referencedColumnName = "id")
     private customers customer;
 
     @ManyToOne
-    @JoinColumn(name = "productId", insertable = false, updatable = false)
+    @MapsId("productId")
+    @JoinColumn(name = "productId", referencedColumnName = "id")
     private products product;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(nullable = false)
     private int quantity;
 
-    public Integer getId() {
+    public CartId getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(CartId id) {
         this.id = id;
-    }
-
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
-
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
     }
 
     public customers getCustomer() {
@@ -57,7 +37,6 @@ public class carts {
 
     public void setCustomer(customers customer) {
         this.customer = customer;
-        this.customerId = customer.getCustomerId();
     }
 
     public products getProduct() {
@@ -66,7 +45,6 @@ public class carts {
 
     public void setProduct(products product) {
         this.product = product;
-        this.productId = product.getProductId();
     }
 
     public int getQuantity() {

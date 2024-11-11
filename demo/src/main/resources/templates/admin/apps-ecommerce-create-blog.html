@@ -35,7 +35,7 @@
                                                 value="add">
                                             <input type="text" class="form-control d-none" id="blog-id-input">
                                             <input type="text" class="form-control" id="blog-title-input" value=""
-                                                placeholder="Enter blog ID" required="" th:field="*{BlogId}">
+                                                placeholder="Enter blog ID" required="" th:field="*{BlogId}" readonly>
                                             <div class="invalid-feedback">Please Enter a blog ID.</div>
                                         </div>
                                         <div class="mb-3">
@@ -146,7 +146,7 @@
                                                 Time</label>
                                             <input type="text" id="datepicker-publish-input" class="form-control"
                                                 placeholder="Enter publish date" data-provider="flatpickr"
-                                                data-date-format="d.m.y" data-enable-time="" readonly>
+                                                data-date-format="d.m.y" data-enable-time="" readonly th:field="*{BlogCreateDate}">
                                         </div>
 
                                     </div>

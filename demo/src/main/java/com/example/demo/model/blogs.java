@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 

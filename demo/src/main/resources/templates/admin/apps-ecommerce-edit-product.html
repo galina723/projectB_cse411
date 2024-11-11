@@ -53,7 +53,7 @@
                                             <label for="product-description-input">Product Description</label>
                                             <textarea id="product-description-input" name="description"
                                                 class="form-control" placeholder="Enter product description" required=""
-                                                th:field="*{ProductDescription}"></textarea>
+                                                th:field="*{ProductDescription}" rows="5"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -253,9 +253,9 @@
             const newCount = input.files.length;
 
             if (newCount > 0) {
-                countDisplay.style.display = 'none'; 
+                countDisplay.style.display = 'none';
             } else {
-                countDisplay.style.display = 'block'; 
+                countDisplay.style.display = 'block';
             }
         }
     </script>

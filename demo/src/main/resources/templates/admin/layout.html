@@ -78,7 +78,7 @@
                                     <span></span>
                                     <span></span>
                                 </span>
-                            </button>                            
+                            </button>
                         </div>
 
                         <div class="d-flex align-items-center">
@@ -706,7 +706,25 @@
         <script th:src="@{/admin/assets/js/pages/ecommerce-product-list.init.js}"></script>
         <script th:src="@{/admin/assets/js/pages/ecommerce-product-details.init.js}"></script>
         <script th:src="@{/admin/assets/js/pages/ecommerce-customer-list.init.js}"></script>
-
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                ClassicEditor
+                    .create(document.querySelector('#product-description-input'), {
+                        toolbar: [
+                            'undo', 'redo', '|',
+                            'heading', '|',
+                            'bold', 'italic', '|',
+                            'link', 'blockQuote', 'bulletedList', 'numberedList', '|',
+                            'insertTable', '|',
+                            'Outdent', 'Indent'
+                        ],
+                        removePlugins: ['image', 'mediaEmbed']
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            });
+        </script>
     </div>
 </body>
 
