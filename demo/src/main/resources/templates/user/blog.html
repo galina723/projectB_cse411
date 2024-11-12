@@ -45,7 +45,7 @@
                                                     <h4 class="post_title"><a
                                                             th:href="@{/user/blog-details/{id}(id=${blog.BlogId})}">
                                                             [[${blog.BlogTitle}]]</a></h4>
-                                                    <p th:text="${#strings.abbreviate(blog.BlogDescription, 100)}">
+                                                    <p th:utext="${#strings.abbreviate(blog.BlogDescription, 100)}">...
                                                     </p>
                                                     <footer class="blog_footer">
                                                         <a th:href="@{/user/blog-details/{id}(id=${blog.BlogId})}">Read

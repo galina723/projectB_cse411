@@ -3707,18 +3707,18 @@ textarea:-ms-input-placeholder {
 }
 
 .label_product span.label_new {
-  top: 20px;
-  right: 20px;
+  top: 10px;
+  left: 10px;
   text-transform: uppercase;
-  color: #ffffff;
-  background: #fe3737;
-  font-size: 12px;
+  color: white;
+  background: #ffc107;
+  font-size: 15px;
+  font-weight: 600;
   height: 22px;
   line-height: 22px;
-  width: 40px;
+  width: 50px;
   text-align: center;
   display: block;
-  border-radius: 5px;
 }
 
 .product_content {
@@ -12285,6 +12285,60 @@ textarea:-ms-input-placeholder {
 
 .product_social ul li {
   margin-right: 10px;
+}
+
+@keyframes zoomIn {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.zoomIn {
+  animation: zoomIn 1.25s infinite;
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.bounce {
+  animation: bounce 0.75s ease-in-out infinite;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(1);
+}
+
+.custom-carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.carousel-control-prev.custom-carousel-control {
+  left: -50px;
+}
+
+.carousel-control-next.custom-carousel-control {
+  right: -50px;
 }
 
 /*privacy policy css end*/

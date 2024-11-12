@@ -125,7 +125,7 @@
                                                     <img th:src="@{'/productimages/'+${product.ProductMainImage}}"
                                                         alt=""></a>
                                                 <div class="label_product">
-                                                    <span class="label_sale">-20%</span>
+                                                    <span class="label_new zoomIn">New</span>
                                                 </div>
                                                 <div class="action_links">
                                                     <ul>
@@ -203,7 +203,7 @@
                                                     <img th:src="@{'/productimages/'+${product.ProductMainImage}}"
                                                         alt=""></a>
                                                 <div class="label_product">
-                                                    <span class="label_sale">-20%</span>
+                                                    <span class="label_sale bounce">Hot</span>
                                                 </div>
                                                 <div class="action_links">
                                                     <ul>
@@ -259,7 +259,7 @@
             <!--product area end-->
 
             <!--product area start-->
-            <div class="product_area  mb-95">
+            <div class="product_area mb-95">
                 <div class="container">
                     <div class="row">
                         <div class="col-12">
@@ -268,51 +268,91 @@
                                     <h2>Our Categories</h2>
                                     <p>Browse the collection of our tab products.</p>
                                 </div>
-                                <div class="product_tab_btn">
-                                    <ul class="nav" role="tablist">
-                                        <li>
-                                            <a class="active" data-bs-toggle="tab" href="#makeup" role="tab"
-                                                aria-controls="makeup" aria-selected="true">
-                                                Makeup
-                                            </a>
-                                        </li>
-                                    </ul>
+                                <div id="categoryCarousel" class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-inner">
+                                        <div th:each="i : ${#numbers.sequence(0, (categories.size() - 1) / 3)}">
+                                            <div th:class="'carousel-item ' + ${i == 0 ? 'active' : ''}">
+                                                <div class="product_tab_btn">
+                                                    <ul class="nav" role="tablist">
+                                                        <li th:each="category, iterStat : ${categories}"
+                                                            th:if="${iterStat.index >= (i * 3) && iterStat.index < ((i + 1) * 3)}"
+                                                            class="nav-item">
+                                                            <a th:class="'nav-link ' + ${selectedCategoryId == category.CategoryId ? 'active' : ''}"
+                                                                th:href="@{/user/index/{categoryId}(categoryId=${category.CategoryId})}"
+                                                                role="tab" th:aria-controls="${category.CategoryName}"
+                                                                th:aria-selected="${selectedCategoryId == category.CategoryId}">
+                                                                <span th:text="${category.CategoryName}"></span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="carousel-control-prev custom-carousel-control" type="button"
+                                        data-bs-target="#categoryCarousel" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    </button>
+                                    <button class="carousel-control-next custom-carousel-control" type="button"
+                                        data-bs-target="#categoryCarousel" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="product_container">
                         <div class="tab-content">
-                            <div class="tab-pane fade show active" id="makeup" role="tabpanel">
+                            <div th:each="category : ${categories}"
+                                th:class="'tab-pane fade ' + ${selectedCategoryId == category.CategoryId ? 'show active' : ''}"
+                                th:id="${categoryName}" role="tabpanel">
                                 <div class="row">
                                     <div class="product_carousel product_column4 owl-carousel">
-                                        <div class="col-lg-3">
+                                        <div class="col-lg-3" th:each="product : ${productsCategory}">
                                             <article class="single_product">
                                                 <figure>
                                                     <div class="product_thumb">
-                                                        <a class="primary_img" href="/user/product-details"><img
-                                                                src="/user/assets/img/product/product1.jpg" alt=""></a>
-                                                        <div class="label_product">
-                                                            <span class="label_sale">-20%</span>
-                                                        </div>
+                                                        <a class="primary_img"
+                                                            th:href="@{/user/product-details/{id}(id=${product.ProductId})}">
+                                                            <img th:src="@{'/productimages/' + ${product.ProductMainImage}}"
+                                                                alt="">
+                                                        </a>
                                                         <div class="action_links">
                                                             <ul>
-                                                                <li class="add_to_cart"><a href="/user/cart"
-                                                                        title="Add tob cart"><i
-                                                                            class="icon-bag icons"></i></a>
+                                                                <li class="add_to_cart" style="display: inline-block;">
+                                                                    <form id="add-to-cart-form"
+                                                                        th:action="@{/user/cart/add}" method="POST"
+                                                                        style="display: inline;">
+                                                                        <input type="hidden" name="productId"
+                                                                            th:value="${product.ProductId}" />
+                                                                        <input type="hidden" name="quantity"
+                                                                            value="1" />
+                                                                        <button type="submit"
+                                                                            class="add_to_cart_button">
+                                                                            <i class="icon-bag icons"></i>
+                                                                        </button>
+                                                                    </form>
                                                                 </li>
-                                                                <li class="wishlist"><a href="/user/wishlist"
-                                                                        title="Add to Wishlist"><i
-                                                                            class="icon-heart icons"></i></a></li>
+                                                                <li class="wishlist" style="display: inline-block;">
+                                                                    <form th:action="@{/user/wishlist/add}"
+                                                                        method="POST" style="display: inline;">
+                                                                        <input type="hidden" name="productId"
+                                                                            th:value="${product.ProductId}" />
+                                                                        <button type="submit" class="wishlist_button">
+                                                                            <i class="icon-heart icons"></i>
+                                                                        </button>
+                                                                    </form>
+                                                                </li>
                                                             </ul>
                                                         </div>
                                                     </div>
                                                     <figcaption class="product_content">
-                                                        <h4 class="product_name"><a href="/user/product-details">Juicy
-                                                                Couture
-                                                                Tricot Logo Stripe Jacket</a></h4>
+                                                        <h4 class="product_name"><a
+                                                                th:href="@{/user/product-details/{id}(id=${product.ProductId})}">
+                                                                <span th:text="${product.ProductName}"></span></a></h4>
                                                         <div class="price_box">
-                                                            <span class="current_price">$28.00</span>
+                                                            <span class="current_price"
+                                                                th:text="${product.ProductPrice}"></span>
                                                         </div>
                                                         <div class="product_rating">
                                                             <ul>
@@ -354,94 +394,21 @@
                     </div>
                     <div class="row">
                         <div class="blog_carousel blog_column3 owl-carousel">
-                            <div class="col-lg-3">
+                            <div class="col-lg-3" th:each="blog : ${blogs}">
                                 <article class="single_blog">
                                     <figure>
                                         <div class="blog_thumb">
-                                            <a href="/user/blog-details"><img src="/user/assets/img/blog/blog1.jpg"
-                                                    alt=""></a>
+                                            <a th:href="@{/user/blog-details/{id}(id=${blog.BlogId})}"><img
+                                                    th:src="@{'/blogimages/'+${blog.BlogImage}}" alt=""></a>
                                         </div>
                                         <figcaption class="blog_content">
-                                            <h4 class="post_title"><a href="/user/blog-details"> This is First Post
-                                                    For
-                                                    XipBlog</a></h4>
-                                            <p>
-                                                Lorem Ipsum is simply dummy text of the printing and typesetting
-                                                industry. Lorem
-                                                Ipsum has been ...
+                                            <h4 class="post_title"><a
+                                                    th:href="@{/user/blog-details/{id}(id=${blog.BlogId})}">
+                                                    [[${blog.BlogTitle}]]</a></h4>
+                                            <p th:utext="${#strings.abbreviate(blog.BlogDescription, 100)}">
                                             </p>
                                             <footer class="blog_footer">
-                                                <a href="/user/blog-details">Read More</a>
-                                            </footer>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                            <div class="col-lg-3">
-                                <article class="single_blog">
-                                    <figure>
-                                        <div class="blog_thumb">
-                                            <a href="/user/blog-details"><img src="/user/assets/img/blog/blog2.jpg"
-                                                    alt=""></a>
-                                        </div>
-                                        <figcaption class="blog_content">
-                                            <h4 class="post_title"><a href="/user/blog-details"> This is Secound
-                                                    Post
-                                                    For
-                                                    XipBlog</a></h4>
-                                            <p>
-                                                Lorem Ipsum is simply dummy text of the printing and typesetting
-                                                industry. Lorem
-                                                Ipsum has been ...
-                                            </p>
-                                            <footer class="blog_footer">
-                                                <a href="/user/blog-details">Read More</a>
-                                            </footer>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                            <div class="col-lg-3">
-                                <article class="single_blog">
-                                    <figure>
-                                        <div class="blog_thumb">
-                                            <a href="/user/blog-details"><img src="/user/assets/img/blog/blog3.jpg"
-                                                    alt=""></a>
-                                        </div>
-                                        <figcaption class="blog_content">
-                                            <h4 class="post_title"><a href="/user/blog-details"> This is Third Post
-                                                    For
-                                                    XipBlog</a></h4>
-                                            <p>
-                                                Lorem Ipsum is simply dummy text of the printing and typesetting
-                                                industry. Lorem
-                                                Ipsum has been ...
-                                            </p>
-                                            <footer class="blog_footer">
-                                                <a href="/user/blog-details">Read More</a>
-                                            </footer>
-                                        </figcaption>
-                                    </figure>
-                                </article>
-                            </div>
-                            <div class="col-lg-3">
-                                <article class="single_blog">
-                                    <figure>
-                                        <div class="blog_thumb">
-                                            <a href="/user/blog-details"><img src="/user/assets/img/blog/blog4.jpg"
-                                                    alt=""></a>
-                                        </div>
-                                        <figcaption class="blog_content">
-                                            <h4 class="post_title"><a href="/user/blog-details"> This is Fourth Post
-                                                    For
-                                                    XipBlog</a></h4>
-                                            <p>
-                                                Lorem Ipsum is simply dummy text of the printing and typesetting
-                                                industry. Lorem
-                                                Ipsum has been ...
-                                            </p>
-                                            <footer class="blog_footer">
-                                                <a href="/user/blog-details">Read More</a>
+                                                <a th:href="@{/user/blog-details/{id}(id=${blog.BlogId})}">Read More</a>
                                             </footer>
                                         </figcaption>
                                     </figure>
@@ -452,85 +419,6 @@
                 </div>
             </section>
             <!--blog area end-->
-
-            <!--testimonial area start-->
-            <div class="testimonial_area">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="section_title">
-                                <h2>Testimonials</h2>
-                                <p>What they say </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testimonial_container">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="testimonial_thumb_wrapper testimonial_thumb_column3">
-                                    <div class="testimonial_thumb">
-                                        <img src="/user/assets/img/about/testimonial1.png" alt="">
-                                    </div>
-                                    <div class="testimonial_thumb">
-                                        <img src="/user/assets/img/about/testimonial2.png" alt="">
-                                    </div>
-                                    <div class="testimonial_thumb">
-                                        <img src="/user/assets/img/about/testimonial3.png" alt="">
-                                    </div>
-                                    <div class="testimonial_thumb">
-                                        <img src="/user/assets/img/about/testimonial1.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="testimonial_content_wrapper  testimonial_content_collumn1">
-                                    <div class="testimonial_content">
-                                        <p>All Perfect !! I have three sites with magento , this theme is the best
-                                            !!
-                                            Excellent
-                                            support , advice theme installation package , sorry for English, are
-                                            Italian
-                                            but I
-                                            had no problem !! Thank you !</p>
-                                        <a href="https://hasthemes.com/">Demo@hasthemes.com</a>
-                                        <h3>orando BLoom</h3>
-                                    </div>
-                                    <div class="testimonial_content">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolores
-                                            suscipit
-                                            itaque sit
-                                            incidunt temporibus nulla debitis maxime vitae eveniet non aspernatur
-                                            sunt,
-                                            ex
-                                            impedit totam corporis dolor.</p>
-                                        <a href="https://hasthemes.com/">Demo@hasthemes.com</a>
-                                        <h3>orando BLoom</h3>
-                                    </div>
-                                    <div class="testimonial_content">
-                                        <p> voluptas laboriosam rem? Nemo quos quod nesciunt labore sequi sunt
-                                            inventore.
-                                            Blanditiis, at debitis eaque maxime sequi dignissimos ex harum aut,
-                                            voluptate iusto
-                                            hic numquam magni fugiat neque quod!</p>
-                                        <a href="https://hasthemes.com/">Demo@hasthemes.com</a>
-                                        <h3>orando BLoom</h3>
-                                    </div>
-                                    <div class="testimonial_content">
-                                        <p>repellat repellendus porro numquam, rerum facilis quia alias. Earum ex,
-                                            sequi
-                                            odit ad
-                                            similique. Facilis cum velit distinctio ratione ex accusantium. Iste
-                                            dicta
-                                            alias
-                                            quas ipsa, labore, nobis impedit</p>
-                                        <a href="https://hasthemes.com/">Demo@hasthemes.com</a>
-                                        <h3>orando BLoom</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--testimonial area end-->
 
             <!--banner area start-->
             <div class="banner_area mb-100">
@@ -556,8 +444,6 @@
             <!--banner area end-->
         </section>
     </div>
-
-
 </body>
 
 </html>

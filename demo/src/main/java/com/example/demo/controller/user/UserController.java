@@ -1,8 +1,7 @@
 package com.example.demo.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,6 +16,7 @@ import jakarta.servlet.http.HttpSession;
 
 import com.example.demo.otherfunction.encryption;
 
+import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -90,7 +90,48 @@ public class UserController {
                 .filter(product -> !"block".equalsIgnoreCase(product.getProductStatus()))
                 .collect(Collectors.toList());
         model.addAttribute("products", products);
+
+        List<blogs> blogs = (List<blogs>) blogrepo.findAll();
+        blogs = blogs.stream()
+                .filter(blog -> !"hidden".equalsIgnoreCase(blog.getBlogStatus()))
+                .collect(Collectors.toList());
+        model.addAttribute("blogs", blogs);
         return "user/index";
+    }
+
+    @GetMapping("/index/{categoryId}")
+    public String getProductsByCategory(@PathVariable("categoryId") int categoryId, Model model) {
+        Pageable pageable = PageRequest.of(0, 8);
+        List<products> products = productrepo.findTop10Products(pageable);
+
+        products = products.stream()
+                .filter(product -> !"block".equalsIgnoreCase(product.getProductStatus()))
+                .collect(Collectors.toList());
+        model.addAttribute("products", products);
+
+        List<blogs> blogs = (List<blogs>) blogrepo.findAll();
+        blogs = blogs.stream()
+                .filter(blog -> !"hidden".equalsIgnoreCase(blog.getBlogStatus()))
+                .collect(Collectors.toList());
+        model.addAttribute("blogs", blogs);
+
+        List<categories> categories = (List<categories>) caterepo.findAll();
+        model.addAttribute("categories", categories);
+
+        model.addAttribute("selectedCategoryId", categoryId);
+
+        String categoryName = caterepo.findById(categoryId).orElse(null).getCategoryName();
+        System.out.println("Category Name: " + categoryName);
+        model.addAttribute("categoryName", categoryName);
+
+        List<products> products2 = productrepo.findProductsByCategoryId(categoryId, pageable);
+
+        products = products.stream()
+                .filter(product -> !"block".equalsIgnoreCase(product.getProductStatus()))
+                .collect(Collectors.toList());
+        model.addAttribute("productsCategory", products2);
+
+        return "/user/index";
     }
 
     @GetMapping("register")
@@ -256,8 +297,9 @@ public class UserController {
         // Check if the user is logged in
         Integer customerId = (Integer) session.getAttribute("loginCustomer");
         if (customerId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("message", "Please log in to add items to your cart."));
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .location(URI.create("/user/login"))
+                    .build();
         }
 
         // Fetch the customer
