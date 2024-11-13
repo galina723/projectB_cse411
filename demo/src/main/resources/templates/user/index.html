@@ -444,6 +444,25 @@
             <!--banner area end-->
         </section>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var checkoutSuccess = "[[${session.checkoutSuccess}]]";
+
+            if (checkoutSuccess === "true") {
+                Toastify({
+                    text: "Checkout successful! Your order has been placed.",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "green",
+                }).showToast();
+
+                fetch("/user/checkout/clearCheckoutSuccess");
+            }
+        });
+    </script>
 </body>
 
 </html>

@@ -2,147 +2,155 @@
 <html class="no-js" lang="en" xmlns:th="https://www.thymeleaf.org/">
 
 
-<head th:replace="user/layout :: pageHead('Checkout')">
+<head th:replace="~{user/layout :: pageHead('Checkout')}">
 </head>
 
 <body>
-<div th:replace="user/layout :: body">
-    <section th:fragment="mainContent">
-        <!--breadcrumbs area start-->
-        <div class="breadcrumbs_area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="breadcrumb_content">
-                            <h3>checkout</h3>
-                            <ul>
-                                <li><a href="/user/index">home</a></li>
-                                <li>checkout</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--breadcrumbs area end-->
-        <!--Checkout page section-->
-        <div class="Checkout_section">
-            <div class="container">
-
-                <div class="checkout_form">
+    <div th:replace="~{user/layout :: body}">
+        <section th:fragment="mainContent">
+            <!--breadcrumbs area start-->
+            <div class="breadcrumbs_area">
+                <div class="container">
                     <div class="row">
-                        <div class="col-lg-6 col-md-6">
-                            <form action="#">
-                                <h3>Billing Details</h3>
-                                <div class="row">
-
-                                    <div class="col-12 mb-20">
-                                        <label>Full Name <span>*</span></label>
-                                        <input placeholder="Enter your full name" type="text">
-                                    </div>
-
-
-                                    <div class="col-12 mb-20">
-                                        <label>Address <span>*</span></label>
-                                        <input placeholder="House number and street name" type="text">
-                                    </div>
-
-                                    <div class="col-12 mb-20">
-                                        <label>City <span>*</span></label>
-                                        <input type="text">
-                                    </div>
-
-                                    <div class="col-12 mb-20">
-                                        <label for="country">Province <span>*</span></label>
-                                        <select class="select_option" name="cuntry" id="country">
-                                            <option value="2">Bình Dương</option>
-                                            <option value="3">Bình Phước</option>
-                                            <option value="4">Tây Ninh</option>
-                                            <option value="5">Đồng Nai</option>
-                                            <option value="6">Thành phố Hồ Chí Minh</option>
-                                            <option value="7">Bà Rịa Vũng Tàu</option>
-                                            <option value="8">Long An</option>
-                                            <option value="9">Bình Thuận</option>
-                                            <option value="10">Hà Nội</option>
-
-                                        </select>
-                                    </div>
-
-                                    <div class="col-lg-6 mb-20">
-                                        <label>Phone<span>*</span></label>
-                                        <input type="text">
-
-                                    </div>
-                                    <div class="col-lg-6 mb-20">
-                                        <label> Email Address <span>*</span></label>
-                                        <input type="text">
-
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-lg-6 col-md-6">
-                            <form action="#">
-                                <h3>Your order</h3>
-                                <div class="order_table table-responsive">
-                                    <table>
-                                        <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            <th>Total</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td> Handbag fringilla <strong> × 2</strong></td>
-                                            <td> $165.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td> Handbag justo <strong> × 2</strong></td>
-                                            <td> $50.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td> Handbag elit <strong> × 2</strong></td>
-                                            <td> $50.00</td>
-                                        </tr>
-                                        <tr>
-                                            <td> Handbag Rutrum <strong> × 1</strong></td>
-                                            <td> $50.00</td>
-                                        </tr>
-                                        </tbody>
-                                        <tfoot>
-                                        <tr>
-                                            <th>Cart Subtotal</th>
-                                            <td>$215.00</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Shipping</th>
-                                            <td><strong>$5.00</strong></td>
-                                        </tr>
-                                        <tr class="order_total">
-                                            <th>Order Total</th>
-                                            <td><strong>$220.00</strong></td>
-                                        </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                                <div class="payment_method">
-
-
-                                    <div class="order_button">
-                                        <button type="submit">Checkout</button>
-                                    </div>
-                                </div>
-                            </form>
+                        <div class="col-12">
+                            <div class="breadcrumb_content">
+                                <h3>checkout</h3>
+                                <ul>
+                                    <li><a href="/user/index">home</a></li>
+                                    <li>checkout</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!--Checkout page section end-->
+            <!--breadcrumbs area end-->
+            <!--Checkout page section-->
+            <div class="Checkout_section">
+                <div class="container">
 
-    </section>
-</div>
+                    <div class="checkout_form">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <form action="#" th:object="${customers}">
+                                    <h3>Billing Details</h3>
+                                    <div class="row">
+
+                                        <div class="col-12 mb-20">
+                                            <label>Full Name </label>
+                                            <input placeholder="Enter your full name" type="text"
+                                                th:field="*{CustomerName}">
+                                        </div>
+
+
+                                        <div class="col-12 mb-20">
+                                            <label>Address <span>*</span></label>
+                                            <input placeholder="House number and street name" type="text">
+                                        </div>
+
+                                        <div class="col-12 mb-20">
+                                            <label>City <span>*</span></label>
+                                            <input type="text">
+                                        </div>
+
+                                        <div class="col-12 mb-20">
+                                            <label for="country">Province <span>*</span></label>
+                                            <select class="select_option" name="cuntry" id="country">
+                                                <option value="2">Bình Dương</option>
+                                                <option value="3">Bình Phước</option>
+                                                <option value="4">Tây Ninh</option>
+                                                <option value="5">Đồng Nai</option>
+                                                <option value="6">Thành phố Hồ Chí Minh</option>
+                                                <option value="7">Bà Rịa Vũng Tàu</option>
+                                                <option value="8">Long An</option>
+                                                <option value="9">Bình Thuận</option>
+                                                <option value="10">Hà Nội</option>
+
+                                            </select>
+                                        </div>
+
+                                        <div class="col-lg-6 mb-20">
+                                            <label>Phone</label>
+                                            <input type="text" th:field="*{CustomerPhone}">
+
+                                        </div>
+                                        <div class="col-lg-6 mb-20">
+                                            <label> Email Address</label>
+                                            <input type="text" th:field="*{cemail}">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <form th:action="@{/user/checkout/confirmation}" method="post">
+                                    <h3>Your order</h3>
+                                    <div class="order_table table-responsive">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Product</th>
+                                                    <th>Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="cartItem : ${cartItems}">
+                                                    <td> [[${cartItem.ProductName}]] <strong> ×
+                                                            [[${cartItem.quantity}]]</strong></td>
+                                                    <td> $[[${cartItem.totalPrice}]]</td>
+                                                </tr>
+
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th>Cart Subtotal</th>
+                                                    <td>$[[${subtotal}]]</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Shipping</th>
+                                                    <td><strong>$[[${shippingFee}]]</strong></td>
+                                                </tr>
+                                                <tr class="order_total">
+                                                    <th>Order Total</th>
+                                                    <td><strong>$[[${total}]]</strong></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                    <div class="col-12 mb-20">
+                                        <label> Note</label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="payment_method">
+
+
+                                        <div class="order_button">
+                                            <button type="submit">Checkout</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Checkout page section end-->
+        </section>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var emptyCart = "[[${emptyCart}]]";
+            if (emptyCart === "true") {
+                Toastify({
+                    text: "Your cart is empty. Please add products to your cart before checking out.",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#ff6347",
+                }).showToast();
+            }
+        });
+    </script>
 </body>
 
 </html>

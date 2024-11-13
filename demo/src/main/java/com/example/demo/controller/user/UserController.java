@@ -42,6 +42,9 @@ public class UserController {
     @Autowired
     private blogrepository blogrepo;
 
+    @Autowired
+    private orderrepository orderrepo;
+
     @ModelAttribute
     public void addGlobalAttributes(Model model, HttpSession session) {
         Integer customerId = (Integer) session.getAttribute("loginCustomer");
@@ -85,6 +88,12 @@ public class UserController {
 
         Pageable pageable = PageRequest.of(0, 8);
         List<products> products = productrepo.findTop10Products(pageable);
+
+        List<products> products2 = productrepo.findProductsByCategoryId(categories.get(0).getCategoryId(), pageable);
+        products2 = products2.stream()
+                .filter(product -> !"block".equalsIgnoreCase(product.getProductStatus()))
+                .collect(Collectors.toList());
+        model.addAttribute("productsCategory", products2);
 
         products = products.stream()
                 .filter(product -> !"block".equalsIgnoreCase(product.getProductStatus()))
@@ -131,7 +140,7 @@ public class UserController {
                 .collect(Collectors.toList());
         model.addAttribute("productsCategory", products2);
 
-        return "/user/index";
+        return "user/index";
     }
 
     @GetMapping("register")
@@ -386,9 +395,107 @@ public class UserController {
         return "redirect:/user/cart"; // Redirect back to the cart page
     }
 
-    @GetMapping("checkout")
-    public String checkout() {
+    @GetMapping("/checkout")
+    public String showCheckoutPage(HttpSession session, Model model) {
+        Integer customerId = (Integer) session.getAttribute("loginCustomer");
+        if (customerId == null) {
+            return "redirect:/user/login";
+        }
+
+        customers customer = customerrepo.findById(customerId).orElse(null);
+        if (customer == null) {
+            return "redirect:/user/login";
+        }
+
+        model.addAttribute("customers", customer);
+
+        List<carts> cartItems = cartrepo.findByCustomerId(customerId);
+        if (cartItems.isEmpty()) {
+            model.addAttribute("emptyCart", true);
+            model.addAttribute("checkoutSuccess", false);
+            return "user/checkout";
+        }
+
+        double subtotal = 0.0;
+        List<cartsdto> cartItemDTOs = new ArrayList<>();
+        for (carts cartItem : cartItems) {
+            products product = cartItem.getProduct();
+            if (product != null) {
+                double totalPrice = product.getProductPrice() * cartItem.getQuantity();
+                subtotal += totalPrice;
+                cartsdto dto = new cartsdto();
+                dto.setProductName(product.getProductName());
+                dto.setQuantity(cartItem.getQuantity());
+                dto.setTotalPrice(totalPrice);
+                cartItemDTOs.add(dto);
+            }
+        }
+
+        double shippingFee = (subtotal < 500) ? subtotal * 0.01 : 0.0;
+        double total = subtotal + shippingFee;
+
+        model.addAttribute("subtotal", subtotal);
+        model.addAttribute("shippingFee", shippingFee);
+        model.addAttribute("total", total);
+        model.addAttribute("cartItems", cartItemDTOs);
+        model.addAttribute("emptyCart", false);
+        model.addAttribute("checkoutSuccess", false);
+
         return "user/checkout";
+    }
+
+    @PostMapping("/checkout/confirmation")
+    public String processCheckout(HttpSession session, Model model) {
+        Integer customerId = (Integer) session.getAttribute("loginCustomer");
+        if (customerId == null) {
+            return "redirect:/user/login";
+        }
+
+        List<carts> cartItems = cartrepo.findByCustomerId(customerId);
+        if (cartItems.isEmpty()) {
+            session.setAttribute("emptyCart", true);
+            return "redirect:/user/checkout";
+        }
+
+        double subtotal = 0.0;
+        for (carts cartItem : cartItems) {
+            products product = cartItem.getProduct();
+            if (product != null) {
+                subtotal += product.getProductPrice() * cartItem.getQuantity();
+            }
+        }
+
+        double shippingFee = (subtotal < 500) ? subtotal * 0.01 : 0.0;
+        double total = subtotal + shippingFee;
+
+        orders order = new orders();
+        order.setCustomerId(String.valueOf(customerId));
+        order.setOrderDate(new java.sql.Date(new Date().getTime()));
+        order.setOrderStatus("Pending");
+        order.setOrderAmount((int) total);
+        order.setOrderPaymentMethod("COD");
+        order.setOrderNote("No special instructions.");
+        order.setOrderAddress("address");
+        order.setOrderCity("city");
+        order.setOrderProvince("province");
+        orderrepo.save(order);
+
+        cartrepo.deleteAllByCustomerId(customerId);
+
+        session.setAttribute("checkoutSuccess", true); // Set it to show on next load of index
+        return "redirect:/user/index";
+    }
+
+    @GetMapping("/checkout/clearCheckoutSuccess")
+    public String index(HttpSession session, Model model) {
+        Boolean checkoutSuccess = (Boolean) session.getAttribute("checkoutSuccess");
+
+        if (checkoutSuccess != null && checkoutSuccess) {
+            model.addAttribute("checkoutSuccess", true);
+            session.removeAttribute("checkoutSuccess"); // Remove after setting it
+        }
+
+        return "user/index";
     }
 
     @GetMapping("contact")
