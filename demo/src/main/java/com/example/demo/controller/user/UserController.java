@@ -1,16 +1,19 @@
 package com.example.demo.controller.user;
 
+import org.apache.commons.collections4.Get;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
+import com.example.demo.service.SendEmailService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -165,29 +168,27 @@ public class UserController {
 
     @GetMapping("/login")
     public String login(Model model) {
-        model.addAttribute("customers", new customers());
+        // No need to add a customers object if it's not being used in the form binding
         return "user/login";
     }
 
     @PostMapping("/login/success")
-    public String loginSubmit(@RequestParam("cemail") String email,
-            @RequestParam("CustomerPassword") String password, HttpSession session,
-            Model model) {
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> loginSubmit(@RequestParam("cemail") String email,
+            @RequestParam("CustomerPassword") String password, HttpSession session) {
 
+        Map<String, Object> response = new HashMap<>();
         customers custo = customerrepo.findByCemail(email);
-        if (custo == null) {
-            return "redirect:/user/register";
-        } else {
-            if (encryption.matches(password, custo.getCustomerPassword())) {
-                session.setAttribute("loginCustomer", custo.getCustomerId());
 
-                return "redirect:/user/index";
-            } else {
-                model.addAttribute("loginError", "Invalid email or password");
-                return "user/login";
-            }
+        if (custo == null || !encryption.matches(password, custo.getCustomerPassword())) {
+            response.put("success", false); // Login failed
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
+        // If login is successful
+        session.setAttribute("loginCustomer", custo.getCustomerId()); // Store in session
+        response.put("success", true);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/logout")
@@ -196,9 +197,91 @@ public class UserController {
         return "redirect:/user/login"; // Redirect to login page after logout
     }
 
-    @GetMapping("forgot-password")
-    public String forgotpassword() {
-        return "user/forgot-password";
+    @Autowired
+    private SendEmailService sendEmailService;
+
+    @GetMapping("/forgot-password")
+    public String showForgotPasswordPage() {
+        return "user/forgot-password"; // Render the forgot-password.html template
+    }
+
+    @PostMapping("/forgot-password/send-code")
+    public String sendResetCode(@RequestParam("email") String cemail, HttpSession session, Model model) {
+        customers customer = customerrepo.findByCemail(cemail); // Check if the email exists in the database
+
+        if (customer != null) {
+            // Generate reset code
+            String resetCode = sendEmailService.generateResetCode();
+
+            // Store the reset code in session (it will be validated later)
+            session.setAttribute("resetCode", resetCode);
+            session.setAttribute("customerId", customer.getCustomerId());
+
+            // Send the reset code to the user's email
+            String body = "Your password reset code is: " + resetCode;
+            sendEmailService.sendEmail(cemail, body, "Password Reset Code");
+
+            // Redirect to a page where the user can enter the reset code
+            return "redirect:/user/forgot-password/verify";
+        } else {
+            model.addAttribute("error", "Email not found.");
+            return "user/forgot-password"; // Return the forgot password form with error message
+        }
+    }
+
+    @GetMapping("/forgot-password/verify")
+    public String verifyCodePage() {
+        return "user/verify-code"; // This will show the page to input the reset code
+    }
+
+    @PostMapping("/forgot-password/verify-code")
+    public String verifyResetCode(@RequestParam("code") String code, HttpSession session, Model model) {
+        String sessionCode = (String) session.getAttribute("resetCode");
+
+        if (sessionCode != null && sessionCode.equals(code)) {
+            return "user/reset-password"; // If code matches, show reset password page
+        } else {
+            model.addAttribute("error", "Invalid reset code.");
+            return "user/verify-code"; // Show verification page with error message
+        }
+    }
+
+    @GetMapping("/forgot-password/reset")
+    public String showResetPasswordForm(@RequestParam("email") String email, Model model) {
+
+        model.addAttribute("cemail", email); // Pass email to the reset page
+        return "user/reset-password";
+    }
+
+    // Process password reset
+    @PostMapping("/forgot-password/reset")
+    public String resetPassword(
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword,
+            @RequestParam("email") String email,
+            HttpSession session,
+            Model model) {
+        int customerId = (int) session.getAttribute("customerId");
+        customers customer = customerrepo.findById(customerId).orElse(null);
+
+        if (!newPassword.equals(confirmPassword)) {
+            model.addAttribute("error", "Mật khẩu không khớp, vui lòng thử lại.");
+            return "user/reset-password";
+        }
+
+        String encodedPassword = encryption.encrypt(newPassword);
+        customer.setCustomerPassword(encodedPassword);
+
+        customerrepo.save(customer);
+
+        // int updatedRows = customerrepo.updatePasswordByEmail(encodedPassword, email);
+
+        // if (updatedRows == 0) {
+        // model.addAttribute("error", "Không tìm thấy người dùng với email này.");
+        // return "user/reset-password";
+        // }
+
+        return "redirect:/user/login";
     }
 
     @GetMapping("404")
@@ -303,7 +386,7 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> addToCart(@RequestParam("productId") int productId,
             @RequestParam("quantity") int quantity,
             HttpSession session) {
-        // Check if the user is logged in
+
         Integer customerId = (Integer) session.getAttribute("loginCustomer");
         if (customerId == null) {
             return ResponseEntity.status(HttpStatus.FOUND)
@@ -311,19 +394,16 @@ public class UserController {
                     .build();
         }
 
-        // Fetch the customer
         customers customer = customerrepo.findById(customerId).orElse(null);
         if (customer == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Customer not found."));
         }
 
-        // Fetch the product
         products product = productrepo.findById(productId).orElse(null);
         if (product == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Product not found."));
         }
 
-        // Create and save the new cart entry
         carts newCart = new carts();
         CartId cartId = new CartId();
         cartId.setCustomerId(customerId);
@@ -558,4 +638,5 @@ public class UserController {
     public String wishlist() {
         return "user/wishlist";
     }
+
 }

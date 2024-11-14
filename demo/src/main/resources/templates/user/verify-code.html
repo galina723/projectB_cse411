@@ -37,26 +37,15 @@
                         </div>
                         <div class="col-lg-6 col-md-6">
                             <div class="account_form">
-                                <h2>login</h2>
-                                <form id="loginForm" method="post" th:action="@{/user/login/success}">
-                                    <p>
-                                        <label>Email<span style="color: red;">*</span></label>
-                                        <input type="text" name="cemail" required="required">
-                                    </p>
-                                    <p>
-                                        <label>Password<span style="color: red;">*</span></label>
-                                        <input type="password" name="CustomerPassword" required="required">
-                                    </p>
-                                    <div class="login_submit">
-                                        <a href="/user/forgot-password">Lost your password?</a>
-                                        <button style="background-color: white; color: black; border: 0.2px solid rgb(152, 152, 152);"
-                                                onmouseover="this.style.background='#fe3737'; this.style.color='white'"
-                                                onmouseout="this.style.background='white'; this.style.color='black'" type="button"
-                                                onclick="window.location.href='/user/register';">Register
-                                        </button>
-                                        <button type="submit">Login</button>
-                                    </div>
+                                <h2>Verify Code</h2>
+                                <form method="post" th:action="@{/user/forgot-password/verify-code}">
+                                    <label>Enter Code:</label>
+                                    <input type="text" name="code" required="required">
+                                    <button type="submit">Verify Code</button>
                                 </form>
+                                <div th:if="${error}">
+                                    <p style="color: red;">${error}</p>
+                                </div>
                             </div>
                         </div>
 
