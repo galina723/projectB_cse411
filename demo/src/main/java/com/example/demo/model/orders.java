@@ -34,7 +34,7 @@ public class orders {
     @Column(name = "paymentmethod", length = 50, nullable = false)
     private String OrderPaymentMethod;
 
-    @Column(name = "note", columnDefinition = "TEXT", length = 255, nullable = false)
+    @Column(name = "note", columnDefinition = "TEXT", length = 255)
     private String OrderNote;
 
     @Column(name = "address", length = 255, nullable = false)
