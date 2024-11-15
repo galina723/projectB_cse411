@@ -210,11 +210,6 @@
                                             </form>
                                         </div>
                                     </div>
-                                    <div class="header_account_list">
-                                        <a href="/user/wishlist"><i class="icon-heart"></i>
-                                            <span class="item_count">3</span>
-                                        </a>
-                                    </div>
 
                                     <div class="header_account_list  mini_cart_wrapper"
                                         th:if="${session.loginCustomer != null}">
@@ -612,7 +607,7 @@
                                 // Display success message
                                 Toastify({
                                     text: "Added to cart successfully.",
-                                    duration: 1000,
+                                    duration: 500,
                                     gravity: "top",
                                     position: 'right',
                                     backgroundColor: "#4CAF50",
@@ -622,7 +617,7 @@
                                 if (error.message.includes("exceeds available stock")) {
                                     Toastify({
                                         text: 'Error: ' + error.message,
-                                        duration: 1000,
+                                        duration: 700,
                                         gravity: "top",
                                         position: 'right',
                                         backgroundColor: "#f44336",
@@ -631,7 +626,7 @@
                                     // Handle other errors
                                     Toastify({
                                         text: 'An unexpected error occurred.',
-                                        duration: 1000,
+                                        duration: 700,
                                         gravity: "top",
                                         position: 'right',
                                         backgroundColor: "#f44336",

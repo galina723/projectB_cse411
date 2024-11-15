@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,10 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.blogs;
 import com.example.demo.model.blogsdto;
-import com.example.demo.model.categories;
-import com.example.demo.model.productotherimages;
-import com.example.demo.model.products;
-import com.example.demo.model.productsdto;
 import com.example.demo.repository.*;
 
 import jakarta.servlet.http.HttpSession;
