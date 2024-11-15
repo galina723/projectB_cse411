@@ -17,8 +17,11 @@ import com.example.demo.service.SendEmailService;
 
 import jakarta.servlet.http.HttpSession;
 
+import com.example.demo.otherfunction.JsonLoader;
 import com.example.demo.otherfunction.encryption;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -47,6 +50,9 @@ public class UserController {
 
     @Autowired
     private orderrepository orderrepo;
+
+    @Autowired
+    private JsonLoader jsonLoader;
 
     @ModelAttribute
     public void addGlobalAttributes(Model model, HttpSession session) {
@@ -404,15 +410,33 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Product not found."));
         }
 
-        carts newCart = new carts();
-        CartId cartId = new CartId();
-        cartId.setCustomerId(customerId);
-        cartId.setProductId(productId);
-        newCart.setId(cartId);
-        newCart.setCustomer(customer);
-        newCart.setProduct(product);
-        newCart.setQuantity(quantity);
-        cartrepo.save(newCart);
+        if (quantity > product.getProductQuantity()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message",
+                            "Requested quantity exceeds available stock. Available: " + product.getProductQuantity()));
+        }
+
+        carts existingCartItem = cartrepo.findByCustomerIdAndProductId(customerId, productId);
+        if (existingCartItem != null) {
+            int newQuantity = existingCartItem.getQuantity() + quantity;
+            if (newQuantity > product.getProductQuantity()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("message", "Total quantity in cart exceeds available stock. Available: "
+                                + product.getProductQuantity()));
+            }
+            existingCartItem.setQuantity(newQuantity);
+            cartrepo.save(existingCartItem);
+        } else {
+            carts newCart = new carts();
+            CartId cartId = new CartId();
+            cartId.setCustomerId(customerId);
+            cartId.setProductId(productId);
+            newCart.setId(cartId);
+            newCart.setCustomer(customer);
+            newCart.setProduct(product);
+            newCart.setQuantity(quantity);
+            cartrepo.save(newCart);
+        }
 
         // Prepare response data
         List<carts> cartItems = cartrepo.findByCustomerId(customerId);
@@ -459,17 +483,32 @@ public class UserController {
 
         // Get the cart items for the current customer
         List<carts> cartItems = cartrepo.findByCustomerId(customerId);
+        boolean quantityExceeded = false;
 
         // Iterate over each cart item and update the quantity
         for (carts cartItem : cartItems) {
             String quantityParam = params.get("quantity-" + cartItem.getProduct().getProductId());
             if (quantityParam != null) {
-                int quantity = Integer.parseInt(quantityParam);
-                if (quantity > 0) {
-                    cartItem.setQuantity(quantity); // Update the quantity
-                    cartrepo.save(cartItem); // Save the updated cart item
+                int requestedQuantity = Integer.parseInt(quantityParam);
+                int availableQuantity = cartItem.getProduct().getProductQuantity();
+
+                // Check if the requested quantity exceeds the available quantity
+                if (requestedQuantity > availableQuantity) {
+                    quantityExceeded = true;
+                    redirectAttributes.addFlashAttribute("errorMessage",
+                            "Quantity for product " + cartItem.getProduct().getProductName() +
+                                    " exceeds available stock (" + availableQuantity + " available).");
+                } else if (requestedQuantity > 0) {
+                    // Update the quantity if it is valid
+                    cartItem.setQuantity(requestedQuantity);
+                    cartrepo.save(cartItem);
                 }
             }
+        }
+
+        // Redirect with an error message if any quantity exceeded the stock
+        if (quantityExceeded) {
+            return "redirect:/user/cart";
         }
 
         return "redirect:/user/cart"; // Redirect back to the cart page
@@ -482,13 +521,14 @@ public class UserController {
             return "redirect:/user/login";
         }
 
+        // Load customer information
         customers customer = customerrepo.findById(customerId).orElse(null);
         if (customer == null) {
             return "redirect:/user/login";
         }
-
         model.addAttribute("customers", customer);
 
+        // Load cart items
         List<carts> cartItems = cartrepo.findByCustomerId(customerId);
         if (cartItems.isEmpty()) {
             model.addAttribute("emptyCart", true);
@@ -496,6 +536,7 @@ public class UserController {
             return "user/checkout";
         }
 
+        // Calculate subtotal and prepare cart item DTOs
         double subtotal = 0.0;
         List<cartsdto> cartItemDTOs = new ArrayList<>();
         for (carts cartItem : cartItems) {
@@ -511,17 +552,38 @@ public class UserController {
             }
         }
 
+        // Calculate shipping fee and total
         double shippingFee = (subtotal < 500) ? subtotal * 0.01 : 0.0;
         double total = subtotal + shippingFee;
 
+        List<provinces> provincesList;
+        try {
+            provincesList = jsonLoader.loadProvinces(); // Load provinces
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "error"; // Handle the error accordingly
+        }
+        // Add attributes to model
         model.addAttribute("subtotal", subtotal);
         model.addAttribute("shippingFee", shippingFee);
         model.addAttribute("total", total);
         model.addAttribute("cartItems", cartItemDTOs);
         model.addAttribute("emptyCart", false);
         model.addAttribute("checkoutSuccess", false);
+        model.addAttribute("provinces", provincesList);
 
         return "user/checkout";
+    }
+
+    @GetMapping("/districts/{provinceId}")
+    @ResponseBody
+    public List<districts> getDistricts(@PathVariable String provinceId) {
+        try {
+            return jsonLoader.loadDistricts(provinceId);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>(); // Return an empty list on error
+        }
     }
 
     @PostMapping("/checkout/confirmation")
@@ -554,6 +616,9 @@ public class UserController {
         double shippingFee = (subtotal < 500) ? subtotal * 0.01 : 0.0;
         double total = subtotal + shippingFee;
 
+        String provinceName = jsonLoader.getProvinceNameById(province);
+
+        // Create and save the order
         orders order = new orders();
         order.setCustomerId(String.valueOf(customerId));
         order.setOrderDate(new java.sql.Date(new Date().getTime()));
@@ -563,9 +628,21 @@ public class UserController {
         order.setOrderNote(note != null ? note : ""); // Use default if null
         order.setOrderAddress(address); // Use default if null
         order.setOrderCity(city); // Use default if null
-        order.setOrderProvince(province); // Use default if null
+        order.setOrderProvince(provinceName); // Use default if null
         orderrepo.save(order);
 
+        for (carts cartItem : cartItems) {
+            products product = cartItem.getProduct();
+            if (product != null) {
+                int newQuantity = product.getProductQuantity() - cartItem.getQuantity();
+                if (newQuantity < 0)
+                    newQuantity = 0;
+                product.setProductQuantity(newQuantity);
+                productrepo.save(product);
+            }
+        }
+
+        // Clear cart after order
         cartrepo.deleteAllByCustomerId(customerId);
 
         session.setAttribute("checkoutSuccess", true);

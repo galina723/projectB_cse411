@@ -453,10 +453,9 @@
                 Toastify({
                     text: "Checkout successful! Your order has been placed.",
                     duration: 3000,
-                    close: true,
                     gravity: "top",
                     position: "right",
-                    backgroundColor: "green",
+                    backgroundColor: "#4CAF50",
                 }).showToast();
 
                 fetch("/user/checkout/clearCheckoutSuccess");

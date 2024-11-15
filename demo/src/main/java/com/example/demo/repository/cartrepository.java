@@ -22,4 +22,7 @@ public interface cartrepository extends CrudRepository<carts, CartId> {
     @Transactional
     @Query("DELETE FROM carts c WHERE c.id.customerId = :customerId")
     void deleteAllByCustomerId(@Param("customerId") Integer customerId);
+
+    @Query("SELECT c FROM carts c WHERE c.id.customerId = :customerId AND c.id.productId = :productId")
+    carts findByCustomerIdAndProductId(@Param("customerId") int customerId, @Param("productId") int productId);
 }
