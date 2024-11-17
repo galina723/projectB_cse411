@@ -8,36 +8,47 @@ public class orderdetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column (name = "orderid", length = 10, nullable = false)
-    private int OrderId;
+    @Column (name = "id", length = 10, nullable = false)
+    private int OrderDetailId;
+
+    @ManyToOne
+    @JoinColumn(name = "orderid", nullable = false)
+    private orders order;
 
     @Column (name = "productid", length = 10, nullable = false)
-    private String ProductId;
+    private int ProductId;
 
     @Column (name = "price", nullable = false)
-    private int ProductPrice;
+    private double ProductPrice;
 
     @Column (name = "quantity", nullable = false)
     private int ProductQuantity;
 
-    @Column (name = "coupon", length = 50, nullable = false)
+    @Column (name = "coupon", length = 50)
     private String coupon;
-    public int getOrderId() {
-        return OrderId;
+    
+    public int getOrderDetailId() {
+        return OrderDetailId;
     }
-    public void setOrderId(int orderId) {
-        OrderId = orderId;
+    public void setOrderDetailId(int orderDetailId) {
+        OrderDetailId = orderDetailId;
     }
-    public String getProductId() {
+    public orders getOrder() {
+        return order;
+    }
+    public void setOrder(orders order) {
+        this.order = order;
+    }
+    public int getProductId() {
         return ProductId;
     }
-    public void setProductId(String productId) {
+    public void setProductId(int productId) {
         ProductId = productId;
     }
-    public int getProductPrice() {
+    public double getProductPrice() {
         return ProductPrice;
     }
-    public void setProductPrice(int productPrice) {
+    public void setProductPrice(double productPrice) {
         ProductPrice = productPrice;
     }
     public int getProductQuantity() {

@@ -67,10 +67,18 @@
                                                     <tr th:each="order, star : ${orders}">
                                                         <td>[[${star.index+1}]]</td>
                                                         <td>[[${order.OrderDate}]]</td>
-                                                        <td><span class="success">[[${order.OrderStatus}]]</span>
+                                                        <td><span
+                                                                th:class="${order.OrderStatus == 'Pending' ? 'badge bg-warning text-white text-uppercase' : 
+                                                            order.OrderStatus == 'In Progress' ? 'badge bg-info text-white text-uppercase' : 
+                                                            order.OrderStatus == 'Cancelled' ? 'badge bg-danger text-white text-uppercase' : 
+                                                            order.OrderStatus == 'Delivered' ? 'badge bg-success text-white text-uppercase' : 
+                                                            order.OrderStatus == 'Returns' ? 'badge bg-secondary text-white text-uppercase' : ''}">
+                                                                <p th:text="${order.OrderStatus}" class="m-0"></p>
+                                                            </span>
                                                         </td>
                                                         <td>$[[${order.OrderAmount}]]</td>
-                                                        <td><a href="/user/cart" class="view">view</a></td>
+                                                        <td><a th:href="@{'/user/order-details/' + ${order.OrderId}}"
+                                                                class="view">view</a></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -115,8 +123,7 @@
                                                                 <div class="col-12 mb-20">
                                                                     <label>Province</label>
                                                                     <select class="select_option" name="orderProvince"
-                                                                        id="province" required
-                                                                        th:field="*{CustomerProvince}">
+                                                                        id="province" required>
                                                                         <option value="" disabled selected>Select a
                                                                             province</option>
                                                                         <option th:each="province : ${provinces}"
@@ -128,8 +135,7 @@
                                                                 <div class="col-12 mb-20">
                                                                     <label>City</label>
                                                                     <select class="select_option" name="orderCity"
-                                                                        id="city" th:field="*{CustomerCity}"
-                                                                        style="display: inline-block;">
+                                                                        id="city" style="display: inline-block;">
                                                                         <option value="" disabled selected>Select a city
                                                                         </option>
                                                                     </select>
@@ -137,6 +143,8 @@
                                                                 <label>Address</label>
                                                                 <input type="text" th:field="*{CustomerAddress}"
                                                                     name="orderAddress">
+                                                                <a href="/user/forgot-password">Lost your
+                                                                    password?</a>
                                                                 <div class="save_button primary_btn default_button">
                                                                     <button type="submit">Save</button>
                                                                 </div>

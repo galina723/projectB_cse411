@@ -11,8 +11,9 @@ public class orders {
     @Column(name = "id", length = 10, nullable = false)
     private int OrderId;
 
-    @Column(name = "customerid", length = 10, nullable = false)
-    private String CustomerId;
+    @ManyToOne
+    @JoinColumn(name = "customerid", nullable = false)
+    private customers customer;
 
     @Column(name = "date", nullable = false)
     private Date OrderDate;
@@ -53,16 +54,6 @@ public class orders {
     public void setOrderId(int orderId) {
         OrderId = orderId;
     }
-
-    public String getCustomerId() {
-        return CustomerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        CustomerId = customerId;
-    }
-
-    
 
     public String getOrderStatus() {
         return OrderStatus;
@@ -118,6 +109,14 @@ public class orders {
 
     public void setOrderProvince(String orderProvince) {
         OrderProvince = orderProvince;
+    }
+
+    public customers getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(customers customer) {
+        this.customer = customer;
     }
 
 }

@@ -54,6 +54,9 @@ public class UserController {
     @Autowired
     private SendEmailService sendEmailService;
 
+    @Autowired
+    private orderdetailrepository orderdetailsrepo;
+
     @ModelAttribute
     public void addGlobalAttributes(Model model, HttpSession session) {
         Integer customerId = (Integer) session.getAttribute("loginCustomer");
@@ -591,7 +594,7 @@ public class UserController {
         String provinceName = jsonLoader.getProvinceNameById(province);
 
         orders order = new orders();
-        order.setCustomerId(String.valueOf(customerId));
+        order.setCustomer(customerrepo.findById(customerId).orElse(null));
         order.setOrderDate(new java.sql.Date(new Date().getTime()));
         order.setOrderStatus("Pending");
         order.setOrderAmount((int) total);
@@ -605,10 +608,16 @@ public class UserController {
         for (carts cartItem : cartItems) {
             products product = cartItem.getProduct();
             if (product != null) {
+                orderdetails orderDetail = new orderdetails();
+                orderDetail.setOrder(order);
+                orderDetail.setProductId(product.getProductId());
+                orderDetail.setProductPrice(product.getProductPrice());
+                orderDetail.setProductQuantity(cartItem.getQuantity());
+                orderDetail.setCoupon(null);
+                orderdetailsrepo.save(orderDetail);
+
                 int newQuantity = product.getProductQuantity() - cartItem.getQuantity();
-                if (newQuantity < 0)
-                    newQuantity = 0;
-                product.setProductQuantity(newQuantity);
+                product.setProductQuantity(Math.max(newQuantity, 0));
                 productrepo.save(product);
             }
         }
@@ -682,6 +691,46 @@ public class UserController {
         }
 
         return "redirect:/user/my-account";
+    }
+
+    @GetMapping("order-details/{id}")
+    public String orderDetail(@PathVariable("id") int id, Model model, HttpSession session) {
+        Integer customerId = (Integer) session.getAttribute("loginCustomer");
+        if (customerId == null) {
+            return "redirect:/user/login";
+        }
+
+        orders order = orderrepo.findById(id).orElse(null);
+        if (order == null) {
+            return "redirect:/user/my-account";
+        }
+
+        List<orderdetails> orderDetailsList = orderdetailsrepo.findByOrderId(id);
+        double total = 0.0;
+        List<orderdetailsdto> orderDetailsDTOs = new ArrayList<>();
+        for (orderdetails orderDetail : orderDetailsList) {
+            products product = productrepo.findById(orderDetail.getProductId()).orElse(null);
+            if (product != null) {
+                orderdetailsdto dto = new orderdetailsdto();
+                dto.setProductId(product.getProductId());
+                dto.setProductName(product.getProductName());
+                dto.setProductMainImage(product.getProductMainImage());
+                dto.setQuantity(orderDetail.getProductQuantity());
+                dto.setProductPrice(product.getProductPrice());
+                dto.setTotalPrice(orderDetail.getProductPrice() * orderDetail.getProductQuantity());
+                total += dto.getTotalPrice();
+                orderDetailsDTOs.add(dto);
+            }
+        }
+
+        double shippingFee = order.getOrderAmount() - total;
+
+        model.addAttribute("customer", customerrepo.findById(customerId).orElse(null));
+        model.addAttribute("total", total);
+        model.addAttribute("shippingFee", shippingFee);
+        model.addAttribute("orders", order);
+        model.addAttribute("orderDetails", orderDetailsDTOs);
+        return "user/order-details";
     }
 
     @GetMapping("product-details/{id}")

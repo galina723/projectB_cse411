@@ -12362,6 +12362,9 @@ textarea:-ms-input-placeholder {
   right: -50px;
 }
 
+.save_button {
+  padding-top: 10px;
+}
 
 .save_button button {
   background: #fe3737;
@@ -12378,6 +12381,13 @@ textarea:-ms-input-placeholder {
   width: auto;
 }
 
+
+.badge {
+  padding: 8px 10px;  
+  font-size: 0.75rem;  
+  border-radius: 0;    
+  border-radius: 4px;
+}
 /*privacy policy css end*/
 
 /*# sourceMappingURL=style.css.map */

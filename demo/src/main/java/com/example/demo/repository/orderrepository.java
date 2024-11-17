@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 import com.example.demo.model.orders;
 
 public interface orderrepository extends CrudRepository<orders, Integer> {
-    @Query("SELECT o FROM orders o WHERE o.CustomerId = :customerId")
+    @Query("SELECT o FROM orders o WHERE o.customer.CustomerId = :customerId")
     List<orders> findOrdersByCustomerId(@Param("customerId") int customerId);
 }
