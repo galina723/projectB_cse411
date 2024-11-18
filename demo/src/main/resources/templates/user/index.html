@@ -140,16 +140,6 @@
                                                                 </button>
                                                             </form>
                                                         </li>
-                                                        <li class="wishlist" style="display: inline-block;">
-                                                            <form th:action="@{/user/wishlist/add}" method="POST"
-                                                                style="display: inline;">
-                                                                <input type="hidden" name="productId"
-                                                                    th:value="${product.ProductId}" />
-                                                                <button type="submit" class="wishlist_button">
-                                                                    <i class="icon-heart icons"></i>
-                                                                </button>
-                                                            </form>
-                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -215,16 +205,6 @@
                                                                 <input type="hidden" name="quantity" value="1" />
                                                                 <button type="submit" class="add_to_cart_button">
                                                                     <i class="icon-bag icons"></i>
-                                                                </button>
-                                                            </form>
-                                                        </li>
-                                                        <li class="wishlist" style="display: inline-block;">
-                                                            <form th:action="@{/user/wishlist/add}" method="POST"
-                                                                style="display: inline;">
-                                                                <input type="hidden" name="productId"
-                                                                    th:value="${product.ProductId}" />
-                                                                <button type="submit" class="wishlist_button">
-                                                                    <i class="icon-heart icons"></i>
                                                                 </button>
                                                             </form>
                                                         </li>
@@ -330,16 +310,6 @@
                                                                         <button type="submit"
                                                                             class="add_to_cart_button">
                                                                             <i class="icon-bag icons"></i>
-                                                                        </button>
-                                                                    </form>
-                                                                </li>
-                                                                <li class="wishlist" style="display: inline-block;">
-                                                                    <form th:action="@{/user/wishlist/add}"
-                                                                        method="POST" style="display: inline;">
-                                                                        <input type="hidden" name="productId"
-                                                                            th:value="${product.ProductId}" />
-                                                                        <button type="submit" class="wishlist_button">
-                                                                            <i class="icon-heart icons"></i>
                                                                         </button>
                                                                     </form>
                                                                 </li>
@@ -452,11 +422,10 @@
             if (checkoutSuccess === "true") {
                 Toastify({
                     text: "Checkout successful! Your order has been placed.",
-                    duration: 3000,
-                    close: true,
+                    duration: 700,
                     gravity: "top",
                     position: "right",
-                    backgroundColor: "green",
+                    backgroundColor: "#4CAF50",
                 }).showToast();
 
                 fetch("/user/checkout/clearCheckoutSuccess");

@@ -93,8 +93,6 @@
             <artifactId>opencsv</artifactId>
             <version>5.5.2</version>
         </dependency>
-
-
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
@@ -112,7 +110,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-        
 
 
     </dependencies>

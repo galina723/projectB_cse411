@@ -210,11 +210,6 @@
                                             </form>
                                         </div>
                                     </div>
-                                    <div class="header_account_list">
-                                        <a href="/user/wishlist"><i class="icon-heart"></i>
-                                            <span class="item_count">3</span>
-                                        </a>
-                                    </div>
 
                                     <div class="header_account_list  mini_cart_wrapper"
                                         th:if="${session.loginCustomer != null}">
@@ -578,6 +573,11 @@
                                     window.location.href = response.url;
                                 } else if (response.ok) {
                                     return response.json();
+                                } else if (response.status === 400) {
+                                    // Handle quantity exceed error
+                                    return response.json().then(data => {
+                                        throw new Error(data.message || 'Requested quantity exceeds available stock.');
+                                    });
                                 } else {
                                     return Promise.reject(response);
                                 }
@@ -589,16 +589,16 @@
                                 // Update mini cart UI
                                 const cartGallery = document.querySelector('.cart_gallery');
                                 cartGallery.innerHTML = data.cartItems.map(cartItem => `
-                    <div class="cart_item">
-                        <div class="cart_img">
-                            <a href="#"><img src="/productimages/${cartItem.productImage}" alt=""></a>
-                        </div>
-                        <div class="cart_info">
-                            <a href="/user/product-details/${cartItem.productId}">${cartItem.productName}</a>
-                            <p>${cartItem.quantity} x <span>$${cartItem.productPrice}</span></p>
-                        </div>
-                    </div>
-                `).join('');
+                                        <div class="cart_item">
+                                            <div class="cart_img">
+                                                <a href="#"><img src="/productimages/${cartItem.productImage}" alt=""></a>
+                                            </div>
+                                            <div class="cart_info">
+                                                <a href="/user/product-details/${cartItem.productId}">${cartItem.productName}</a>
+                                                <p>${cartItem.quantity} x <span>$${cartItem.productPrice}</span></p>
+                                            </div>
+                                        </div>
+                                    `).join('');
 
                                 // Update subtotal and total
                                 document.querySelector('.cart_total .price').textContent = `$${data.subtotal.toFixed(2)}`;
@@ -607,29 +607,26 @@
                                 // Display success message
                                 Toastify({
                                     text: "Added to cart successfully.",
-                                    duration: 1000,
+                                    duration: 500,
                                     gravity: "top",
                                     position: 'right',
-                                    close: true,
                                     backgroundColor: "#4CAF50",
                                 }).showToast();
                             })
                             .catch(error => {
-                                // Handle error response
-                                if (error instanceof Response) {
-                                    error.text().then(errorMsg => {
-                                        Toastify({
-                                            text: 'Error: ' + (error.statusText || 'An error occurred'),
-                                            duration: 3000,
-                                            gravity: "top",
-                                            position: 'right',
-                                            backgroundColor: "#f44336",
-                                        }).showToast();
-                                    });
+                                if (error.message.includes("exceeds available stock")) {
+                                    Toastify({
+                                        text: 'Error: ' + error.message,
+                                        duration: 700,
+                                        gravity: "top",
+                                        position: 'right',
+                                        backgroundColor: "#f44336",
+                                    }).showToast();
                                 } else {
+                                    // Handle other errors
                                     Toastify({
                                         text: 'An unexpected error occurred.',
-                                        duration: 3000,
+                                        duration: 700,
                                         gravity: "top",
                                         position: 'right',
                                         backgroundColor: "#f44336",

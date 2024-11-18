@@ -7,7 +7,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,10 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.blogs;
 import com.example.demo.model.blogsdto;
-import com.example.demo.model.categories;
-import com.example.demo.model.productotherimages;
-import com.example.demo.model.products;
-import com.example.demo.model.productsdto;
 import com.example.demo.repository.*;
 
 import jakarta.servlet.http.HttpSession;
@@ -76,7 +71,7 @@ public class blogcontroller {
         MultipartFile image = blogsdto.getBlogImage();
         String storagefilename = image.getOriginalFilename();
 
-        String uploaddir = "E:\\doanb\\projectB_cse411\\demo\\src\\main\\resources\\static\\blogimages";
+        String uploaddir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\blogimages";
         Path uploadpath = Paths.get(uploaddir);
 
         try {
@@ -170,7 +165,7 @@ public class blogcontroller {
             return "admin/apps-ecommerce-edit-blog";
         }
 
-        String uploadDir = "E:\\doanb\\projectB_cse411\\demo\\src\\main\\resources\\static\\blogimages";
+        String uploadDir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\blogimages";
         Path uploadPath = Paths.get(uploadDir);
 
         MultipartFile image = blogsdto.getBlogImage();

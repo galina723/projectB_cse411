@@ -80,12 +80,6 @@
                                         <input type="hidden" name="productId" th:value="${product.ProductId}">
                                         <button class="button" type="submit"><i class="icon-bag icons"></i></button>
                                     </div>
-                                    <div class=" product_d_action">
-                                        <ul>
-                                            <li><a href="#" title="Add to wishlist">+ Add to Wishlist</a></li>
-
-                                        </ul>
-                                    </div>
                                     <div class="product_meta">
                                         <span>Category: [[${product.ProductCategory}]]</span>
                                     </div>
@@ -240,10 +234,16 @@
                                             </div>
                                             <div class="action_links">
                                                 <ul>
-                                                    <li class="add_to_cart"><a href="/user/cart" title="Add tob cart"><i
-                                                                class="icon-bag icons"></i></a></li>
-                                                    <li class="wishlist"><a href="/user/wishlist"
-                                                            title="Add to Wishlist"><i class="icon-heart icons"></i></a>
+                                                    <li class="add_to_cart" style="display: inline-block;">
+                                                        <form id="add-to-cart-form" th:action="@{/user/cart/add}"
+                                                            method="POST" style="display: inline;">
+                                                            <input type="hidden" name="productId"
+                                                                th:value="${product.ProductId}" />
+                                                            <input type="hidden" name="quantity" value="1" />
+                                                            <button type="submit" class="add_to_cart_button">
+                                                                <i class="icon-bag icons"></i>
+                                                            </button>
+                                                        </form>
                                                     </li>
                                                 </ul>
                                             </div>

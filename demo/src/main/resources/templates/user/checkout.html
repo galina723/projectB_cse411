@@ -41,37 +41,30 @@
                                             <input placeholder="Enter your full name" type="text"
                                                 th:field="*{CustomerName}">
                                         </div>
-
+                                        <div class="col-12 mb-20">
+                                            <label>Province <span>*</span></label>
+                                            <select class="select_option" name="orderProvince" id="province" required>
+                                                <option value="" disabled selected>Select a province</option>
+                                                <option th:each="province : ${provinces}" th:value="${province.idProvince}"
+                                                    th:text="${province.name}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 mb-20">
+                                            <label>City <span>*</span></label>
+                                            <select class="select_option" name="orderCity" id="city" required
+                                                style="display: inline-block;">
+                                                <option value="" disabled selected>Select a city</option>
+                                            </select>
+                                        </div>
                                         <div class="col-12 mb-20">
                                             <label>Address <span>*</span></label>
                                             <input placeholder="House number and street name" type="text"
                                                 name="orderAddress" required>
                                         </div>
-
-                                        <div class="col-12 mb-20">
-                                            <label>City <span>*</span></label>
-                                            <input type="text" name="orderCity" required>
-                                        </div>
-
-                                        <div class="col-12 mb-20">
-                                            <label for="country">Province <span>*</span></label>
-                                            <select class="select_option" name="orderProvince" id="country" required>
-                                                <option value="2">Bình Dương</option>
-                                                <option value="3">Bình Phước</option>
-                                                <option value="4">Tây Ninh</option>
-                                                <option value="5">Đồng Nai</option>
-                                                <option value="6">Thành phố Hồ Chí Minh</option>
-                                                <option value="7">Bà Rịa Vũng Tàu</option>
-                                                <option value="8">Long An</option>
-                                                <option value="9">Bình Thuận</option>
-                                                <option value="10">Hà Nội</option>
-                                            </select>
-                                        </div>
-
                                         <div class="col-lg-6 mb-20">
                                             <label>Phone</label>
                                             <input type="text" th:field="*{CustomerPhone}">
-
                                         </div>
                                         <div class="col-lg-6 mb-20">
                                             <label> Email Address</label>
@@ -133,15 +126,58 @@
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            var provinceSelect = document.getElementById("province");
+            var citySelect = document.getElementById("city");
+
+            if (provinceSelect) {
+                provinceSelect.onchange = function () {
+                    var provinceId = this.value;
+
+
+                    // Clear previous options in the city dropdown
+                    citySelect.innerHTML = '<option value="" disabled selected>Select a city</option>';
+
+                    // Fetch districts based on selected province
+                    fetch(`/user/districts/${provinceId}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (Array.isArray(data) && data.length > 0) {
+                                data.forEach(function (district) {
+                                    // Create a new option element
+                                    let option = document.createElement("option");
+                                    option.value = district.name;
+                                    option.textContent = district.name;
+                                    citySelect.appendChild(option);
+                                });
+
+                                // Re-initialize or refresh the custom select library
+                                $(citySelect).niceSelect('update'); // Adjust this line based on your library's method
+                            } else {
+                                console.warn("No districts found for this province.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error('There was a problem with the fetch operation:', error);
+                        });
+                };
+            } else {
+                console.error("Province select element not found!");
+            }
+
+            // Check if the cart is empty and show a toast notification
             var emptyCart = "[[${emptyCart}]]";
             if (emptyCart === "true") {
                 Toastify({
                     text: "Your cart is empty. Please add products to your cart before checking out.",
-                    duration: 3000,
-                    close: true,
+                    duration: 700,
                     gravity: "top",
                     position: "right",
-                    backgroundColor: "#ff6347",
+                    backgroundColor: "#f44336",
                 }).showToast();
             }
         });

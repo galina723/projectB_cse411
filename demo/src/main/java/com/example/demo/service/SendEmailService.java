@@ -6,7 +6,6 @@ import org.springframework.mail.*;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.repository.productrepository;
 
 import org.springframework.beans.factory.annotation.Value;
 

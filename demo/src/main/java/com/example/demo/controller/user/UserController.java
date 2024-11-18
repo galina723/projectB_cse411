@@ -1,12 +1,10 @@
 package com.example.demo.controller.user;
 
-import org.apache.commons.collections4.Get;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -17,8 +15,10 @@ import com.example.demo.service.SendEmailService;
 
 import jakarta.servlet.http.HttpSession;
 
+import com.example.demo.otherfunction.JsonLoader;
 import com.example.demo.otherfunction.encryption;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -47,6 +47,15 @@ public class UserController {
 
     @Autowired
     private orderrepository orderrepo;
+
+    @Autowired
+    private JsonLoader jsonLoader;
+
+    @Autowired
+    private SendEmailService sendEmailService;
+
+    @Autowired
+    private orderdetailrepository orderdetailsrepo;
 
     @ModelAttribute
     public void addGlobalAttributes(Model model, HttpSession session) {
@@ -92,9 +101,12 @@ public class UserController {
         Pageable pageable = PageRequest.of(0, 8);
         List<products> products = productrepo.findTop10Products(pageable);
 
-        List<products> products2 = productrepo.findProductsByCategoryId(categories.get(0).getCategoryId(), pageable);
+        int defaultCategoryId = categories.isEmpty() ? 0 : categories.get(0).getCategoryId();
+        model.addAttribute("selectedCategoryId", defaultCategoryId);
+
+        List<products> products2 = productrepo.findProductsByCategoryId(defaultCategoryId, pageable);
         products2 = products2.stream()
-                .filter(product -> !"block".equalsIgnoreCase(product.getProductStatus()))
+                .filter(product2 -> !"block".equalsIgnoreCase(product2.getProductStatus()))
                 .collect(Collectors.toList());
         model.addAttribute("productsCategory", products2);
 
@@ -149,7 +161,6 @@ public class UserController {
     @GetMapping("register")
     public String register(Model model) {
         customers customer = new customers();
-        // Get the next available ProductId
         int nextCustomerId = customerrepo.findNextCustomerId();
         customer.setCustomerId(nextCustomerId);
         model.addAttribute("customers", customer);
@@ -168,7 +179,6 @@ public class UserController {
 
     @GetMapping("/login")
     public String login(Model model) {
-        // No need to add a customers object if it's not being used in the form binding
         return "user/login";
     }
 
@@ -181,12 +191,11 @@ public class UserController {
         customers custo = customerrepo.findByCemail(email);
 
         if (custo == null || !encryption.matches(password, custo.getCustomerPassword())) {
-            response.put("success", false); // Login failed
+            response.put("success", false);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
-        // If login is successful
-        session.setAttribute("loginCustomer", custo.getCustomerId()); // Store in session
+        session.setAttribute("loginCustomer", custo.getCustomerId());
         response.put("success", true);
         return ResponseEntity.ok(response);
     }
@@ -194,44 +203,37 @@ public class UserController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/user/login"; // Redirect to login page after logout
+        return "redirect:/user/login";
     }
-
-    @Autowired
-    private SendEmailService sendEmailService;
 
     @GetMapping("/forgot-password")
     public String showForgotPasswordPage() {
-        return "user/forgot-password"; // Render the forgot-password.html template
+        return "user/forgot-password";
     }
 
     @PostMapping("/forgot-password/send-code")
     public String sendResetCode(@RequestParam("email") String cemail, HttpSession session, Model model) {
-        customers customer = customerrepo.findByCemail(cemail); // Check if the email exists in the database
+        customers customer = customerrepo.findByCemail(cemail);
 
         if (customer != null) {
-            // Generate reset code
             String resetCode = sendEmailService.generateResetCode();
 
-            // Store the reset code in session (it will be validated later)
             session.setAttribute("resetCode", resetCode);
             session.setAttribute("customerId", customer.getCustomerId());
 
-            // Send the reset code to the user's email
             String body = "Your password reset code is: " + resetCode;
             sendEmailService.sendEmail(cemail, body, "Password Reset Code");
 
-            // Redirect to a page where the user can enter the reset code
             return "redirect:/user/forgot-password/verify";
         } else {
             model.addAttribute("error", "Email not found.");
-            return "user/forgot-password"; // Return the forgot password form with error message
+            return "user/forgot-password";
         }
     }
 
     @GetMapping("/forgot-password/verify")
     public String verifyCodePage() {
-        return "user/verify-code"; // This will show the page to input the reset code
+        return "user/verify-code";
     }
 
     @PostMapping("/forgot-password/verify-code")
@@ -239,21 +241,20 @@ public class UserController {
         String sessionCode = (String) session.getAttribute("resetCode");
 
         if (sessionCode != null && sessionCode.equals(code)) {
-            return "user/reset-password"; // If code matches, show reset password page
+            return "user/reset-password";
         } else {
             model.addAttribute("error", "Invalid reset code.");
-            return "user/verify-code"; // Show verification page with error message
+            return "user/verify-code";
         }
     }
 
     @GetMapping("/forgot-password/reset")
     public String showResetPasswordForm(@RequestParam("email") String email, Model model) {
 
-        model.addAttribute("cemail", email); // Pass email to the reset page
+        model.addAttribute("cemail", email);
         return "user/reset-password";
     }
 
-    // Process password reset
     @PostMapping("/forgot-password/reset")
     public String resetPassword(
             @RequestParam("newPassword") String newPassword,
@@ -273,13 +274,6 @@ public class UserController {
         customer.setCustomerPassword(encodedPassword);
 
         customerrepo.save(customer);
-
-        // int updatedRows = customerrepo.updatePasswordByEmail(encodedPassword, email);
-
-        // if (updatedRows == 0) {
-        // model.addAttribute("error", "Không tìm thấy người dùng với email này.");
-        // return "user/reset-password";
-        // }
 
         return "redirect:/user/login";
     }
@@ -324,20 +318,18 @@ public class UserController {
 
         List<carts> cartItems = cartrepo.findByCustomerId(customerId);
 
-        // Calculate total for each cart item
         double subtotal = 0.0;
         List<cartsdto> cartItemDTOs = new ArrayList<>();
         for (carts cartItem : cartItems) {
-            products product = cartItem.getProduct(); // Fetch the product details
+            products product = cartItem.getProduct();
 
-            if (product != null) { // Ensure product is not null
-                double totalPrice = product.getProductPrice() * cartItem.getQuantity(); // Calculate total price
+            if (product != null) {
+                double totalPrice = product.getProductPrice() * cartItem.getQuantity();
                 subtotal += totalPrice;
                 cartsdto dto = new cartsdto();
                 dto.setProductId(product.getProductId());
-                dto.setProductName(product.getProductName()); // Assuming 'getName()' returns the product name
-                dto.setProductImage(product.getProductMainImage()); // Assuming 'getImageUrl()' returns the product
-                                                                    // image URL
+                dto.setProductName(product.getProductName());
+                dto.setProductImage(product.getProductMainImage());
                 dto.setProductPrice(product.getProductPrice());
                 dto.setQuantity(cartItem.getQuantity());
                 dto.setTotalPrice(totalPrice);
@@ -378,7 +370,7 @@ public class UserController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Failed to remove item from cart.");
         }
-        return "redirect:/user/cart"; // Redirect back to the cart
+        return "redirect:/user/cart";
     }
 
     @PostMapping("cart/add")
@@ -404,17 +396,34 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Product not found."));
         }
 
-        carts newCart = new carts();
-        CartId cartId = new CartId();
-        cartId.setCustomerId(customerId);
-        cartId.setProductId(productId);
-        newCart.setId(cartId);
-        newCart.setCustomer(customer);
-        newCart.setProduct(product);
-        newCart.setQuantity(quantity);
-        cartrepo.save(newCart);
+        if (quantity > product.getProductQuantity()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message",
+                            "Requested quantity exceeds available stock. Available: " + product.getProductQuantity()));
+        }
 
-        // Prepare response data
+        carts existingCartItem = cartrepo.findByCustomerIdAndProductId(customerId, productId);
+        if (existingCartItem != null) {
+            int newQuantity = existingCartItem.getQuantity() + quantity;
+            if (newQuantity > product.getProductQuantity()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("message", "Total quantity in cart exceeds available stock. Available: "
+                                + product.getProductQuantity()));
+            }
+            existingCartItem.setQuantity(newQuantity);
+            cartrepo.save(existingCartItem);
+        } else {
+            carts newCart = new carts();
+            CartId cartId = new CartId();
+            cartId.setCustomerId(customerId);
+            cartId.setProductId(productId);
+            newCart.setId(cartId);
+            newCart.setCustomer(customer);
+            newCart.setProduct(product);
+            newCart.setQuantity(quantity);
+            cartrepo.save(newCart);
+        }
+
         List<carts> cartItems = cartrepo.findByCustomerId(customerId);
         List<cartsdto> cartItemDTOs = new ArrayList<>();
         double subtotal = 0.0;
@@ -457,22 +466,32 @@ public class UserController {
             return "redirect:/user/login";
         }
 
-        // Get the cart items for the current customer
         List<carts> cartItems = cartrepo.findByCustomerId(customerId);
+        boolean quantityExceeded = false;
 
-        // Iterate over each cart item and update the quantity
         for (carts cartItem : cartItems) {
             String quantityParam = params.get("quantity-" + cartItem.getProduct().getProductId());
             if (quantityParam != null) {
-                int quantity = Integer.parseInt(quantityParam);
-                if (quantity > 0) {
-                    cartItem.setQuantity(quantity); // Update the quantity
-                    cartrepo.save(cartItem); // Save the updated cart item
+                int requestedQuantity = Integer.parseInt(quantityParam);
+                int availableQuantity = cartItem.getProduct().getProductQuantity();
+
+                if (requestedQuantity > availableQuantity) {
+                    quantityExceeded = true;
+                    redirectAttributes.addFlashAttribute("errorMessage",
+                            "Quantity for product " + cartItem.getProduct().getProductName() +
+                                    " exceeds available stock (" + availableQuantity + " available).");
+                } else if (requestedQuantity > 0) {
+                    cartItem.setQuantity(requestedQuantity);
+                    cartrepo.save(cartItem);
                 }
             }
         }
 
-        return "redirect:/user/cart"; // Redirect back to the cart page
+        if (quantityExceeded) {
+            return "redirect:/user/cart";
+        }
+
+        return "redirect:/user/cart";
     }
 
     @GetMapping("/checkout")
@@ -486,7 +505,6 @@ public class UserController {
         if (customer == null) {
             return "redirect:/user/login";
         }
-
         model.addAttribute("customers", customer);
 
         List<carts> cartItems = cartrepo.findByCustomerId(customerId);
@@ -514,14 +532,33 @@ public class UserController {
         double shippingFee = (subtotal < 500) ? subtotal * 0.01 : 0.0;
         double total = subtotal + shippingFee;
 
+        List<provinces> provincesList;
+        try {
+            provincesList = jsonLoader.loadProvinces();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "error";
+        }
         model.addAttribute("subtotal", subtotal);
         model.addAttribute("shippingFee", shippingFee);
         model.addAttribute("total", total);
         model.addAttribute("cartItems", cartItemDTOs);
         model.addAttribute("emptyCart", false);
         model.addAttribute("checkoutSuccess", false);
+        model.addAttribute("provinces", provincesList);
 
         return "user/checkout";
+    }
+
+    @GetMapping("/districts/{provinceId}")
+    @ResponseBody
+    public List<districts> getDistricts(@PathVariable String provinceId) {
+        try {
+            return jsonLoader.loadDistricts(provinceId);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     @PostMapping("/checkout/confirmation")
@@ -554,17 +591,36 @@ public class UserController {
         double shippingFee = (subtotal < 500) ? subtotal * 0.01 : 0.0;
         double total = subtotal + shippingFee;
 
+        String provinceName = jsonLoader.getProvinceNameById(province);
+
         orders order = new orders();
-        order.setCustomerId(String.valueOf(customerId));
+        order.setCustomer(customerrepo.findById(customerId).orElse(null));
         order.setOrderDate(new java.sql.Date(new Date().getTime()));
         order.setOrderStatus("Pending");
         order.setOrderAmount((int) total);
         order.setOrderPaymentMethod("COD");
-        order.setOrderNote(note != null ? note : ""); // Use default if null
-        order.setOrderAddress(address); // Use default if null
-        order.setOrderCity(city); // Use default if null
-        order.setOrderProvince(province); // Use default if null
+        order.setOrderNote(note != null ? note : "");
+        order.setOrderAddress(address);
+        order.setOrderCity(city);
+        order.setOrderProvince(provinceName);
         orderrepo.save(order);
+
+        for (carts cartItem : cartItems) {
+            products product = cartItem.getProduct();
+            if (product != null) {
+                orderdetails orderDetail = new orderdetails();
+                orderDetail.setOrder(order);
+                orderDetail.setProductId(product.getProductId());
+                orderDetail.setProductPrice(product.getProductPrice());
+                orderDetail.setProductQuantity(cartItem.getQuantity());
+                orderDetail.setCoupon(null);
+                orderdetailsrepo.save(orderDetail);
+
+                int newQuantity = product.getProductQuantity() - cartItem.getQuantity();
+                product.setProductQuantity(Math.max(newQuantity, 0));
+                productrepo.save(product);
+            }
+        }
 
         cartrepo.deleteAllByCustomerId(customerId);
 
@@ -578,7 +634,7 @@ public class UserController {
 
         if (checkoutSuccess != null && checkoutSuccess) {
             model.addAttribute("checkoutSuccess", true);
-            session.removeAttribute("checkoutSuccess"); // Remove after setting it
+            session.removeAttribute("checkoutSuccess");
         }
 
         return "user/index";
@@ -595,8 +651,86 @@ public class UserController {
     }
 
     @GetMapping("my-account")
-    public String myaccount() {
+    public String myaccount(HttpSession session, Model model) {
+        Integer customerId = (Integer) session.getAttribute("loginCustomer");
+        if (customerId == null) {
+            return "redirect:/user/login";
+        }
+
+        List<orders> orders = orderrepo.findOrdersByCustomerId(customerId);
+        model.addAttribute("orders", orders);
+
+        customers customer = customerrepo.findById(customerId).orElse(null);
+        model.addAttribute("customer", customer);
+
+        List<provinces> provincesList;
+        try {
+            provincesList = jsonLoader.loadProvinces();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "error";
+        }
+        model.addAttribute("provinces", provincesList);
         return "user/my-account";
+    }
+
+    @PostMapping("/my-account")
+    public String updateAccount(@ModelAttribute("customer") customers updatedCustomer, HttpSession session) {
+        Integer customerId = (Integer) session.getAttribute("loginCustomer");
+        if (customerId == null) {
+            return "redirect:/user/login";
+        }
+
+        customers customer = customerrepo.findById(customerId).orElse(null);
+        if (customer != null) {
+            customer.setCustomerName(updatedCustomer.getCustomerName());
+            customer.setCustomerAddress(updatedCustomer.getCustomerAddress());
+            customer.setCustomerCity(updatedCustomer.getCustomerCity());
+            customer.setCustomerProvince(jsonLoader.getProvinceNameById(updatedCustomer.getCustomerProvince()));
+            customerrepo.save(customer);
+        }
+
+        return "redirect:/user/my-account";
+    }
+
+    @GetMapping("order-details/{id}")
+    public String orderDetail(@PathVariable("id") int id, Model model, HttpSession session) {
+        Integer customerId = (Integer) session.getAttribute("loginCustomer");
+        if (customerId == null) {
+            return "redirect:/user/login";
+        }
+
+        orders order = orderrepo.findById(id).orElse(null);
+        if (order == null) {
+            return "redirect:/user/my-account";
+        }
+
+        List<orderdetails> orderDetailsList = orderdetailsrepo.findByOrderId(id);
+        double total = 0.0;
+        List<orderdetailsdto> orderDetailsDTOs = new ArrayList<>();
+        for (orderdetails orderDetail : orderDetailsList) {
+            products product = productrepo.findById(orderDetail.getProductId()).orElse(null);
+            if (product != null) {
+                orderdetailsdto dto = new orderdetailsdto();
+                dto.setProductId(product.getProductId());
+                dto.setProductName(product.getProductName());
+                dto.setProductMainImage(product.getProductMainImage());
+                dto.setQuantity(orderDetail.getProductQuantity());
+                dto.setProductPrice(product.getProductPrice());
+                dto.setTotalPrice(orderDetail.getProductPrice() * orderDetail.getProductQuantity());
+                total += dto.getTotalPrice();
+                orderDetailsDTOs.add(dto);
+            }
+        }
+
+        double shippingFee = order.getOrderAmount() - total;
+
+        model.addAttribute("customer", customerrepo.findById(customerId).orElse(null));
+        model.addAttribute("total", total);
+        model.addAttribute("shippingFee", shippingFee);
+        model.addAttribute("orders", order);
+        model.addAttribute("orderDetails", orderDetailsDTOs);
+        return "user/order-details";
     }
 
     @GetMapping("product-details/{id}")
@@ -616,7 +750,6 @@ public class UserController {
 
     @GetMapping("/shop")
     public String shop(@RequestParam(value = "category", required = false) String categoryName, Model model) {
-        // Load all categories
         List<categories> categories = (List<categories>) caterepo.findAll();
         model.addAttribute("categories", categories);
 
@@ -633,10 +766,4 @@ public class UserController {
         model.addAttribute("products", products);
         return "user/shop";
     }
-
-    @GetMapping("wishlist")
-    public String wishlist() {
-        return "user/wishlist";
-    }
-
 }
