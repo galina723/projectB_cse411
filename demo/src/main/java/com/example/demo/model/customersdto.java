@@ -4,6 +4,12 @@ public class customersdto {
 
     private int CustomerId;
     private String CustomerName;
+    public String getCustomerName() {
+        return CustomerName;
+    }
+    public void setCustomerName(String customerName) {
+        CustomerName = customerName;
+    }
     private String CustomerEmail;
     private String CustomerPassword;
     private String CustomerAddress;
@@ -15,12 +21,7 @@ public class customersdto {
     public void setCustomerId(int customerId) {
         CustomerId = customerId;
     }
-    public String getCustomerName() {
-        return CustomerName;
-    }
-    public void setCustomerName(String customerName) {
-        CustomerName = customerName;
-    }
+
     public String getCustomerEmail() {
         return CustomerEmail;
     }

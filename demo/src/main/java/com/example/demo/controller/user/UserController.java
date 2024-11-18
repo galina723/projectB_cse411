@@ -525,7 +525,13 @@ public class UserController {
     }
 
     @PostMapping("/checkout/confirmation")
-    public String processCheckout(HttpSession session, Model model) {
+    public String processCheckout(
+            HttpSession session, Model model,
+            @RequestParam(value = "orderAddress") String address,
+            @RequestParam(value = "orderCity") String city,
+            @RequestParam(value = "orderProvince") String province,
+            @RequestParam(value = "orderNote", required = false) String note) {
+
         Integer customerId = (Integer) session.getAttribute("loginCustomer");
         if (customerId == null) {
             return "redirect:/user/login";
@@ -554,15 +560,15 @@ public class UserController {
         order.setOrderStatus("Pending");
         order.setOrderAmount((int) total);
         order.setOrderPaymentMethod("COD");
-        order.setOrderNote("No special instructions.");
-        order.setOrderAddress("address");
-        order.setOrderCity("city");
-        order.setOrderProvince("province");
+        order.setOrderNote(note != null ? note : ""); // Use default if null
+        order.setOrderAddress(address); // Use default if null
+        order.setOrderCity(city); // Use default if null
+        order.setOrderProvince(province); // Use default if null
         orderrepo.save(order);
 
         cartrepo.deleteAllByCustomerId(customerId);
 
-        session.setAttribute("checkoutSuccess", true); // Set it to show on next load of index
+        session.setAttribute("checkoutSuccess", true);
         return "redirect:/user/index";
     }
 

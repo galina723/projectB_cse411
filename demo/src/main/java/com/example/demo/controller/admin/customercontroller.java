@@ -57,7 +57,6 @@ public class customercontroller {
         return ("admin/index");
     }
 
-    
     @GetMapping("apps-ecommerce-customers")
     public String customers(Model model) {
 
@@ -65,17 +64,46 @@ public class customercontroller {
         model.addAttribute("customers", customers);
         return ("admin/apps-ecommerce-customers");
     }
-    
 
-    @GetMapping("apps-ecommerce-order-details")
-    public String orderdetail() {
-        return ("admin/apps-ecommerce-order-details");
+    @PostMapping("/deleteCustomer/{id}")
+    public String delete(@PathVariable("id") int id, RedirectAttributes redirectAttributes) {
+        try {
+            customerrepo.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Customer deleted successfully!");
+        } catch (EmptyResultDataAccessException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Customer not found or already deleted.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "An error occurred while deleting the customer.");
+        }
+
+        return "redirect:/admin/apps-ecommerce-customers";
     }
 
-    @GetMapping("apps-ecommerce-orders")
-    public String orders() {
-        return ("admin/apps-ecommerce-orders");
-    }
+    // @PostMapping("/editCustomer")
+    // public String saveEditedCategory(@ModelAttribute("customersdto") customersdto
+    // customersdto, BindingResult result) {
+    // if (result.hasErrors()) {
+    // return "admin/apps-ecommerce-customers"; // Return the same page if errors
+    // are found
+    // }
+
+    // Integer customerId = customersdto.getCustomerId();
+    // customers existingCustomer = customerrepo.findById(customerId).orElse(null);
+    // if (existingCustomer == null) {
+    // result.addError(new FieldError("customersdto", "CustomerId", "Customer not
+    // found!"));
+    // return "admin/apps-ecommerce-customers"; // Return with error if customer not
+    // found
+    // }
+
+    // // Update the customer status
+    // existingCustomer.setCustomerStatus(customersdto.getCustomerStatus());
+    // existingCustomer.setCustomerName(customersdto.getCustomerName());
+
+    // customerrepo.save(existingCustomer);
+
+    // return "redirect:/admin/apps-ecommerce-customers"; // Redirect after saving
+    // }
 
     @GetMapping("apps-ecommerce-seller-details")
     public String sellerdetail() {

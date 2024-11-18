@@ -120,7 +120,7 @@ public class blogcontroller {
         return "redirect:/admin/apps-ecommerce-blog";
     }
 
-    // edit product
+    // edit blog
 
     @GetMapping("/set-current-blog-id/{id}")
     public String setCurrentBlogId(@PathVariable("id") int id, HttpSession session) {

@@ -17,13 +17,7 @@ public class orders {
     @Column(name = "date", nullable = false)
     private Date OrderDate;
 
-    public Date getOrderDate() {
-        return OrderDate;
-    }
-
-    public void setOrderDate(Date orderDate) {
-        OrderDate = orderDate;
-    }
+    
 
     @Column(name = "status", length = 50, nullable = false)
     private String OrderStatus;
@@ -34,7 +28,7 @@ public class orders {
     @Column(name = "paymentmethod", length = 50, nullable = false)
     private String OrderPaymentMethod;
 
-    @Column(name = "note", columnDefinition = "TEXT", length = 255, nullable = false)
+    @Column(name = "note", columnDefinition = "TEXT", length = 255)
     private String OrderNote;
 
     @Column(name = "address", length = 255, nullable = false)
@@ -52,6 +46,14 @@ public class orders {
 
     public void setOrderId(int orderId) {
         OrderId = orderId;
+    }
+
+    public Date getOrderDate() {
+        return OrderDate;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        OrderDate = orderDate;
     }
 
     public String getCustomerId() {
