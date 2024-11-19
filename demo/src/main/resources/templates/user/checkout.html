@@ -45,8 +45,8 @@
                                             <label>Province <span>*</span></label>
                                             <select class="select_option" name="orderProvince" id="province" required>
                                                 <option value="" disabled selected>Select a province</option>
-                                                <option th:each="province : ${provinces}" th:value="${province.idProvince}"
-                                                    th:text="${province.name}">
+                                                <option th:each="province : ${provinces}"
+                                                    th:value="${province.idProvince}" th:text="${province.name}">
                                                 </option>
                                             </select>
                                         </div>
@@ -78,30 +78,22 @@
                                         <table>
                                             <thead>
                                                 <tr>
-                                                    <th>Product</th>
-                                                    <th>Total</th>
+                                                    <th style="text-align: left; padding-left: 15px;">Product</th>
+                                                    <th style="text-align: right; padding-right: 15px;">Total</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr th:each="cartItem : ${cartItems}">
-                                                    <td> [[${cartItem.ProductName}]] <strong> ×
+                                                <tr th:each="cartItem : ${cartItems2}">
+                                                    <td style="text-align: left; padding-left: 15px;"> [[${cartItem.ProductName}]] <strong> ×
                                                             [[${cartItem.quantity}]]</strong></td>
-                                                    <td> $[[${cartItem.totalPrice}]]</td>
+                                                    <td style="text-align: right; padding-right: 15px;"> $[[${cartItem.totalPrice}]]</td>
                                                 </tr>
 
                                             </tbody>
                                             <tfoot>
-                                                <tr>
-                                                    <th>Cart Subtotal</th>
-                                                    <td>$[[${subtotal}]]</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Shipping</th>
-                                                    <td><strong>$[[${shippingFee}]]</strong></td>
-                                                </tr>
                                                 <tr class="order_total">
-                                                    <th>Order Total</th>
-                                                    <td><strong>$[[${total}]]</strong></td>
+                                                    <th style="text-align: left; padding-left: 15px;">Order Total</th>
+                                                    <td style="text-align: right; padding-right: 15px;"><strong>$[[${total}]]</strong></td>
                                                 </tr>
                                             </tfoot>
                                         </table>
@@ -112,7 +104,7 @@
                                     </div>
                                     <div class="payment_method">
                                         <div class="order_button">
-                                            <button type="submit">Checkout</button>
+                                            <button type="submit" style="float: right;">Checkout</button>
                                         </div>
                                     </div>
                                 </div>

@@ -63,13 +63,13 @@ public class UserController {
         if (customerId != null) {
             List<carts> cartItems = cartrepo.findByCustomerId(customerId);
             List<cartsdto> cartItemDTOs = new ArrayList<>();
-            double subtotal = 0.0;
+            double total = 0.0;
 
             for (carts cartItem : cartItems) {
                 products product = cartItem.getProduct();
                 if (product != null) {
                     double totalPrice = product.getProductPrice() * cartItem.getQuantity();
-                    subtotal += totalPrice;
+                    total += totalPrice;
                     cartsdto dto = new cartsdto();
                     dto.setProductId(product.getProductId());
                     dto.setProductName(product.getProductName());
@@ -81,12 +81,8 @@ public class UserController {
                 }
             }
 
-            double shippingFee = subtotal * 0.01;
-            double total = subtotal + shippingFee;
-
             model.addAttribute("cartItems", cartItemDTOs);
             model.addAttribute("cartItemCount", cartItemDTOs.size());
-            model.addAttribute("subtotal", subtotal);
             model.addAttribute("total", total);
         } else {
             model.addAttribute("cartItemCount", 0);
@@ -98,17 +94,22 @@ public class UserController {
         List<categories> categories = (List<categories>) caterepo.findAll();
         model.addAttribute("categories", categories);
 
-        Pageable pageable = PageRequest.of(0, 8);
+        Pageable pageable = PageRequest.of(0, 4);
         List<products> products = productrepo.findTop10Products(pageable);
 
         int defaultCategoryId = categories.isEmpty() ? 0 : categories.get(0).getCategoryId();
-        model.addAttribute("selectedCategoryId", defaultCategoryId);
-
+        int defaultCategoryId2 = categories.isEmpty() ? 0 : categories.get(1).getCategoryId();
         List<products> products2 = productrepo.findProductsByCategoryId(defaultCategoryId, pageable);
+        List<products> products3 = productrepo.findProductsByCategoryId(defaultCategoryId2, pageable);
         products2 = products2.stream()
                 .filter(product2 -> !"block".equalsIgnoreCase(product2.getProductStatus()))
                 .collect(Collectors.toList());
-        model.addAttribute("productsCategory", products2);
+        model.addAttribute("productsToner", products2);
+
+        products3 = products3.stream()
+                .filter(product3 -> !"block".equalsIgnoreCase(product3.getProductStatus()))
+                .collect(Collectors.toList());
+        model.addAttribute("productsLipstick", products3);
 
         products = products.stream()
                 .filter(product -> !"block".equalsIgnoreCase(product.getProductStatus()))
@@ -120,41 +121,6 @@ public class UserController {
                 .filter(blog -> !"hidden".equalsIgnoreCase(blog.getBlogStatus()))
                 .collect(Collectors.toList());
         model.addAttribute("blogs", blogs);
-        return "user/index";
-    }
-
-    @GetMapping("/index/{categoryId}")
-    public String getProductsByCategory(@PathVariable("categoryId") int categoryId, Model model) {
-        Pageable pageable = PageRequest.of(0, 8);
-        List<products> products = productrepo.findTop10Products(pageable);
-
-        products = products.stream()
-                .filter(product -> !"block".equalsIgnoreCase(product.getProductStatus()))
-                .collect(Collectors.toList());
-        model.addAttribute("products", products);
-
-        List<blogs> blogs = (List<blogs>) blogrepo.findAll();
-        blogs = blogs.stream()
-                .filter(blog -> !"hidden".equalsIgnoreCase(blog.getBlogStatus()))
-                .collect(Collectors.toList());
-        model.addAttribute("blogs", blogs);
-
-        List<categories> categories = (List<categories>) caterepo.findAll();
-        model.addAttribute("categories", categories);
-
-        model.addAttribute("selectedCategoryId", categoryId);
-
-        String categoryName = caterepo.findById(categoryId).orElse(null).getCategoryName();
-        System.out.println("Category Name: " + categoryName);
-        model.addAttribute("categoryName", categoryName);
-
-        List<products> products2 = productrepo.findProductsByCategoryId(categoryId, pageable);
-
-        products = products.stream()
-                .filter(product -> !"block".equalsIgnoreCase(product.getProductStatus()))
-                .collect(Collectors.toList());
-        model.addAttribute("productsCategory", products2);
-
         return "user/index";
     }
 
@@ -259,14 +225,13 @@ public class UserController {
     public String resetPassword(
             @RequestParam("newPassword") String newPassword,
             @RequestParam("confirmPassword") String confirmPassword,
-            @RequestParam("email") String email,
             HttpSession session,
             Model model) {
         int customerId = (int) session.getAttribute("customerId");
         customers customer = customerrepo.findById(customerId).orElse(null);
 
         if (!newPassword.equals(confirmPassword)) {
-            model.addAttribute("error", "Mật khẩu không khớp, vui lòng thử lại.");
+            model.addAttribute("error", "The passwords do not match, please try again.");
             return "user/reset-password";
         }
 
@@ -318,14 +283,14 @@ public class UserController {
 
         List<carts> cartItems = cartrepo.findByCustomerId(customerId);
 
-        double subtotal = 0.0;
+        double total = 0.0;
         List<cartsdto> cartItemDTOs = new ArrayList<>();
         for (carts cartItem : cartItems) {
             products product = cartItem.getProduct();
 
             if (product != null) {
                 double totalPrice = product.getProductPrice() * cartItem.getQuantity();
-                subtotal += totalPrice;
+                total += totalPrice;
                 cartsdto dto = new cartsdto();
                 dto.setProductId(product.getProductId());
                 dto.setProductName(product.getProductName());
@@ -337,14 +302,7 @@ public class UserController {
                 cartItemDTOs.add(dto);
             }
         }
-        double shippingFee = 0.0;
-        if (subtotal < 500) {
-            shippingFee = subtotal * 0.01;
-        }
-        double total = subtotal + shippingFee;
 
-        model.addAttribute("subtotal", subtotal);
-        model.addAttribute("shippingFee", shippingFee);
         model.addAttribute("total", total);
 
         model.addAttribute("cartItems", cartItemDTOs);
@@ -426,13 +384,13 @@ public class UserController {
 
         List<carts> cartItems = cartrepo.findByCustomerId(customerId);
         List<cartsdto> cartItemDTOs = new ArrayList<>();
-        double subtotal = 0.0;
+        double total = 0.0;
 
         for (carts cartItem : cartItems) {
             products cartProduct = cartItem.getProduct();
             if (cartProduct != null) {
                 double totalPrice = cartProduct.getProductPrice() * cartItem.getQuantity();
-                subtotal += totalPrice;
+                total += totalPrice;
 
                 cartsdto dto = new cartsdto();
                 dto.setProductId(cartProduct.getProductId());
@@ -445,13 +403,9 @@ public class UserController {
             }
         }
 
-        double shippingFee = subtotal < 500 ? subtotal * 0.01 : 0.0;
-        double total = subtotal + shippingFee;
-
         Map<String, Object> response = new HashMap<>();
         response.put("cartItemCount", cartItemDTOs.size());
         response.put("cartItems", cartItemDTOs);
-        response.put("subtotal", subtotal);
         response.put("total", total);
 
         return ResponseEntity.ok(response);
@@ -514,13 +468,13 @@ public class UserController {
             return "user/checkout";
         }
 
-        double subtotal = 0.0;
+        double total = 0.0;
         List<cartsdto> cartItemDTOs = new ArrayList<>();
         for (carts cartItem : cartItems) {
             products product = cartItem.getProduct();
             if (product != null) {
                 double totalPrice = product.getProductPrice() * cartItem.getQuantity();
-                subtotal += totalPrice;
+                total += totalPrice;
                 cartsdto dto = new cartsdto();
                 dto.setProductName(product.getProductName());
                 dto.setQuantity(cartItem.getQuantity());
@@ -529,9 +483,6 @@ public class UserController {
             }
         }
 
-        double shippingFee = (subtotal < 500) ? subtotal * 0.01 : 0.0;
-        double total = subtotal + shippingFee;
-
         List<provinces> provincesList;
         try {
             provincesList = jsonLoader.loadProvinces();
@@ -539,10 +490,9 @@ public class UserController {
             e.printStackTrace();
             return "error";
         }
-        model.addAttribute("subtotal", subtotal);
-        model.addAttribute("shippingFee", shippingFee);
+
         model.addAttribute("total", total);
-        model.addAttribute("cartItems", cartItemDTOs);
+        model.addAttribute("cartItems2", cartItemDTOs);
         model.addAttribute("emptyCart", false);
         model.addAttribute("checkoutSuccess", false);
         model.addAttribute("provinces", provincesList);
@@ -580,16 +530,13 @@ public class UserController {
             return "redirect:/user/checkout";
         }
 
-        double subtotal = 0.0;
+        double total = 0.0;
         for (carts cartItem : cartItems) {
             products product = cartItem.getProduct();
             if (product != null) {
-                subtotal += product.getProductPrice() * cartItem.getQuantity();
+                total += product.getProductPrice() * cartItem.getQuantity();
             }
         }
-
-        double shippingFee = (subtotal < 500) ? subtotal * 0.01 : 0.0;
-        double total = subtotal + shippingFee;
 
         String provinceName = jsonLoader.getProvinceNameById(province);
 
@@ -670,12 +617,15 @@ public class UserController {
             e.printStackTrace();
             return "error";
         }
+
         model.addAttribute("provinces", provincesList);
         return "user/my-account";
     }
 
     @PostMapping("/my-account")
-    public String updateAccount(@ModelAttribute("customer") customers updatedCustomer, HttpSession session) {
+    public String updateAccount(@RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword,
+            @ModelAttribute("customer") customers updatedCustomer, HttpSession session, Model model) {
         Integer customerId = (Integer) session.getAttribute("loginCustomer");
         if (customerId == null) {
             return "redirect:/user/login";
@@ -687,6 +637,15 @@ public class UserController {
             customer.setCustomerAddress(updatedCustomer.getCustomerAddress());
             customer.setCustomerCity(updatedCustomer.getCustomerCity());
             customer.setCustomerProvince(jsonLoader.getProvinceNameById(updatedCustomer.getCustomerProvince()));
+            if (!newPassword.isEmpty()) {
+                if (!newPassword.equals(confirmPassword)) {
+                    model.addAttribute("error", "The passwords do not match, please try again.");
+                    return "redirect:/user/my-account";
+                }
+
+                String encodedPassword = encryption.encrypt(newPassword);
+                customer.setCustomerPassword(encodedPassword);
+            }
             customerrepo.save(customer);
         }
 
@@ -706,7 +665,6 @@ public class UserController {
         }
 
         List<orderdetails> orderDetailsList = orderdetailsrepo.findByOrderId(id);
-        double total = 0.0;
         List<orderdetailsdto> orderDetailsDTOs = new ArrayList<>();
         for (orderdetails orderDetail : orderDetailsList) {
             products product = productrepo.findById(orderDetail.getProductId()).orElse(null);
@@ -718,16 +676,11 @@ public class UserController {
                 dto.setQuantity(orderDetail.getProductQuantity());
                 dto.setProductPrice(product.getProductPrice());
                 dto.setTotalPrice(orderDetail.getProductPrice() * orderDetail.getProductQuantity());
-                total += dto.getTotalPrice();
                 orderDetailsDTOs.add(dto);
             }
         }
 
-        double shippingFee = order.getOrderAmount() - total;
-
         model.addAttribute("customer", customerrepo.findById(customerId).orElse(null));
-        model.addAttribute("total", total);
-        model.addAttribute("shippingFee", shippingFee);
         model.addAttribute("orders", order);
         model.addAttribute("orderDetails", orderDetailsDTOs);
         return "user/order-details";

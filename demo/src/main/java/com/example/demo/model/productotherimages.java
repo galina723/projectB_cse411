@@ -11,8 +11,8 @@ public class productotherimages {
     @Column(name = "id", length = 10)
     private int ImageId;
 
-    @ManyToOne  // Many images can belong to one product
-    @JoinColumn(name = "productid", nullable = false)  // Define the foreign key column
+    @ManyToOne 
+    @JoinColumn(name = "productid", nullable = false) 
     private products product;
 
     @Column(name = "images", length = 2083)

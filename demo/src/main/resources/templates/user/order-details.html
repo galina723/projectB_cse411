@@ -87,11 +87,9 @@
                                                     [[${orders.OrderNote != null ? orders.OrderNote : 'No Note'}]]
                                                 </p>
                                                 <p>Payment Method: [[${orders.OrderPaymentMethod}]]</p>
-                                                <span th:class="${orders.OrderStatus == 'Pending' ? 'badge bg-warning text-white text-uppercase' : 
-                                                                orders.OrderStatus == 'In Progress' ? 'badge bg-info text-white text-uppercase' : 
-                                                                orders.OrderStatus == 'Cancelled' ? 'badge bg-danger text-white text-uppercase' : 
-                                                                orders.OrderStatus == 'Delivered' ? 'badge bg-success text-white text-uppercase' : 
-                                                                orders.OrderStatus == 'Returns' ? 'badge bg-secondary text-white text-uppercase' : ''}">
+                                                <span
+                                                    th:class="${orders.OrderStatus == 'Pending' ? 'badge bg-warning text-white text-uppercase' : 
+                                                                orders.OrderStatus == 'In Progress' ? 'badge bg-info text-white text-uppercase' : ''}">
                                                     <p th:text="${orders.OrderStatus}" class="m-0"></p>
                                                 </span>
                                             </div>
@@ -102,16 +100,6 @@
                                     <div class="coupon_code right">
                                         <h3>Cart Totals</h3>
                                         <div class="coupon_inner">
-                                            <div class="cart_subtotal">
-                                                <p>Subtotal</p>
-                                                <p class="cart_amount">$<span th:text="${total}"></span></p>
-                                            </div>
-                                            <div class="cart_subtotal ">
-                                                <p>Shipping</p>
-                                                <p class="cart_amount">$<span th:text="${shippingFee}"></span></p>
-                                            </div>
-                                            <a href="javascript:void(0)"></a>
-
                                             <div class="cart_subtotal">
                                                 <p>Total</p>
                                                 <p class="cart_amount">$<span th:text="${orders.OrderAmount}"></p>
