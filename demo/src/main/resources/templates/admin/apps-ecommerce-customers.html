@@ -103,7 +103,7 @@
                                             <table class="table align-middle" id="customerTable">
                                                 <thead class="table-light text-muted">
                                                     <tr>
-                                                        
+
                                                         <th class="sort" data-sort="id">ID</th>
                                                         <th class="sort" data-sort="name">Full Name</th>
                                                         <th class="sort" data-sort="email">Email</th>
@@ -117,7 +117,7 @@
                                                 </thead>
                                                 <tbody class="list form-check-all" th:each="customer : ${customers}">
                                                     <tr>
-                                                        
+
                                                         <td class="id">[[${customer.CustomerId}]]</td>
                                                         <td class="name">[[${customer.CustomerName}]]</td>
                                                         <td class="email">[[${customer.cemail}]]</td>
@@ -125,8 +125,11 @@
                                                         <td class="address">[[${customer.CustomerAddress}]]</td>
                                                         <td class="city">[[${customer.CustomerCity}]]</td>
                                                         <td class="province">[[${customer.CustomerProvince}]]</td>
-                                                        <td class="status"><span
-                                                                class="badge bg-success-subtle text-success text-uppercase">[[${customer.CustomerStatus}]]</span>
+                                                        <td class="status">
+                                                            <span th:if="${customer.CustomerStatus == 'Active'}"
+                                                                class="badge bg-success-subtle text-success text-uppercase">Active</span>
+                                                            <span th:if="${customer.CustomerStatus == 'Block'}"
+                                                                class="badge bg-danger-subtle text-danger text-uppercase">Block</span>
                                                         </td>
                                                         <td>
                                                             <ul class="list-inline hstack gap-2 mb-0">
@@ -134,18 +137,11 @@
                                                                     data-bs-toggle="tooltip" data-bs-trigger="hover"
                                                                     data-bs-placement="top" aria-label="Edit"
                                                                     data-bs-original-title="Edit">
-                                                                    <a href="#showModal" data-bs-toggle="modal"
-                                                                        class="text-primary d-inline-block edit-item-btn">
+                                                                    <a href="#editRecordModal"
+                                                                        class="text-primary d-inline-block edit-customer-btn"
+                                                                        data-bs-toggle="modal" th:attr="data-id=${customer.CustomerId}, data-name=${customer.CustomerName},
+                                                                        data-status=${customer.CustomerStatus}">
                                                                         <i class="ri-pencil-fill fs-16"></i>
-                                                                    </a>
-                                                                </li>
-                                                                <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                                    data-bs-trigger="hover" data-bs-placement="top"
-                                                                    aria-label="Remove" data-bs-original-title="Remove">
-                                                                    <a class="text-danger d-inline-block remove-item-btn"
-                                                                        data-bs-toggle="modal"
-                                                                        href="#deleteRecordModal">
-                                                                        <i class="ri-delete-bin-5-fill fs-16"></i>
                                                                     </a>
                                                                 </li>
                                                             </ul>
@@ -164,154 +160,60 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="d-flex justify-content-end">
-                                            <div class="pagination-wrap hstack gap-2">
-                                                <a class="page-item pagination-prev disabled" href="#">
-                                                    Previous
-                                                </a>
-                                                <ul class="pagination listjs-pagination mb-0">
-                                                    <li class="active"><a class="page" href="#" data-i="1"
-                                                            data-page="8">1</a></li>
-                                                </ul>
-                                                <a class="page-item pagination-next" href="#">
-                                                    Next
-                                                </a>
-                                            </div>
-                                        </div>
                                     </div>
-                                    <div class="modal fade" id="showModal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal fade" id="editRecordModal" tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header bg-light p-3">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Edit Customer</h5>
+                                                    <h5 class="modal-title">Edit Customer</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close" id="close-modal"></button>
+                                                        aria-label="Close"></button>
                                                 </div>
-                                                <form class="tablelist-form" autocomplete="off">
+                                                <form th:action="@{/admin/editCustomer}" method="post"
+                                                    autocomplete="off">
                                                     <div class="modal-body">
-                                                        <input type="hidden" id="id-field">
-
-                                                        <div class="row gy-4 mb-3">
-                                                            <div class="col-md-6">
-                                                                <label for="id-field1" class="form-label">ID</label>
-                                                                <input type="text" id="id-field1" class="form-control"
-                                                                    readonly="">
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <label for="customername-field" class="form-label">Full
-                                                                    Name</label>
-                                                                <input type="text" id="customername-field"
-                                                                    class="form-control" required="">
-                                                                <div class="invalid-feedback">Please enter a customer
-                                                                    name.
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
+                                                        <input type="hidden" name="CustomerId" id="customerIdField" />
                                                         <div class="mb-3">
-                                                            <label for="email-field" class="form-label">Email</label>
-                                                            <input type="email" id="email-field" class="form-control"
-                                                                required="">
-                                                            <div class="invalid-feedback">Please enter an email.</div>
+                                                            <label for="customername-field" class="form-label">Customer
+                                                                Name</label>
+                                                            <input type="text" id="customername-field"
+                                                                name="CustomerName" class="form-control" required />
                                                         </div>
-
                                                         <div class="mb-3">
-                                                            <label for="phone-field" class="form-label">Phone</label>
-                                                            <input type="text" id="phone-field" class="form-control"
-                                                                required="">
-                                                            <div class="invalid-feedback">Please enter a phone.</div>
-                                                        </div>
-
-                                                        <div class="mb-3">
-                                                            <label for="address-field"
-                                                                class="form-label">Address</label>
-                                                            <input type="text" id="address-field" class="form-control"
-                                                                required="">
-                                                            <div class="invalid-feedback">Please enter address.</div>
-                                                        </div>
-
-                                                        <div class="row gy-4 mb-3">
-                                                            <div class="col-md-6">
-                                                                <label for="city-field" class="form-label">City</label>
-                                                                <input type="text" id="city-field" class="form-control"
-                                                                    required="">
-                                                                <div class="invalid-feedback">Please enter a city.
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <label for="province-field"
-                                                                    class="form-label">Province</label>
-                                                                <input type="text" id="province-field"
-                                                                    class="form-control" required="">
-                                                                <div class="invalid-feedback">Please enter a province.
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div>
                                                             <label for="status-field" class="form-label">Status</label>
-                                                            <select class="form-control" data-choices=""
-                                                                data-choices-search-false="" name="status-field"
-                                                                id="status-field" required="">
-                                                                <option value="">Status</option>
+                                                            <select class="form-control" name="CustomerStatus"
+                                                                id="status-field" required>
                                                                 <option value="Active">Active</option>
                                                                 <option value="Block">Block</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <div class="hstack gap-2 justify-content-end">
-                                                            <button type="button" class="btn btn-light"
-                                                                data-bs-dismiss="modal">Close
-                                                            </button>
-                                                            <!-- <button type="submit" class="btn btn-success"
-                                                            id="add-btn">Edit Customer</button> -->
-                                                            <button type="button" class="btn btn-success" id="edit-btn">
-                                                                Update
-                                                            </button>
-                                                        </div>
+                                                        <button type="button" class="btn btn-light"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-success">Update
+                                                            Customer</button>
                                                     </div>
                                                 </form>
                                             </div>
                                         </div>
                                     </div>
-
-                                    <!-- Modal -->
-                                    <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1"
-                                        aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="btn-close" id="deleteRecord-close"
-                                                        data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="mt-2 text-center">
-                                                        <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json"
-                                                            trigger="loop" colors="primary:#f7b84b,secondary:#f06548"
-                                                            style="width:100px;height:100px"></lord-icon>
-                                                        <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                                                            <h4>Are you sure ?</h4>
-                                                            <p class="text-muted mx-4 mb-0">Are you sure you want to
-                                                                remove this record ?</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
-                                                        <button type="button" class="btn w-sm btn-light"
-                                                            data-bs-dismiss="modal">Close
-                                                        </button>
-                                                        <button type="button" class="btn w-sm btn-danger"
-                                                            id="delete-record">Yes, Delete It!
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    <div class="d-flex justify-content-end">
+                                        <div class="pagination-wrap hstack gap-2">
+                                            <a class="page-item pagination-prev disabled" href="#">
+                                                Previous
+                                            </a>
+                                            <ul class="pagination listjs-pagination mb-0">
+                                                <li class="active"><a class="page" href="#" data-i="1"
+                                                        data-page="8">1</a></li>
+                                            </ul>
+                                            <a class="page-item pagination-next" href="#">
+                                                Next
+                                            </a>
                                         </div>
                                     </div>
-                                    <!--end modal -->
                                 </div>
                             </div>
-
                         </div>
                         <!--end col-->
                     </div>
@@ -328,33 +230,49 @@
 </html>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Select all headers with the "sort" class
-        document.querySelectorAll('th.sort').forEach(header => {
-            header.addEventListener('click', () => {
-                const table = header.closest('table');
-                const tbody = table.querySelector('tbody');
-                const rows = Array.from(tbody.querySelectorAll('tr'));
-                const columnIndex = Array.from(header.parentNode.children).indexOf(header);
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     // Select all headers with the "sort" class
+    //     document.querySelectorAll('th.sort').forEach(header => {
+    //         header.addEventListener('click', () => {
+    //             const table = header.closest('table');
+    //             const tbody = table.querySelector('tbody');
+    //             const rows = Array.from(tbody.querySelectorAll('tr'));
+    //             const columnIndex = Array.from(header.parentNode.children).indexOf(header);
 
-                // Toggle ascending/descending sort order
-                const isAscending = header.classList.toggle('ascending');
+    //             // Toggle ascending/descending sort order
+    //             const isAscending = header.classList.toggle('ascending');
 
-                // Sort rows based on the text content in the clicked column
-                rows.sort((rowA, rowB) => {
-                    const cellA = rowA.children[columnIndex].textContent.trim();
-                    const cellB = rowB.children[columnIndex].textContent.trim();
+    //             // Sort rows based on the text content in the clicked column
+    //             rows.sort((rowA, rowB) => {
+    //                 const cellA = rowA.children[columnIndex].textContent.trim();
+    //                 const cellB = rowB.children[columnIndex].textContent.trim();
 
-                    // Check if values are numeric for numeric sorting
-                    const comparison = !isNaN(cellA) && !isNaN(cellB)
-                        ? cellA - cellB
-                        : cellA.localeCompare(cellB, undefined, { numeric: true });
+    //                 // Check if values are numeric for numeric sorting
+    //                 const comparison = !isNaN(cellA) && !isNaN(cellB)
+    //                     ? cellA - cellB
+    //                     : cellA.localeCompare(cellB, undefined, { numeric: true });
 
-                    return isAscending ? comparison : -comparison;
-                });
+    //                 return isAscending ? comparison : -comparison;
+    //             });
 
-                // Re-attach sorted rows to the tbody
-                rows.forEach(row => tbody.appendChild(row));
+    //             // Re-attach sorted rows to the tbody
+    //             rows.forEach(row => tbody.appendChild(row));
+    //         });
+    //     });
+    // });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const editButtons = document.querySelectorAll('.edit-customer-btn');
+
+        editButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const categoryId = this.getAttribute('data-id');
+                const categoryName = this.getAttribute('data-name');
+                const categoryStatus = this.getAttribute('data-status');
+
+                document.getElementById('customerIdField').value = categoryId;
+                document.getElementById('customername-field').value = categoryName;
+                document.getElementById('status-field').value = categoryStatus;
             });
         });
     });
