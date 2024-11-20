@@ -1,5 +1,6 @@
 package com.example.demo.controller.admin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.naming.Binding;
@@ -20,9 +21,39 @@ public class ordercontroller {
     @Autowired
     orderrepository orderrepo;
 
-    @GetMapping("apps-ecommerce-order-details")
-    public String orderdetail(Model model) {
+    @Autowired
+    orderdetailrepository orderdetailsrepo;
 
+    @Autowired
+    productrepository productrepo;
+
+    @Autowired
+    customerrepository customerrepo;
+
+    @GetMapping("apps-ecommerce-order-details/{id}")
+    public String orderdetail(@PathVariable("id") int id, Model model) {
+        orders order = orderrepo.findById(id).orElse(null);
+        customers customer = customerrepo.findById(order.getCustomer().getCustomerId()).orElse(null);
+        
+        List<orderdetails> orderDetailsList = orderdetailsrepo.findByOrderId(id);
+        List<orderdetailsdto> orderDetailsDTOs = new ArrayList<>();
+        for (orderdetails orderDetail : orderDetailsList) {
+            products product = productrepo.findById(orderDetail.getProductId()).orElse(null);
+            if (product != null) {
+                orderdetailsdto dto = new orderdetailsdto();
+                dto.setProductId(product.getProductId());
+                dto.setProductName(product.getProductName());
+                dto.setProductMainImage(product.getProductMainImage());
+                dto.setQuantity(orderDetail.getProductQuantity());
+                dto.setProductPrice(product.getProductPrice());
+                dto.setTotalPrice(orderDetail.getProductPrice() * orderDetail.getProductQuantity());
+                orderDetailsDTOs.add(dto);
+            }
+        }
+
+        model.addAttribute("customers", customer);
+        model.addAttribute("orders", order);
+        model.addAttribute("orderDetails", orderDetailsDTOs);
         return ("admin/apps-ecommerce-order-details");
     }
 
