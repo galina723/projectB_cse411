@@ -3,108 +3,108 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table (name = "admins")
+@Table(name = "admins")
 public class admin {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", length = 10, nullable = false)
-    private int AdminId;
-
-    @Column(name = "email", length = 50, nullable = false)
-    private String AdminEmail;
-
-    @Column(name = "name", length = 50, nullable = false)
-    private String AdminName;
-
-    @Column(name = "password", length = 50, nullable = false)
-    private String AdminPassword;
-
-    @Column(name = "address", length = 255, nullable = false)
-    private String AdminAddress;
-
-    @Column(name = "city", length = 50, nullable = false)
-    private String AdminCity;
-
-    @Column(name = "province", length = 50, nullable = false)
-    private String AdminProvince;
-
-    @Column(name = "phone", length = 50, nullable = false)
-    private String AdminPhone;
-
-    @Column(name = "status", length = 50, nullable = false)
-    private String AdminStatus;
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", length = 10)
+    private int adminId;
 
     public int getAdminId() {
-        return AdminId;
+        return adminId;
     }
 
     public void setAdminId(int adminId) {
-        AdminId = adminId;
+        this.adminId = adminId;
     }
 
+    @Column(name = "email", length = 50)
+    private String adminEmail;
+
     public String getAdminEmail() {
-        return AdminEmail;
+        return adminEmail;
     }
 
     public void setAdminEmail(String adminEmail) {
-        AdminEmail = adminEmail;
+        this.adminEmail = adminEmail;
     }
 
+    @Column(name = "name", length = 50)
+    private String adminName;
+
     public String getAdminName() {
-        return AdminName;
+        return adminName;
     }
 
     public void setAdminName(String adminName) {
-        AdminName = adminName;
+        this.adminName = adminName;
     }
 
+    @Column(name = "password", length = 50)
+    private String adminPassword;
+
     public String getAdminPassword() {
-        return AdminPassword;
+        return adminPassword;
     }
 
     public void setAdminPassword(String adminPassword) {
-        AdminPassword = adminPassword;
+        this.adminPassword = adminPassword;
     }
 
+    @Column(name = "address", length = 255)
+    private String adminAddress;
+
     public String getAdminAddress() {
-        return AdminAddress;
+        return adminAddress;
     }
 
     public void setAdminAddress(String adminAddress) {
-        AdminAddress = adminAddress;
+        this.adminAddress = adminAddress;
     }
 
+    @Column(name = "city", length = 50)
+    private String adminCity;
+
     public String getAdminCity() {
-        return AdminCity;
+        return adminCity;
     }
 
     public void setAdminCity(String adminCity) {
-        AdminCity = adminCity;
+        this.adminCity = adminCity;
     }
 
+    @Column(name = "province", length = 50)
+    private String adminProvince;
+
     public String getAdminProvince() {
-        return AdminProvince;
+        return adminProvince;
     }
 
     public void setAdminProvince(String adminProvince) {
-        AdminProvince = adminProvince;
+        this.adminProvince = adminProvince;
     }
 
+    @Column(name = "phone", length = 50)
+    private String adminPhone;
+
     public String getAdminPhone() {
-        return AdminPhone;
+        return adminPhone;
     }
 
     public void setAdminPhone(String adminPhone) {
-        AdminPhone = adminPhone;
+        this.adminPhone = adminPhone;
     }
 
+    @Column(name = "status", length = 50)
+    private String adminStatus;
+
     public String getAdminStatus() {
-        return AdminStatus;
+        return adminStatus;
     }
 
     public void setAdminStatus(String adminStatus) {
-        AdminStatus = adminStatus;
+        this.adminStatus = adminStatus;
     }
 
 }
