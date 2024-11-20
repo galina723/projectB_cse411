@@ -103,12 +103,7 @@
                                             <table class="table align-middle" id="customerTable">
                                                 <thead class="table-light text-muted">
                                                     <tr>
-                                                        <th scope="col" style="width: 50px;">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox"
-                                                                    id="checkAll" value="option">
-                                                            </div>
-                                                        </th>
+                                                        
                                                         <th class="sort" data-sort="id">ID</th>
                                                         <th class="sort" data-sort="name">Full Name</th>
                                                         <th class="sort" data-sort="email">Email</th>
@@ -122,12 +117,7 @@
                                                 </thead>
                                                 <tbody class="list form-check-all" th:each="customer : ${customers}">
                                                     <tr>
-                                                        <th scope="row">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox"
-                                                                    name="chk_child" value="option1">
-                                                            </div>
-                                                        </th>
+                                                        
                                                         <td class="id">[[${customer.CustomerId}]]</td>
                                                         <td class="name">[[${customer.CustomerName}]]</td>
                                                         <td class="email">[[${customer.cemail}]]</td>

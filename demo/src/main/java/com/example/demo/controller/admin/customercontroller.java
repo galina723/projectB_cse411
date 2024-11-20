@@ -48,17 +48,6 @@ public class customercontroller {
         model.addAttribute("customers", customers);
         return ("admin/apps-ecommerce-customers");
     }
-    
-
-    @GetMapping("apps-ecommerce-order-details")
-    public String orderdetail() {
-        return ("admin/apps-ecommerce-order-details");
-    }
-
-    @GetMapping("apps-ecommerce-orders")
-    public String orders() {
-        return ("admin/apps-ecommerce-orders");
-    }
 
     @GetMapping("apps-ecommerce-seller-details")
     public String sellerdetail() {
