@@ -146,6 +146,9 @@
                                 </div>
                                 <div class="card-body">
                                     <ul class="list-unstyled vstack gap-2 fs-13 mb-0">
+                                        <li>Note: <span
+                                                th:text="${#strings.isEmpty(orders.OrderNote) ? 'No note' : orders.OrderNote}"></span>
+                                        </li>
                                         <li>[[${orders.OrderAddress}]]</li>
                                         <li>[[${orders.OrderCity}]]</li>
                                         <li>[[${orders.OrderProvince}]]</li>
