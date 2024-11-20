@@ -49,10 +49,11 @@
                                     </p>
                                     <div class="login_submit">
                                         <a href="/user/forgot-password">Lost your password?</a>
-                                        <button style="background-color: white; color: black; border: 0.2px solid rgb(152, 152, 152);"
-                                                onmouseover="this.style.background='#fe3737'; this.style.color='white'"
-                                                onmouseout="this.style.background='white'; this.style.color='black'" type="button"
-                                                onclick="window.location.href='/user/register';">Register
+                                        <button
+                                            style="background-color: white; color: black; border: 0.2px solid rgb(152, 152, 152);"
+                                            onmouseover="this.style.background='#fe3737'; this.style.color='white'"
+                                            onmouseout="this.style.background='white'; this.style.color='black'"
+                                            type="button" onclick="window.location.href='/user/register';">Register
                                         </button>
                                         <button type="submit">Login</button>
                                     </div>
@@ -78,7 +79,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Handle form submission
             var loginForm = document.getElementById('loginForm');
             loginForm.addEventListener('submit', function (e) {
                 e.preventDefault(); // Prevent the default form submission
@@ -91,19 +91,17 @@
                     body: formData,
                     headers: { 'X-Requested-With': 'XMLHttpRequest' }
                 })
-                    .then(response => response.ok ? response.json() : Promise.reject(response))
-                    .then(data => {
-                        // If login successful, redirect or show success message
-                        if (data.success) {
-                            window.location.href = '/user/index';  // Redirect on success
+                    .then(response => response.json().then(data => ({ status: response.status, body: data })))
+                    .then(({ status, body }) => {
+                        if (status === 200 && body.success) {
+                            window.location.href = '/user/index'; // Redirect on success
                         } else {
-                            // Show error notification if login failed
+                            // Show error notification with custom message
                             Toastify({
-                                text: "Invalid email or password",
+                                text: body.message || "Login failed. Please try again.",
                                 duration: 3000,
                                 gravity: "top",
                                 position: 'right',
-                                close: true,
                                 backgroundColor: "#f44336", // Red for error
                             }).showToast();
                         }
@@ -111,7 +109,7 @@
                     .catch(error => {
                         // Show error notification in case of network failure or server issue
                         Toastify({
-                            text: "Error: " + (error.statusText || 'Invalid email or password'),
+                            text: "Error: " + (error.statusText || "Something went wrong"),
                             duration: 3000,
                             gravity: "top",
                             position: 'right',

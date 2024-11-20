@@ -155,9 +155,22 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
         customers custo = customerrepo.findByCemail(email);
-
-        if (custo == null || !encryption.matches(password, custo.getCustomerPassword())) {
+        
+        if (custo == null) {
             response.put("success", false);
+            response.put("message", "Invalid email or password.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
+        if ("block".equalsIgnoreCase(custo.getCustomerStatus())) {
+            response.put("success", false);
+            response.put("message", "Your account is blocked. Please contact support.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
+
+        if (!encryption.matches(password, custo.getCustomerPassword())) {
+            response.put("success", false);
+            response.put("message", "Invalid email or password.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
