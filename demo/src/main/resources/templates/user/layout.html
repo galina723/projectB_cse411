@@ -221,7 +221,8 @@
                                             <div class="cart_gallery">
                                                 <div class="cart_item" th:each="cartItem : ${cartItems}">
                                                     <div class="cart_img">
-                                                        <a href="#"><img
+                                                        <a
+                                                            th:href="@{/user/product-details/{id}(id=${cartItem.ProductId})}"><img
                                                                 th:src="@{'/productimages/' + ${cartItem.ProductImage}}"
                                                                 alt=""></a>
                                                     </div>
@@ -236,10 +237,6 @@
                                             </div>
                                             <div class="mini_cart_table">
                                                 <div class="cart_table_border">
-                                                    <div class="cart_total">
-                                                        <span>Subtotal:</span>
-                                                        <span class="price">$[[${subtotal}]]</span>
-                                                    </div>
                                                     <div class="cart_total mt-10">
                                                         <span>Total:</span>
                                                         <span class="price">$[[${total}]]</span>
@@ -558,7 +555,7 @@
             document.addEventListener('DOMContentLoaded', function () {
                 document.querySelectorAll('#add-to-cart-form').forEach(form => {
                     form.addEventListener('submit', function (e) {
-                        e.preventDefault(); // Prevent normal form submission
+                        e.preventDefault();
 
                         const formData = new FormData(form);
 
@@ -569,12 +566,10 @@
                         })
                             .then(response => {
                                 if (response.redirected) {
-                                    // Handle redirect (e.g., to login page)
                                     window.location.href = response.url;
                                 } else if (response.ok) {
                                     return response.json();
                                 } else if (response.status === 400) {
-                                    // Handle quantity exceed error
                                     return response.json().then(data => {
                                         throw new Error(data.message || 'Requested quantity exceeds available stock.');
                                     });
@@ -583,10 +578,8 @@
                                 }
                             })
                             .then(data => {
-                                // Update item count
                                 document.querySelector('.mini_cart_wrapper .item_count').textContent = data.cartItemCount;
 
-                                // Update mini cart UI
                                 const cartGallery = document.querySelector('.cart_gallery');
                                 cartGallery.innerHTML = data.cartItems.map(cartItem => `
                                         <div class="cart_item">
@@ -600,11 +593,8 @@
                                         </div>
                                     `).join('');
 
-                                // Update subtotal and total
-                                document.querySelector('.cart_total .price').textContent = `$${data.subtotal.toFixed(2)}`;
                                 document.querySelector('.cart_total.mt-10 .price').textContent = `$${data.total.toFixed(2)}`;
 
-                                // Display success message
                                 Toastify({
                                     text: "Added to cart successfully.",
                                     duration: 500,
@@ -623,7 +613,6 @@
                                         backgroundColor: "#f44336",
                                     }).showToast();
                                 } else {
-                                    // Handle other errors
                                     Toastify({
                                         text: 'An unexpected error occurred.',
                                         duration: 700,

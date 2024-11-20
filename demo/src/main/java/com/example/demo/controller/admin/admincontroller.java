@@ -71,25 +71,16 @@ public class admincontroller {
             @RequestParam("AdminPassword") String password, HttpSession session) {
 
         Map<String, Object> response = new HashMap<>();
-        admin admins = adminrepo.findByAdminName(name);
+        // admin admin = adminrepo.findByAdminName(name);
 
-        if (admins == null) {
-            response.put("success", false);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+        // if (admin == null || !encryption.matches(password, admin.getAdminPassword())) {
+        //     response.put("success", false);
+        //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        // }
 
-        session.setAttribute("loginAdmin", admins.getAdminId());
+        // session.setAttribute("loginAdmin", admin.getAdminId());
         response.put("success", true);
         return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("apps-ecommerce-sellers")
-    public String sellers(Model model) {
-
-        List<admin> admins = (List<admin>) adminrepo.findAll();
-        model.addAttribute("admins", admins);
-        return ("admin/apps-ecommerce-sellers");
-
     }
 
 }

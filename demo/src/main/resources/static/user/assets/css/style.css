@@ -3574,6 +3574,13 @@ textarea:-ms-input-placeholder {
 
 .single_product {
   transition: .3s;
+  border: 1px solid #ddd;
+  padding: 10px 10px 10px;
+}
+
+.single_product .product_thumb {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
 }
 
 .single_product:hover .add_to_cart {
@@ -4691,10 +4698,14 @@ textarea:-ms-input-placeholder {
 
 .single_blog {
   background: #fff;
+  padding: 10px 10px 10px;
+  border: 1px solid #ddd;
 }
 
 .blog_thumb {
   overflow: hidden;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
 }
 
 .blog_thumb:hover img {
@@ -8154,7 +8165,7 @@ textarea:-ms-input-placeholder {
 }
 
 .table_desc .cart_page table tbody tr td.product_remove {
-  min-width: 100px;
+  min-width: 50px;
 }
 
 .table_desc .cart_page table tbody tr td.product_remove a {
@@ -8853,8 +8864,7 @@ textarea:-ms-input-placeholder {
   margin-bottom: 60px;
 }
 
-.contact_message h3 {
-  font-size: 21px;
+.contact_message h2 {
   text-transform: capitalize;
   font-weight: 500;
   line-height: 20px;
@@ -8994,6 +9004,7 @@ textarea:-ms-input-placeholder {
   border: 1px solid #ededed;
   padding: 23px 20px 29px;
   border-radius: 5px;
+  position: relative;
 }
 
 .account_form label {
@@ -9009,7 +9020,7 @@ textarea:-ms-input-placeholder {
 }
 
 .account_form input {
-  border: 1px solid #ededed;
+  border: 1px solid #ccc;
   height: 40px;
   max-width: 100%;
   padding: 0 20px;
@@ -9239,6 +9250,7 @@ textarea:-ms-input-placeholder {
 
 .dashboard_tab_button ul li a.active {
   background: #fe3737;
+  color: #ffffff;
 }
 
 .main_content_area {
@@ -11388,7 +11400,8 @@ textarea:-ms-input-placeholder {
 }
 
 .related_thumb {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ddd;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -11431,6 +11444,11 @@ textarea:-ms-input-placeholder {
 .related_content .blog_meta span {
   font-size: 12px;
   line-height: 22px;
+}
+
+.single_related {
+  border: 1px solid #ddd;
+  padding: 10px 10px 10px;
 }
 
 @media only screen and (max-width: 767px) {
@@ -12383,11 +12401,34 @@ textarea:-ms-input-placeholder {
 
 
 .badge {
-  padding: 8px 10px;  
-  font-size: 0.75rem;  
-  border-radius: 0;    
+  padding: 8px 10px;
+  font-size: 0.75rem;
+  border-radius: 0;
   border-radius: 4px;
 }
+
+.contact_map {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.map-area {
+  width: 80%;
+  max-width: 940px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+iframe {
+  width: 100%;
+  height: 450px;
+  border: none;
+}
+
+
 /*privacy policy css end*/
 
 /*# sourceMappingURL=style.css.map */

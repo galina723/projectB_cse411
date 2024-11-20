@@ -1,351 +1,244 @@
 <!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
-      data-sidebar-image="none" data-preloader="disable" xmlns:th="http://www.thymeleaf.org">
+    data-sidebar-image="none" data-preloader="disable" xmlns:th="http://www.thymeleaf.org">
 
 
-<head th:replace="admin/layout :: pageHead('Orders')">
+<head th:replace="~{admin/layout :: pageHead('Order')}">
 
 </head>
 
 <body>
 
-<div th:replace="admin/layout :: body">
-    <section th:fragment="mainContent">
-        <div class="page-content">
-            <div class="container-fluid">
-                <!-- start page title -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0">Order Management</h4>
+    <div th:replace="~{admin/layout :: body}">
+        <section th:fragment="mainContent">
+            <div class="page-content">
+                <div class="container-fluid">
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                <h4 class="mb-sm-0">Order Managment</h4>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- end page title -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card" id="orderList">
-                            <div class="card-header border-0">
-                                <div class="row align-items-center gy-3">
-                                    <div class="col-sm">
-                                        <h5 class="card-title mb-0">Order History</h5>
-                                    </div>
-                                    <div class="col-sm-auto">
-                                        <div class="d-flex gap-1 flex-wrap">
-                                            <button type="button" class="btn btn-info"><i
-                                                    class="ri-file-download-line align-bottom me-1"></i>
-                                                Export
-                                            </button>
-                                            <button class="btn btn-soft-danger" id="remove-actions"
+                    <!-- end page title -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card" id="customerList">
+                                <div class="card-header border-bottom-dashed">
+
+                                    <div class="row g-4 align-items-center">
+                                        <div class="col-sm">
+                                            <div>
+                                                <h5 class="card-title mb-0">Order History</h5>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-auto">
+                                            <div class="d-flex flex-wrap align-items-start gap-2">
+                                                <button class="btn btn-soft-danger" id="remove-actions"
                                                     onclick="deleteMultiple()"><i
-                                                    class="ri-delete-bin-2-line"></i></button>
+                                                        class="ri-delete-bin-2-line"></i></button>
+                                                <button type="button" class="btn btn-info"><i
+                                                        class="ri-file-download-line align-bottom me-1"></i>
+                                                    Export</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card-body border-bottom-dashed border-bottom">
-                                <form>
-                                    <div class="row g-3">
-                                        <div class="col-xl-6">
-                                            <div class="search-box">
-                                                <input type="text" class="form-control search"
-                                                       placeholder="Search for customer, email, phone, status or something...">
-                                                <i class="ri-search-line search-icon"></i>
-                                            </div>
-                                        </div>
-                                        <!--end col-->
-                                        <div class="col-xl-6">
-                                            <div class="row g-3">
-                                                <div class="col-sm-4">
-                                                    <div class="">
-                                                        <input type="text" class="form-control"
-                                                               id="datepicker-range" data-provider="flatpickr"
-                                                               data-date-format="d M, Y" data-range-date="true"
-                                                               placeholder="Select date">
-                                                    </div>
+                                <div class="card-body border-bottom-dashed border-bottom">
+                                    <form>
+                                        <div class="row g-3">
+                                            <div class="col-xl-6">
+                                                <div class="search-box">
+                                                    <input type="text" class="form-control search"
+                                                        placeholder="Search for customer, email, phone, status or something...">
+                                                    <i class="ri-search-line search-icon"></i>
                                                 </div>
-                                                <!--end col-->
-                                                <div class="col-sm-4">
-                                                    <div>
-                                                        <select class="form-control" data-plugin="choices"
+                                            </div>
+                                            <!--end col-->
+                                            <div class="col-xl-6">
+                                                <div class="row g-3">
+                                                    <div class="col-sm-4">
+                                                        <div class="">
+                                                            <input type="text" class="form-control"
+                                                                id="datepicker-range" data-provider="flatpickr"
+                                                                data-date-format="d M, Y" data-range-date="true"
+                                                                placeholder="Select date">
+                                                        </div>
+                                                    </div>
+                                                    <!--end col-->
+                                                    <div class="col-sm-4">
+                                                        <div>
+                                                            <select class="form-control" data-plugin="choices"
                                                                 data-choices="" data-choices-search-false=""
                                                                 name="choices-single-default" id="idStatus">
-                                                            <option value="">Status</option>
-                                                            <option value="all" selected="">All</option>
-                                                            <option value="Active">Active</option>
-                                                            <option value="Block">Block</option>
-                                                        </select>
+                                                                <option value="">Status</option>
+                                                                <option value="all" selected="">All</option>
+                                                                <option value="Pending">Pending</option>
+                                                                <option value="Inprogress">Inprogress</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <!--end col-->
+                                                    <!--end col-->
 
-                                                <div class="col-sm-4">
-                                                    <div>
-                                                        <button type="button" class="btn btn-primary w-100"
-                                                                onclick="SearchData();"><i
-                                                                class="ri-equalizer-fill me-2 align-bottom"></i>Filters
-                                                        </button>
+                                                    <div class="col-sm-4">
+                                                        <div>
+                                                            <button type="button" class="btn btn-primary w-100"
+                                                                onclick="SearchData();"> <i
+                                                                    class="ri-equalizer-fill me-2 align-bottom"></i>Filters</button>
+                                                        </div>
                                                     </div>
+                                                    <!--end col-->
                                                 </div>
-                                                <!--end col-->
                                             </div>
                                         </div>
-                                    </div>
-                                    <!--end row-->
-                                </form>
-                            </div>
-                            <div class="card-body">
-                                <div>
-                                    <div class="table-responsive table-card mb-1">
-                                        <table class="table align-middle" id="orderTable" >
-                                            <thead class="text-muted table-light">
-                                            <th scope="col" style="width: 25px;">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox"
-                                                           id="checkAll" value="option">
-                                                </div>
-                                            </th>
-                                            <th class="sortt">ID</th>
-                                            <th class="sort" data-sort="customerid">Customer</th>
-                                            <th class="sort" data-sort="date">Order Date</th>
-                                            <th class="sort" data-sort="address">Address</th>
-                                            <th class="sort" data-sort="city">City</th>
-                                            <th class="sort" data-sort="province">Province</th>
-                                            <th class="sortt">Note</th>
-                                            <th class="sort" data-sort="amount">Total</th>
-                                            <th class="sort" data-sort="payment">Pay</th>
-                                            <th class="sort" data-sort="status">Status</th>
-                                            <th class="sortt">Action</th>
-                                            </thead>
-                                            <tbody class="list form-check-all">
-                                            <tr th:each="order : ${orders}">
-                                                <th scope="row">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox"
-                                                               name="checkAll" value="option1">
-                                                    </div>
-                                                </th>
-                                                <td class="id"><a href="/admin/apps-ecommerce-order-details"
-                                                                  class="fw-medium link-primary"></a></td>
-                                                <td class="customerid">[[${order.OrderCustomer}]]</td>
-                                                <td class="date">[[${order.OrderDate}]]</td>
-                                                <td class="address">[[${order.OrderAddress}]]</td>
-                                                <td class="city">[[${order.OrderCity}]]</td>
-                                                <td class="province">[[${order.OrderProvince}]]</td>
-                                                <td class="note">[[${order.OrderNote}]]</td>
-                                                <td class="amount">[[${order.OrderAmount}]]</td>
-                                                <td class="payment">[[${order.OrderPaymentMethod}]]</td>
-                                                <td class="status"><span
-                                                        class="badge bg-warning-subtle text-warning text-uppercase">[[${order.OrderStatus}]]</span>
-                                                </td>
-                                                <td>
-                                                    <ul class="list-inline hstack gap-2 mb-0">
-                                                        <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                            data-bs-trigger="hover" data-bs-placement="top"
-                                                            aria-label="View" data-bs-original-title="View">
-                                                            <a href="/admin/apps-ecommerce-order-details"
-                                                               class="text-primary d-inline-block">
-                                                                <i class="ri-eye-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li class="list-inline-item edit"
-                                                            data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                            data-bs-placement="top" aria-label="Edit"
-                                                            data-bs-original-title="Edit">
-                                                            <a href="#showModal" data-bs-toggle="modal"
-                                                               class="text-primary d-inline-block edit-item-btn">
-                                                                <i class="ri-pencil-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li class="list-inline-item" data-bs-toggle="tooltip"
-                                                            data-bs-trigger="hover" data-bs-placement="top"
-                                                            aria-label="Remove" data-bs-original-title="Remove">
-                                                            <a class="text-danger d-inline-block remove-item-btn"
-                                                               data-bs-toggle="modal" href="#deleteOrder">
-                                                                <i class="ri-delete-bin-5-fill fs-16"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <div class="noresult" style="display: none">
-                                            <div class="text-center">
-                                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json"
-                                                           trigger="loop" colors="primary:#405189,secondary:#0ab39c"
-                                                           style="width:75px;height:75px"></lord-icon>
-                                                <h5 class="mt-2">Sorry! No Result Found</h5>
-                                                <p class="text-muted">We've searched more than 150+ Orders We did
-                                                    not find any orders for you search.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-end">
-                                        <div class="pagination-wrap hstack gap-2">
-                                            <a class="page-item pagination-prev disabled" href="#">
-                                                Previous
-                                            </a>
-                                            <ul class="pagination listjs-pagination mb-0">
-                                                <li class="active"><a class="page" href="#" data-i="1"
-                                                                      data-page="8">1</a></li>
-                                            </ul>
-                                            <a class="page-item pagination-next" href="#">
-                                                Next
-                                            </a>
-                                        </div>
-                                    </div>
+                                        <!--end row-->
+                                    </form>
                                 </div>
-                                <div class="modal fade" id="showModal" tabindex="-1"
-                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header bg-light p-3">
-                                                <h5 class="modal-title" id="exampleModalLabel">&nbsp;Edit Order</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close" id="close-modal"></button>
+                                <div class="card-body">
+                                    <div>
+                                        <div class="table-responsive table-card mb-1">
+                                            <table class="table align-middle" id="orderTable">
+                                                <thead class="text-muted table-light">
+
+                                                    <th class="sortt">ID</th>
+                                                    <th class="sort" data-sort="customerid">Customer</th>
+                                                    <th class="sort" data-sort="date">Order Date</th>
+                                                    <th class="sort" data-sort="address">Address</th>
+                                                    <th class="sort" data-sort="city">City</th>
+                                                    <th class="sort" data-sort="province">Province</th>
+                                                    <th class="sort" data-sort="amount">Total</th>
+                                                    <th class="sort" data-sort="payment">Pay</th>
+                                                    <th class="sort" data-sort="status">Status</th>
+                                                    <th class="sortt">Action</th>
+                                                </thead>
+                                                <tbody class="list form-check-all">
+                                                    <tr th:each="order : ${orders}">
+
+                                                        <td class="id"><a
+                                                                th:href="@{/admin/apps-ecommerce-order-details/{id}(id=${order.OrderId})}"
+                                                                class="fw-medium link-primary">[[${order.OrderId}]]</a>
+                                                        </td>
+                                                        <td class="customerid">[[${order.Customer.CustomerId}]]</td>
+                                                        <td class="date">[[${order.OrderDate}]]</td>
+                                                        <td class="address">[[${order.OrderAddress}]]</td>
+                                                        <td class="city">[[${order.OrderCity}]]</td>
+                                                        <td class="province">[[${order.OrderProvince}]]</td>
+                                                        <td class="amount">[[${order.OrderAmount}]]</td>
+                                                        <td class="payment">[[${order.OrderPaymentMethod}]]</td>
+                                                        <td class="status">
+                                                            <span
+                                                                th:classappend="
+                                                                ${order.OrderStatus == 'Pending'} ? 'badge bg-warning-subtle text-warning text-uppercase' :
+                                                                (${order.OrderStatus == 'Inprogress'} ? 'badge bg-success-subtle text-success text-uppercase' : '')">
+                                                                [[${order.OrderStatus}]]
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <ul class="list-inline hstack gap-2 mb-0">
+                                                                <li class="list-inline-item edit"
+                                                                    data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                                    data-bs-placement="top" aria-label="Edit"
+                                                                    data-bs-original-title="Edit">
+                                                                    <a href="#editOrderModal"
+                                                                        class="text-primary d-inline-block edit-order-btn"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#editOrderModal" th:attr="data-id=${order.OrderId},
+                                                                        data-status=${order.OrderStatus}">
+                                                                        <i class="ri-pencil-fill fs-16"></i>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="noresult" style="display: none">
+                                                <div class="text-center">
+                                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json"
+                                                        trigger="loop" colors="primary:#121331,secondary:#08a88a"
+                                                        style="width:75px;height:75px"></lord-icon>
+                                                    <h5 class="mt-2">Sorry! No Result Found</h5>
+                                                    <p class="text-muted mb-0">We've searched more than 150+ customer We
+                                                        did not find any customer for you search.</p>
+                                                </div>
                                             </div>
-                                            <form class="tablelist-form" autocomplete="off">
-                                                <div class="modal-body">
-                                                    <input type="hidden" id="id-field">
+                                        </div>
+                                        <!-- Modal -->
 
-                                                    <div class="row gy-4 mb-3">
-                                                        <div class="col-md-6">
-                                                            <label for="orderId" class="form-label">ID</label>
-                                                            <input type="text" id="orderId" class="form-control"
-                                                                   readonly="">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="customerid-field"
-                                                                   class="form-label">Customer ID</label>
-                                                            <input type="text" id="customerid-field"
-                                                                   class="form-control" required="">
-                                                        </div>
+                                        <div class="modal fade" id="editOrderModal" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <div class="modal-header bg-light p-3">
+                                                        <h5 class="modal-title">Edit Order</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
                                                     </div>
-                                                    <div class="mb-3">
-                                                        <label for="date-field" class="form-label">Order
-                                                            Date</label>
-                                                        <input type="date" id="date-field" class="form-control"
-                                                               data-provider="flatpickr" required=""
-                                                               data-date-format="d M, Y" data-enable-time="">
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="address-field"
-                                                               class="form-label">Address</label>
-                                                        <input type="text" id="address-field" class="form-control"
-                                                               required="">
-                                                    </div>
-                                                    <div class="row gy-4 mb-3">
-                                                        <div class="col-md-6">
-                                                            <label for="city-field" class="form-label">City</label>
-                                                            <input type="text" id="city-field" class="form-control"
-                                                                   required="">
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label for="province-field"
-                                                                   class="form-label">Province</label>
-                                                            <input type="text" id="province-field"
-                                                                   class="form-control" required="">
-                                                        </div>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label for="note-field" class="form-label">Note</label>
-                                                        <input type="text" id="note-field" class="form-control"
-                                                               required="">
-                                                    </div>
-                                                    <div class="row gy-4 mb-3">
-                                                        <div class="col-md-6">
-                                                            <div>
-                                                                <label for="amount-field" class="form-label">Total
-                                                                    Amount</label>
-                                                                <input type="text" id="amount-field"
-                                                                       class="form-control" required="">
+                                                    <form th:action="@{/admin/editOrder}" method="post"
+                                                        autocomplete="off">
+                                                        <div class="modal-body">
+                                                            <input type="hidden" name="OrderId" id="orderIdField" />
+                                                            <div class="mb-3">
+                                                                <label for="status-field"
+                                                                    class="form-label">Status</label>
+                                                                <select class="form-control" name="OrderStatus"
+                                                                    id="status-field" required>
+                                                                    <option value="Pending">Pending</option>
+                                                                    <option value="Inprogress">Inprogress</option>
+                                                                </select>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <div>
-                                                                <label for="payment-field"
-                                                                       class="form-label">Payment Method</label>
-                                                                <input type="text" id="payment-field"
-                                                                       class="form-control" required="">
-                                                            </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-light"
+                                                                data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-success">Update
+                                                                Order</button>
                                                         </div>
-                                                    </div>
-
-                                                    <div>
-                                                        <label for="delivered-status" class="form-label">Delivery
-                                                            Status</label>
-                                                        <select class="form-control" data-trigger=""
-                                                                name="delivered-status" required=""
-                                                                id="delivered-status">
-                                                            <option value="">Delivery Status</option>
-                                                            <option value="Pending">Pending</option>
-                                                            <option value="Inprogress">Inprogress</option>
-                                                            <option value="Cancelled">Cancelled</option>
-                                                            <option value="Pickups">Pickups</option>
-                                                            <option value="Delivered">Delivered</option>
-                                                            <option value="Returns">Returns</option>
-                                                        </select>
-                                                    </div>
+                                                    </form>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <div class="hstack gap-2 justify-content-end">
-                                                        <button type="button" class="btn btn-light"
-                                                                data-bs-dismiss="modal">Close
-                                                        </button>
-                                                        <!-- <button type="submit" class="btn btn-success"
-                                                            id="add-btn">Edit Order</button> -->
-                                                        <button type="button" class="btn btn-success" id="edit-btn">
-                                                            Update
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </form>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
 
-                                <!-- Modal -->
-                                <div class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-body p-5 text-center">
-                                                <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json"
-                                                           trigger="loop" colors="primary:#405189,secondary:#f06548"
-                                                           style="width:90px;height:90px"></lord-icon>
-                                                <div class="mt-4 text-center">
-                                                    <h4>You are about to delete a order ?</h4>
-                                                    <p class="text-muted fs-15 mb-4">Deleting your order will remove
-                                                        all of your information from our database.</p>
-                                                    <div class="hstack gap-2 justify-content-center remove">
-                                                        <button
-                                                                class="btn btn-link link-success fw-medium text-decoration-none"
-                                                                id="deleteRecord-close" data-bs-dismiss="modal"><i
-                                                                class="ri-close-line me-1 align-middle"></i>
-                                                            Close
-                                                        </button>
-                                                        <button class="btn btn-danger" id="delete-record">Yes,
-                                                            Delete It
-                                                        </button>
-                                                    </div>
-                                                </div>
+                                        <div class="d-flex justify-content-end">
+                                            <div class="pagination-wrap hstack gap-2">
+                                                <a class="page-item pagination-prev disabled" href="#">
+                                                    Previous
+                                                </a>
+                                                <ul class="pagination listjs-pagination mb-0">
+                                                    <li class="active"><a class="page" href="#" data-i="1"
+                                                            data-page="8">1</a></li>
+                                                </ul>
+                                                <a class="page-item pagination-next" href="#">
+                                                    Next
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!--end modal -->
                             </div>
                         </div>
-
+                        <!--end col-->
                     </div>
-                    <!--end col-->
+                    <!--end row-->
                 </div>
             </div>
-        </div>
-    </section>
-</div>
+        </section>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editButtons = document.querySelectorAll('.edit-order-btn');
 
+            editButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const orderId = this.getAttribute('data-id');
+                    const orderStatus = this.getAttribute('data-status');
+
+                    document.getElementById('orderIdField').value = orderId;
+                    document.getElementById('status-field').value = orderStatus;
+                });
+            });
+        });
+    </script>
 </body>
 
 

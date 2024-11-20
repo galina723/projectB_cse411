@@ -107,12 +107,7 @@
                                             <table class="table align-middle" id="customerTable">
                                                 <thead class="table-light text-muted">
                                                     <tr>
-                                                        <th scope="col" style="width: 50px;">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox"
-                                                                    id="checkAll" value="option">
-                                                            </div>
-                                                        </th>
+                                                        
                                                         <th class="sortt">ID</th>
                                                         <th class="sort" data-sort="name">Name</th>
                                                         <th class="sort" data-sort="quantity">Quantity</th>
@@ -122,12 +117,7 @@
                                                 </thead>
                                                 <tbody class="list form-check-all">
                                                     <tr th:each="category : ${categories}">
-                                                        <th scope="col" style="width: 50px;">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox"
-                                                                    id="checkAll" value="option">
-                                                            </div>
-                                                        </th>
+                                                        
                                                         <td class="id">[[${category.CategoryId}]]</td>
                                                         <td class="name">[[${category.CategoryName}]]</td>
                                                         <td class="quantity">[[${category.CategoryQuantity}]]</td>
@@ -321,7 +311,6 @@
                                                 </a>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>

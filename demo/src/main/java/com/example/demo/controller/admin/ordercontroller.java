@@ -1,54 +1,89 @@
 package com.example.demo.controller.admin;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.naming.Binding;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.example.demo.model.orders;
+import com.example.demo.model.*;
 import com.example.demo.repository.*;
 
-import jakarta.servlet.http.HttpSession;
-
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("admin")
 public class ordercontroller {
-
-    @Autowired
-    adminrepository adminrepo;
-
-    @Autowired
-    blogrepository blogrepo;
 
     @Autowired
     orderrepository orderrepo;
 
-    // list orders
+    @Autowired
+    orderdetailrepository orderdetailsrepo;
 
-    @GetMapping("apps-ecommerce-order")
-    public String order(Model model) {
-        List<orders> orders = (List<orders>) orderrepo.findAll();
-        model.addAttribute("orders", orders);
-        return ("admin/apps-ecommerce-order");
-    }
+    @Autowired
+    productrepository productrepo;
 
-    @GetMapping("apps-ecommerce-order-detail/{id}")
-    public String orderDetail(@PathVariable("id") int id, Model model) {
+    @Autowired
+    customerrepository customerrepo;
+
+    @GetMapping("apps-ecommerce-order-details/{id}")
+    public String orderdetail(@PathVariable("id") int id, Model model) {
         orders order = orderrepo.findById(id).orElse(null);
-        model.addAttribute("order", order);
-        return ("admin/apps-ecommerce-order-detail");
+        customers customer = customerrepo.findById(order.getCustomer().getCustomerId()).orElse(null);
+        
+        List<orderdetails> orderDetailsList = orderdetailsrepo.findByOrderId(id);
+        List<orderdetailsdto> orderDetailsDTOs = new ArrayList<>();
+        for (orderdetails orderDetail : orderDetailsList) {
+            products product = productrepo.findById(orderDetail.getProductId()).orElse(null);
+            if (product != null) {
+                orderdetailsdto dto = new orderdetailsdto();
+                dto.setProductId(product.getProductId());
+                dto.setProductName(product.getProductName());
+                dto.setProductMainImage(product.getProductMainImage());
+                dto.setQuantity(orderDetail.getProductQuantity());
+                dto.setProductPrice(product.getProductPrice());
+                dto.setTotalPrice(orderDetail.getProductPrice() * orderDetail.getProductQuantity());
+                orderDetailsDTOs.add(dto);
+            }
+        }
+
+        model.addAttribute("customers", customer);
+        model.addAttribute("orders", order);
+        model.addAttribute("orderDetails", orderDetailsDTOs);
+        return ("admin/apps-ecommerce-order-details");
     }
+
+    @GetMapping("apps-ecommerce-orders")
+    public String orders(Model model) {
+        List<orders> order = (List<orders>) orderrepo.findAll();
+        model.addAttribute("orders", order);
+        return ("admin/apps-ecommerce-orders");
+    }
+
+    @PostMapping("/editOrder")
+    public String saveEditedCategory(@ModelAttribute("ordersdto") ordersdto ordersdto,
+            BindingResult result) {
+        if (result.hasErrors()) {
+            return "admin/apps-ecommerce-orders";
+        }
+
+        Integer orderId = ordersdto.getOrderId();
+        orders existingOrder = orderrepo.findById(orderId).orElse(null);
+        if (existingOrder == null) {
+            result.addError(new FieldError("ordersdto", "OrderId", "Order not found!"));
+            return "admin/apps-ecommerce-orders";
+        }
+
+        existingOrder.setOrderStatus(ordersdto.getOrderStatus());
+
+        orderrepo.save(existingOrder);
+
+
+        return "redirect:/admin/apps-ecommerce-orders";
+    }
+
 }

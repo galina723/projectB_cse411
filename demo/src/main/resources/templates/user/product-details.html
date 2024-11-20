@@ -30,13 +30,13 @@
             <!--product details start-->
             <div class="product_details mb-60">
                 <div class="container">
-                    <div class="row" th:each="product : ${products}">
-                        <div class="col-lg-4 col-md-5">
+                    <div class="row">
+                        <div class="col-lg-5 col-md-5">
                             <div class="product-details-tab">
                                 <div id="img-1" class="zoomWrapper single-zoom">
                                     <a href="#">
-                                        <img id="zoom1" th:src="@{'/productimages/' + ${product.ProductMainImage}}"
-                                            th:attr="data-zoom-image=@{'/productimages/' + ${product.ProductMainImage}}"
+                                        <img id="zoom1" th:src="@{'/productimages/' + ${products.ProductMainImage}}"
+                                            th:attr="data-zoom-image=@{'/productimages/' + ${products.ProductMainImage}}"
                                             alt="big-1">
                                     </a>
                                 </div>
@@ -53,11 +53,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-8 col-md-7">
+                        <div class="col-lg-7 col-md-7">
                             <div class="product_d_right">
                                 <form id="add-to-cart-form" th:action="@{/user/cart/add}" method="post">
                                     <div class="productd_title_nav">
-                                        <h1><a href="#">[[${product.ProductName}]]</a></h1>
+                                        <h1><a href="#">[[${products.ProductName}]]</a></h1>
 
                                     </div>
 
@@ -72,16 +72,16 @@
                                         </ul>
                                     </div>
                                     <div class="price_box">
-                                        <span class="current_price">$[[${product.ProductPrice}]]</span>
+                                        <span class="current_price">$[[${products.ProductPrice}]]</span>
                                     </div>
                                     <div class="product_variant quantity">
                                         <label>quantity</label>
                                         <input min="1" max="100" value="1" type="number" name="quantity" required>
-                                        <input type="hidden" name="productId" th:value="${product.ProductId}">
+                                        <input type="hidden" name="productId" th:value="${products.ProductId}">
                                         <button class="button" type="submit"><i class="icon-bag icons"></i></button>
                                     </div>
                                     <div class="product_meta">
-                                        <span>Category: [[${product.ProductCategory}]]</span>
+                                        <span>Category: [[${products.ProductCategory}]]</span>
                                     </div>
 
                                 </form>
@@ -111,7 +111,7 @@
             <div class="product_d_info mb-57">
                 <div class="container">
                     <div class="row">
-                        <div class="col-12" th:each="product : ${products}">
+                        <div class="col-12">
                             <div class="product_d_inner">
                                 <div class="product_info_button">
                                     <ul class="nav" role="tablist">
@@ -119,87 +119,14 @@
                                             <a class="active" data-bs-toggle="tab" href="#info" role="tab"
                                                 aria-controls="info" aria-selected="false">Description</a>
                                         </li>
-
-                                        <!-- <li>
-                                        <a data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews"
-                                           aria-selected="false">Reviews (1)</a>
-                                    </li> -->
                                     </ul>
                                 </div>
                                 <div class="tab-content">
                                     <div class="tab-pane fade show active" id="info" role="tabpanel">
                                         <div class="product_info_content">
-                                            <p th:utext="${product.ProductDescription}"></p>
+                                            <p th:utext="${products.ProductDescription}"></p>
                                         </div>
                                     </div>
-
-
-                                    <!-- <div class="tab-pane fade" id="reviews" role="tabpanel">
-                                    <div class="reviews_wrapper">
-                                        <h2>1 review for Donec eu furniture</h2>
-                                        <div class="reviews_comment_box">
-                                            <div class="comment_thmb">
-                                                <img src="assets/img/blog/comment2.jpg" alt="">
-                                            </div>
-                                            <div class="comment_text">
-                                                <div class="reviews_meta">
-                                                    <div class="star_rating">
-                                                        <ul>
-                                                            <li><a href="#"><i class="ion-android-star"></i></a>
-                                                            </li>
-                                                            <li><a href="#"><i class="ion-android-star"></i></a>
-                                                            </li>
-                                                            <li><a href="#"><i class="ion-android-star"></i></a>
-                                                            </li>
-                                                            <li><a href="#"><i class="ion-android-star"></i></a>
-                                                            </li>
-                                                            <li><a href="#"><i class="ion-android-star"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                    <p><strong>admin </strong>- September 12, 2018</p>
-                                                    <span>roadthemes</span>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="comment_title">
-                                            <h2>Add a review </h2>
-                                            <p>Your email address will not be published. Required fields are marked
-                                            </p>
-                                        </div>
-                                        <div class="product_ratting mb-10">
-                                            <h3>Your rating</h3>
-                                            <ul>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                                <li><a href="#"><i class="ion-android-star"></i></a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="product_review_form">
-                                            <form action="#">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <label for="review_comment">Your review </label>
-                                                        <textarea name="comment" id="review_comment"></textarea>
-                                                    </div>
-                                                    <div class="col-lg-6 col-md-6">
-                                                        <label for="author">Name</label>
-                                                        <input id="author" type="text">
-
-                                                    </div>
-                                                    <div class="col-lg-6 col-md-6">
-                                                        <label for="email">Email </label>
-                                                        <input id="email" type="text">
-                                                    </div>
-                                                </div>
-                                                <button type="submit">Submit</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div> -->
                                 </div>
                             </div>
                         </div>
@@ -229,16 +156,13 @@
                                                 th:href="@{'/user/product-details/'+ ${relatedProduct.ProductId}}"><img
                                                     th:src="@{'/productimages/'+${relatedProduct.ProductMainImage}}"
                                                     alt=""></a>
-                                            <div class="label_product">
-                                                <span class="label_sale">-20%</span>
-                                            </div>
                                             <div class="action_links">
                                                 <ul>
                                                     <li class="add_to_cart" style="display: inline-block;">
                                                         <form id="add-to-cart-form" th:action="@{/user/cart/add}"
                                                             method="POST" style="display: inline;">
                                                             <input type="hidden" name="productId"
-                                                                th:value="${product.ProductId}" />
+                                                                th:value="${relatedProduct.ProductId}" />
                                                             <input type="hidden" name="quantity" value="1" />
                                                             <button type="submit" class="add_to_cart_button">
                                                                 <i class="icon-bag icons"></i>
