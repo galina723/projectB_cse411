@@ -20,13 +20,13 @@ public class admin {
     @Column(name = "password", length = 50, nullable = false)
     private String AdminPassword;
 
-    @Column(name = "address", length = 255, nullable = false)
+    @Column(name = "address", length = 255)
     private String AdminAddress;
 
-    @Column(name = "city", length = 50, nullable = false)
+    @Column(name = "city", length = 50)
     private String AdminCity;
 
-    @Column(name = "province", length = 50, nullable = false)
+    @Column(name = "province", length = 50)
     private String AdminProvince;
 
     @Column(name = "phone", length = 50, nullable = false)
