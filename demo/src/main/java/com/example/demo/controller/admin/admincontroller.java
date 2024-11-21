@@ -83,4 +83,12 @@ public class admincontroller {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("apps-ecommerce-sellers")
+    public String sellers(Model model) {
+
+        List<admin> admins = (List<admin>) adminrepo.findAll();
+        model.addAttribute("admins", admins);
+        return ("admin/apps-ecommerce-sellers");
+    }
+
 }

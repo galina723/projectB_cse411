@@ -71,13 +71,7 @@ public class customercontroller {
         return ("admin/apps-ecommerce-seller-details");
     }
 
-    @GetMapping("apps-ecommerce-sellers")
-    public String sellers(Model model) {
-
-        List<admin> admins = (List<admin>) adminrepo.findAll();
-        model.addAttribute("admins", admins);
-        return ("admin/apps-ecommerce-sellers");
-    }
+    
 
     @GetMapping("apps-invoices-details")
     public String invoicedetail() {
