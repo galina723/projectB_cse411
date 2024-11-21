@@ -121,7 +121,7 @@
                                                         <th class="sort" data-sort="address">Address</th>
                                                         <th class="sort" data-sort="city">City</th>
                                                         <th class="sort" data-sort="province">Province</th>
-                                                        <th class="sort" data-sort="status">Status</th>
+                                                        <th class="sort desc" data-sort="status">Status</th>
                                                         <th class="sort" data-sort="action">Action</th>
                                                     </tr>
                                                 </thead>
@@ -240,36 +240,53 @@
 </html>
 
 <script>
-    // document.addEventListener("DOMContentLoaded", function () {
-    //     // Select all headers with the "sort" class
-    //     document.querySelectorAll('th.sort').forEach(header => {
-    //         header.addEventListener('click', () => {
-    //             const table = header.closest('table');
-    //             const tbody = table.querySelector('tbody');
-    //             const rows = Array.from(tbody.querySelectorAll('tr'));
-    //             const columnIndex = Array.from(header.parentNode.children).indexOf(header);
+    document.addEventListener("DOMContentLoaded", function () {
+        let currentColumn = null;
+        let isAscending = true;
 
-    //             // Toggle ascending/descending sort order
-    //             const isAscending = header.classList.toggle('ascending');
+        // Add event listener to all headers with the "sort" class
+        document.querySelectorAll('th.sort').forEach(header => {
+            header.addEventListener('click', () => {
+                const table = header.closest('table');
+                const tbody = table.querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                const columnIndex = Array.from(header.parentNode.children).indexOf(header);
 
-    //             // Sort rows based on the text content in the clicked column
-    //             rows.sort((rowA, rowB) => {
-    //                 const cellA = rowA.children[columnIndex].textContent.trim();
-    //                 const cellB = rowB.children[columnIndex].textContent.trim();
+                // Toggle sorting direction if the same column is clicked
+                if (currentColumn === header) {
+                    isAscending = !isAscending;
+                } else {
+                    // Reset sorting direction and clear previous column's classes
+                    isAscending = true;
+                    document.querySelectorAll('th.sort').forEach(h => h.classList.remove('ascending', 'descending'));
+                    currentColumn = header;
+                }
 
-    //                 // Check if values are numeric for numeric sorting
-    //                 const comparison = !isNaN(cellA) && !isNaN(cellB)
-    //                     ? cellA - cellB
-    //                     : cellA.localeCompare(cellB, undefined, { numeric: true });
+                // Set classes for current sort direction
+                header.classList.toggle('ascending', isAscending);
+                header.classList.toggle('descending', !isAscending);
 
-    //                 return isAscending ? comparison : -comparison;
-    //             });
+                // Sort rows based on text content in the clicked column
+                rows.sort((rowA, rowB) => {
+                    const cellA = rowA.children[columnIndex].textContent.trim();
+                    const cellB = rowB.children[columnIndex].textContent.trim();
 
-    //             // Re-attach sorted rows to the tbody
-    //             rows.forEach(row => tbody.appendChild(row));
-    //         });
-    //     });
-    // });
+                    // Determine sort type (date, numeric, or string) and compare
+                    const comparison = !isNaN(Date.parse(cellA)) && !isNaN(Date.parse(cellB))
+                        ? new Date(cellA) - new Date(cellB)
+                        : (!isNaN(cellA) && !isNaN(cellB))
+                            ? parseFloat(cellA) - parseFloat(cellB)
+                            : cellA.localeCompare(cellB, undefined, { numeric: true });
+
+                    return isAscending ? comparison : -comparison;
+                });
+
+                // Re-append rows in sorted order
+                rows.forEach(row => tbody.appendChild(row));
+            });
+        });
+    });
+
 
     document.addEventListener('DOMContentLoaded', function () {
         const editButtons = document.querySelectorAll('.edit-customer-btn');
