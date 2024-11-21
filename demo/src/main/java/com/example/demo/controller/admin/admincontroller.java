@@ -1,29 +1,15 @@
 package com.example.demo.controller.admin;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.admin;
-import com.example.demo.model.blogs;
-import com.example.demo.model.blogsdto;
-import com.example.demo.model.customers;
 import com.example.demo.otherfunction.encryption;
 import com.example.demo.repository.*;
 
@@ -62,25 +48,46 @@ public class admincontroller {
 
     @GetMapping("/auth-signin-basic")
     public String dashboard() {
+        if (adminrepo.existsByEmail("yenhopie28@gmail.com") == false) {
+            admin admin = new admin();
+            admin.setAdminName("yenhopie28");
+            admin.setAdminEmail("yenhopie28@gmail.com");
+            String hashPassword = encryption.encrypt("yenhopie28");
+            admin.setAdminPassword(hashPassword);
+            admin.setAdminPhone("0123456789");
+            admin.setAdminStatus("Active");
+            adminrepo.save(admin);
+        }
         return "admin/auth-signin-basic";
     }
 
     @PostMapping("/login/success")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> loginSubmit(@RequestParam("AdminName") String name,
+    public ResponseEntity<Map<String, Object>> loginSubmit(@RequestParam("AdminEmail") String email,
             @RequestParam("AdminPassword") String password, HttpSession session) {
 
         Map<String, Object> response = new HashMap<>();
-        // admin admin = adminrepo.findByAdminName(name);
+        admin ad = adminrepo.findByAdminEmail(email);
 
-        // if (admin == null || !encryption.matches(password, admin.getAdminPassword())) {
-        //     response.put("success", false);
-        //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        // }
+        if (ad != null) {
+            if (ad.getAdminEmail().equals("yenhopie28@gmail.com")
+                    && encryption.matches(password, ad.getAdminPassword())) {
+                session.setAttribute("loginAdmin", ad.getAdminId());
+                response.put("success", true);
+                return ResponseEntity.ok(response);
+            } else if (encryption.matches(password, ad.getAdminPassword())) {
+                session.setAttribute("loginAdmin2", ad.getAdminId());
+                response.put("success", true);
+                return ResponseEntity.ok(response);
+            } else {
+                response.put("success", false);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+        } else {
+            response.put("success", false);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
 
-        // session.setAttribute("loginAdmin", admin.getAdminId());
-        response.put("success", true);
-        return ResponseEntity.ok(response);
     }
 
     @GetMapping("apps-ecommerce-sellers")
