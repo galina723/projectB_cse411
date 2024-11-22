@@ -37,10 +37,7 @@ public class customercontroller {
     @Autowired
     blogrepository blogrepo;
 
-    @GetMapping("index")
-    public String dashboard() {
-        return ("admin/index");
-    }
+
 
     @GetMapping("apps-ecommerce-customers")
     public String customers(Model model) {
