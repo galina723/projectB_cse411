@@ -12,4 +12,7 @@ public interface adminrepository extends CrudRepository<admin, Integer> {
 
     @Query("SELECT a FROM admin a WHERE a.AdminEmail = ?1")
     admin findByAdminEmail(String email);
+
+    @Query(value = "SELECT COALESCE(MAX(id), 0) + 1 FROM admins", nativeQuery = true)
+    int findNextAdminId();
 }

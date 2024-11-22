@@ -35,10 +35,31 @@ public class productcontroller {
     @Autowired
     cartrepository cartrepo;
 
-    // add product
+    @Autowired
+    adminrepository adminrepo;
 
+    @ModelAttribute("loggedInAdminName")
+    public String getLoggedInAdminName(HttpSession session) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
+        if (adminId != null) {
+            return adminrepo.findById(adminId).get().getAdminName();
+        } else if (superId != null) {
+            return adminrepo.findById(superId).get().getAdminName();
+        } else {
+            return null;
+        }
+    }
     @GetMapping("apps-ecommerce-products")
-    public String products(Model model) {
+    public String products(Model model, RedirectAttributes redirectAttributes, HttpSession session) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
+        if (adminId == null && superId == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to view this page.");
+            return "redirect:/admin/auth-signin-basic";
+        }
         List<products> productList = (List<products>) productrepo.findAll();
 
         List<Integer> productIdsInCart = new ArrayList<>();
@@ -51,7 +72,14 @@ public class productcontroller {
     }
 
     @GetMapping("apps-ecommerce-add-product")
-    public String addproduct(Model model) {
+    public String addproduct(Model model, RedirectAttributes redirectAttributes, HttpSession session) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
+        if (adminId == null && superId == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to view this page.");
+            return "redirect:/admin/auth-signin-basic";
+        }
         List<categories> categories = caterepo.findAllByIsActiveTrue();
         model.addAttribute("categories", categories);
 
@@ -151,7 +179,14 @@ public class productcontroller {
     }
 
     @GetMapping("/apps-ecommerce-edit-product")
-    public String showEditForm(HttpSession session, Model model) {
+    public String showEditForm(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
+        if (adminId == null && superId == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to view this page.");
+            return "redirect:/admin/auth-signin-basic";
+        }
         List<categories> categories = caterepo.findAllByIsActiveTrue();
         model.addAttribute("categories", categories);
         Integer productId = (Integer) session.getAttribute("currentProductId");

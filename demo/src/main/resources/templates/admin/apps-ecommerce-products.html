@@ -106,21 +106,20 @@
                                             <table class="table align-middle" id="customerTable">
                                                 <thead class="table-light text-muted">
                                                     <tr>
-                                                        
                                                         <th class="sortt">ID</th>
                                                         <th class="sort" data-sort="customer_name">Name</th>
                                                         <th class="image">Main Image</th>
                                                         <th class="sort" data-sort="category">Category</th>
                                                         <th class="sort" data-sort="phone">Price</th>
                                                         <th class="sort" data-sort="quantity">Quantity</th>
-                                                        =<th class="sort" data-sort="date">Created Date</th>
+                                                        <th class="sort" data-sort="date">Created Date</th>
                                                         <th class="sort desc" data-sort="status">Status</th>
                                                         <th class="sortt">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="list form-check-all">
                                                     <tr th:each="product : ${products}">
-                                                        
+
                                                         <td class="id">[[${product.ProductId}]]</td>
                                                         <td class="customer_name">[[${product.ProductName}]]</td>
                                                         <td class="image">
