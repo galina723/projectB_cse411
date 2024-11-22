@@ -107,7 +107,7 @@
                                             <table class="table align-middle" id="customerTable">
                                                 <thead class="table-light text-muted">
                                                     <tr>
-                                                        
+
                                                         <th class="sortt">ID</th>
                                                         <th class="sort" data-sort="name">Name</th>
                                                         <th class="sortt" data-sort="quantity">Quantity</th>
@@ -117,7 +117,7 @@
                                                 </thead>
                                                 <tbody class="list form-check-all">
                                                     <tr th:each="category : ${categories}">
-                                                        
+
                                                         <td class="id">[[${category.CategoryId}]]</td>
                                                         <td class="name">[[${category.CategoryName}]]</td>
                                                         <td class="quantity">[[${category.CategoryQuantity}]]</td>
@@ -233,8 +233,8 @@
                                                     <form th:action="@{/admin/editCategory}" method="post"
                                                         th:object="${categoriesdto}" autocomplete="off">
                                                         <div class="modal-body">
-                                                            <input type ="hidden" name="CategoryId" th:field="*{CategoryId}"
-                                                                id="categoryIdField" />
+                                                            <input type="hidden" name="CategoryId"
+                                                                th:field="*{CategoryId}" id="categoryIdField" />
                                                             <div class="mb-3">
                                                                 <label for="categoryname-field"
                                                                     class="form-label">Category Name</label>

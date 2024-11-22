@@ -81,7 +81,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             var loginForm = document.getElementById('loginForm');
             loginForm.addEventListener('submit', function (e) {
-                e.preventDefault(); // Prevent the default form submission
+                e.preventDefault(); 
 
                 const formData = new FormData(loginForm);
                 const actionUrl = loginForm.action;
@@ -94,26 +94,24 @@
                     .then(response => response.json().then(data => ({ status: response.status, body: data })))
                     .then(({ status, body }) => {
                         if (status === 200 && body.success) {
-                            window.location.href = '/user/index'; // Redirect on success
+                            window.location.href = '/user/index';
                         } else {
-                            // Show error notification with custom message
                             Toastify({
                                 text: body.message || "Login failed. Please try again.",
-                                duration: 3000,
+                                duration: 1000,
                                 gravity: "top",
                                 position: 'right',
-                                backgroundColor: "#f44336", // Red for error
+                                backgroundColor: "#f44336",
                             }).showToast();
                         }
                     })
                     .catch(error => {
-                        // Show error notification in case of network failure or server issue
                         Toastify({
                             text: "Error: " + (error.statusText || "Something went wrong"),
-                            duration: 3000,
+                            duration: 1000,
                             gravity: "top",
                             position: 'right',
-                            backgroundColor: "#f44336", // Red for error
+                            backgroundColor: "#f44336",
                         }).showToast();
                     });
             });

@@ -32,7 +32,7 @@ public class admin {
     @Column(name = "phone", length = 50, nullable = false)
     private String AdminPhone;
 
-    @Column(name = "status", length = 50, nullable = false)
+    @Column(name = "status", length = 50)
     private String AdminStatus;
 
     public int getAdminId() {

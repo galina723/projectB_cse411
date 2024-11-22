@@ -34,10 +34,30 @@ public class blogcontroller {
     @Autowired
     blogrepository blogrepo;
 
-    // list blog
 
+    @ModelAttribute("loggedInAdminName")
+    public String getLoggedInAdminName(HttpSession session) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
+        if (adminId != null) {
+            return adminrepo.findById(adminId).get().getAdminName();
+        } else if (superId != null) {
+            return adminrepo.findById(superId).get().getAdminName();
+        } else {
+            return null;
+        }
+    }
+    
     @GetMapping("apps-ecommerce-blog")
-    public String blog(Model model) {
+    public String blog(Model model, RedirectAttributes redirectAttributes, HttpSession session) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
+        if (adminId == null && superId == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to view this page.");
+            return "redirect:/admin/auth-signin-basic";
+        }
         List<blogs> blogs = (List<blogs>) blogrepo.findAll();
         model.addAttribute("blogs", blogs);
         return ("admin/apps-ecommerce-blog");
@@ -46,7 +66,14 @@ public class blogcontroller {
     // add blog
 
     @GetMapping("apps-ecommerce-create-blog")
-    public String addproduct(Model model) {
+    public String addproduct(Model model, RedirectAttributes redirectAttributes, HttpSession session) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
+        if (adminId == null && superId == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to view this page.");
+            return "redirect:/admin/auth-signin-basic";
+        }
         List<blogs> blogs = (List<blogs>) blogrepo.findAll();
         model.addAttribute("blogs", blogs);
 
@@ -124,7 +151,14 @@ public class blogcontroller {
     }
 
     @GetMapping("/apps-ecommerce-edit-blog")
-    public String showEditForm(HttpSession session, Model model) {
+    public String showEditForm(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
+        if (adminId == null && superId == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to view this page.");
+            return "redirect:/admin/auth-signin-basic";
+        }
         Integer blogId = (Integer) session.getAttribute("currentBlogId");
         if (blogId == null) {
             model.addAttribute("errorMessage", "No blog selected!");

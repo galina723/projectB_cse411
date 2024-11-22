@@ -11,8 +11,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("admin")
@@ -30,11 +34,36 @@ public class ordercontroller {
     @Autowired
     customerrepository customerrepo;
 
+    @Autowired
+    adminrepository adminrepo;
+
+    @ModelAttribute("loggedInAdminName")
+    public String getLoggedInAdminName(HttpSession session) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
+        if (adminId != null) {
+            return adminrepo.findById(adminId).get().getAdminName();
+        } else if (superId != null) {
+            return adminrepo.findById(superId).get().getAdminName();
+        } else {
+            return null;
+        }
+    }
+    
     @GetMapping("apps-ecommerce-order-details/{id}")
-    public String orderdetail(@PathVariable("id") int id, Model model) {
+    public String orderdetail(@PathVariable("id") int id, Model model, RedirectAttributes redirectAttributes,
+            HttpSession session) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
+        if (adminId == null && superId == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to view this page.");
+            return "redirect:/admin/auth-signin-basic";
+        }
         orders order = orderrepo.findById(id).orElse(null);
         customers customer = customerrepo.findById(order.getCustomer().getCustomerId()).orElse(null);
-        
+
         List<orderdetails> orderDetailsList = orderdetailsrepo.findByOrderId(id);
         List<orderdetailsdto> orderDetailsDTOs = new ArrayList<>();
         for (orderdetails orderDetail : orderDetailsList) {
@@ -58,7 +87,14 @@ public class ordercontroller {
     }
 
     @GetMapping("apps-ecommerce-orders")
-    public String orders(Model model) {
+    public String orders(Model model, RedirectAttributes redirectAttributes, HttpSession session) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
+        if (adminId == null && superId == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to view this page.");
+            return "redirect:/admin/auth-signin-basic";
+        }
         List<orders> order = (List<orders>) orderrepo.findAll();
         model.addAttribute("orders", order);
         return ("admin/apps-ecommerce-orders");
@@ -81,7 +117,6 @@ public class ordercontroller {
         existingOrder.setOrderStatus(ordersdto.getOrderStatus());
 
         orderrepo.save(existingOrder);
-
 
         return "redirect:/admin/apps-ecommerce-orders";
     }

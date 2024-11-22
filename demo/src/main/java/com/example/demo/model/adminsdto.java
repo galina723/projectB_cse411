@@ -1,69 +1,67 @@
 package com.example.demo.model;
 
 public class adminsdto {
-
-    private int adminId;
-    private String adminName;
-    private String adminEmail;
-    private String adminPassword;
-    private String adminAddress;
-    private String adminPhone;
-    private String adminStatus;
-
+    private int AdminId;
+    private String AdminEmail;
+    private String AdminName;
+    private String AdminPassword;
+    private String AdminAddress;
+    private String AdminCity;
+    private String AdminProvince;
+    private String AdminPhone;
+    private String AdminStatus;
     public int getAdminId() {
-        return adminId;
+        return AdminId;
     }
-
     public void setAdminId(int adminId) {
-        adminId = adminId;
+        AdminId = adminId;
     }
-
-    public String getAdminName() {
-        return adminName;
-    }
-
-    public void setAdminName(String adminName) {
-        adminName = adminName;
-    }
-
     public String getAdminEmail() {
-        return adminEmail;
+        return AdminEmail;
     }
-
     public void setAdminEmail(String adminEmail) {
-        adminEmail = adminEmail;
+        AdminEmail = adminEmail;
     }
-
+    public String getAdminName() {
+        return AdminName;
+    }
+    public void setAdminName(String adminName) {
+        AdminName = adminName;
+    }
     public String getAdminPassword() {
-        return adminPassword;
+        return AdminPassword;
     }
-
     public void setAdminPassword(String adminPassword) {
-        adminPassword = adminPassword;
+        AdminPassword = adminPassword;
     }
-
     public String getAdminAddress() {
-        return adminAddress;
+        return AdminAddress;
     }
-
     public void setAdminAddress(String adminAddress) {
-        adminAddress = adminAddress;
+        AdminAddress = adminAddress;
     }
-
+    public String getAdminCity() {
+        return AdminCity;
+    }
+    public void setAdminCity(String adminCity) {
+        AdminCity = adminCity;
+    }
+    public String getAdminProvince() {
+        return AdminProvince;
+    }
+    public void setAdminProvince(String adminProvince) {
+        AdminProvince = adminProvince;
+    }
     public String getAdminPhone() {
-        return adminPhone;
+        return AdminPhone;
     }
-
     public void setAdminPhone(String adminPhone) {
-        adminPhone = adminPhone;
+        AdminPhone = adminPhone;
     }
-
     public String getAdminStatus() {
-        return adminStatus;
+        return AdminStatus;
     }
-
     public void setAdminStatus(String adminStatus) {
-        adminStatus = adminStatus;
+        AdminStatus = adminStatus;
     }
-
 }

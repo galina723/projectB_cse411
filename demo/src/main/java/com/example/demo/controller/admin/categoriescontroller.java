@@ -18,6 +18,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/admin")
 public class categoriescontroller {
@@ -28,8 +30,32 @@ public class categoriescontroller {
     @Autowired
     productrepository productrepo;
 
+    @Autowired
+    adminrepository adminrepo;
+    
+    @ModelAttribute("loggedInAdminName")
+    public String getLoggedInAdminName(HttpSession session) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
+        if (adminId != null) {
+            return adminrepo.findById(adminId).get().getAdminName();
+        } else if (superId != null) {
+            return adminrepo.findById(superId).get().getAdminName();
+        } else {
+            return null;
+        }
+    }
+    
     @GetMapping("/apps-ecommerce-category")
-    public String categories(Model model) {
+    public String categories(Model model, RedirectAttributes redirectAttributes, HttpSession session) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
+        if (adminId == null && superId == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to view this page.");
+            return "redirect:/admin/auth-signin-basic";
+        }
         List<Object[]> results = caterepo.findCategoriesWithTotalQuantity();
         List<categories> categoriesList = new ArrayList<>();
 
@@ -63,7 +89,7 @@ public class categoriescontroller {
         if (categoriesdto.getCategoryStatus().equalsIgnoreCase("Active")) {
             newCategory.setActive(true);
         } else {
-            newCategory.setActive(false); 
+            newCategory.setActive(false);
         }
         caterepo.save(newCategory);
 

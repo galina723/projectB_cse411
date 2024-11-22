@@ -2,14 +2,13 @@ package com.example.demo.controller.admin;
 
 import java.util.List;
 
-import javax.naming.Binding;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.*;
 import com.example.demo.repository.adminrepository;
@@ -17,6 +16,8 @@ import com.example.demo.repository.blogrepository;
 import com.example.demo.repository.customerrepository;
 import com.example.demo.repository.orderrepository;
 import com.example.demo.repository.productrepository;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/admin")
@@ -37,10 +38,42 @@ public class customercontroller {
     @Autowired
     blogrepository blogrepo;
 
+    @ModelAttribute("loggedInAdminName")
+    public String getLoggedInAdminName(HttpSession session) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
 
+        if (adminId != null) {
+            return adminrepo.findById(adminId).get().getAdminName();
+        } else if (superId != null) {
+            return adminrepo.findById(superId).get().getAdminName();
+        } else {
+            return null;
+        }
+    }
+    
+    @GetMapping("index")
+    public String dashboard(Model model, RedirectAttributes redirectAttributes, HttpSession session) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
+        if (adminId == null && superId == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to view this page.");
+            return "redirect:/admin/auth-signin-basic";
+        }
+        return ("admin/index");
+    }
 
     @GetMapping("apps-ecommerce-customers")
-    public String customers(Model model) {
+    public String customers(Model model, RedirectAttributes redirectAttributes, HttpSession session) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
+        if (adminId == null && superId == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to view this page.");
+            return "redirect:/admin/auth-signin-basic";
+        }
+
         List<customers> customers = (List<customers>) customerrepo.findAll();
         model.addAttribute("customers", customers);
         return ("admin/apps-ecommerce-customers");
@@ -61,18 +94,6 @@ public class customercontroller {
         customerrepo.save(existingCustomer);
 
         return "redirect:/admin/apps-ecommerce-customers";
-    }
-
-    @GetMapping("apps-ecommerce-seller-details")
-    public String sellerdetail() {
-        return ("admin/apps-ecommerce-seller-details");
-    }
-
-    
-
-    @GetMapping("apps-invoices-details")
-    public String invoicedetail() {
-        return ("admin/apps-invoices-details");
     }
 
     @GetMapping("pages-profile-settings")
