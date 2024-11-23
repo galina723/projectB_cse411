@@ -30,13 +30,10 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="mb-3">
-                                            <label class="form-label" for="blog-title-input">Blog ID</label>
                                             <input type="hidden" class="form-control" id="formAction" name="formAction"
                                                 value="add">
-                                            <input type="text" class="form-control d-none" id="blog-id-input">
-                                            <input type="text" class="form-control" id="blog-title-input" value=""
+                                            <input type="hidden" class="form-control" id="blog-title-input" value=""
                                                 placeholder="Enter blog ID" required="" th:field="*{BlogId}" readonly>
-                                            <div class="invalid-feedback">Please Enter a blog ID.</div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="blog-title-input">Title</label>
@@ -109,9 +106,9 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="mb-3">
-                                            <label class="form-label" for="author-input">Author ID</label>
+                                            <label class="form-label" for="author-input">Author</label>
                                             <input type="text" class="form-control" id="author-input"
-                                                placeholder="Enter an author id" required="" th:field="*{BlogPostBy}">
+                                                placeholder="Enter an author" th:value="${loggedInAdminName}" readonly>
                                             <div class="invalid-feedback">Please Enter an author id.
                                             </div>
                                         </div>

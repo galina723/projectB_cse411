@@ -137,7 +137,7 @@ public class UserController {
     public String saveCustomer(@ModelAttribute customers customer) {
         String hashedPassword = encryption.encrypt(customer.getCustomerPassword());
         customer.setCustomerPassword(hashedPassword);
-        customer.setCustomerStatus("active");
+        customer.setCustomerStatus("Active");
 
         customerrepo.save(customer);
         return "redirect:/user/login";

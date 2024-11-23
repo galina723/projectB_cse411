@@ -4,12 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.model.customers;
-import com.example.demo.model.products;
+import com.example.demo.model.*;
 import com.example.demo.otherfunction.ExportCSVService;
-import com.example.demo.otherfunction.ExportPDFService;
-import com.example.demo.repository.customerrepository;
-import com.example.demo.repository.productrepository;
+import com.example.demo.repository.*;
 
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,29 +25,52 @@ public class ExportController {
     @Autowired
     private productrepository productrepo;
 
+    @Autowired
+    private categoriesrepository caterepo;
+
+    @Autowired
+    private blogrepository blogrepo;
+
+    @Autowired
+    private adminrepository adminrepo;
+
+    @Autowired
+    private orderrepository orderrepo;
 
     @GetMapping("/export/customers/csv")
     public void exportCSVcustomer(HttpServletResponse response) throws IOException {
-        List<customers> customers = (List<com.example.demo.model.customers>) customerrepo.findAll();
+        List<customers> customers = (List<customers>) customerrepo.findAll();
         exportService.exportToCSVforcustomer(response, customers);
     }
 
-    @GetMapping("/export/customers/pdf")
-    public void exportcustomerToPDF(HttpServletResponse response) throws IOException {
-        List<customers> custo = (List<com.example.demo.model.customers>) customerrepo.findAll();
-        ExportPDFService.exportCustomerToPDF(response, custo);
-    }
 
     @GetMapping("/export/products/csv")
     public void exportCSVproduct(HttpServletResponse response) throws IOException {
-        List<products> pro = (List<com.example.demo.model.products>) productrepo.findAll();
+        List<products> pro = (List<products>) productrepo.findAll();
         exportService.exportToCSVforproduct(response, pro);
     }
 
-    @GetMapping("/export/products/pdf")
-    public void exportproductToPDF(HttpServletResponse response) throws IOException {
-        List<products> pro = (List<com.example.demo.model.products>) productrepo.findAll();
-        ExportPDFService.exportProductPDF(response, pro);
+    @GetMapping("/export/categories/csv")
+    public void exportCSVcategory(HttpServletResponse response) throws IOException {
+        List<categories> cate = (List<categories>) caterepo.findAll();
+        exportService.exportToCSVforcategory(response, cate);
     }
 
+    @GetMapping("/export/blogs/csv")
+    public void exportCSVblog(HttpServletResponse response) throws IOException {
+        List<blogs> bl = (List<blogs>) blogrepo.findAll();
+        exportService.exportToCSVforblog(response, bl);
+    }
+
+    @GetMapping("/export/admins/csv")
+    public void exportCSVadmin(HttpServletResponse response) throws IOException {
+        List<admin> ad = (List<admin>) adminrepo.findAll();
+        exportService.exportToCSVforadmin(response, ad);
+    }
+
+    @GetMapping("/export/orders/csv")
+    public void exportCSVorder(HttpServletResponse response) throws IOException {
+        List<orders> od = (List<orders>) orderrepo.findAll();
+        exportService.exportToCSVfororder(response, od);
+    }
 }

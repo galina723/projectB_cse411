@@ -43,20 +43,11 @@
                                                     </button>
                                                 </form>
 
-                                                <div class="dropdown">
-                                                    <button class="btn btn-info dropdown-toggle" type="button"
-                                                        id="exportDropdown" data-bs-toggle="dropdown"
-                                                        aria-expanded="false">
-                                                        <i class="ri-file-download-line align-bottom me-1"></i> Export
-                                                    </button>
-                                                    <ul class="dropdown-menu" aria-labelledby="exportDropdown">
-                                                        <!-- Product Export Options -->
-                                                        <li><a class="dropdown-item" href="/export/products/csv">Export
-                                                                as CSV</a></li>
-                                                        <li><a class="dropdown-item" href="/export/products/pdf">Export
-                                                                as PDF</a></li>
-                                                    </ul>
-                                                </div>
+                                                <button class="btn btn-info" type="button" id="exportButton"
+                                                    onclick="window.location.href='/export/products/csv'">
+                                                    <i class="ri-file-download-line align-bottom me-1"></i> Export
+                                                </button>
+
                                             </div>
                                         </div>
                                     </div>

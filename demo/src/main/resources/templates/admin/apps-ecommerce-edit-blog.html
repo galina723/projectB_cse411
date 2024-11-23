@@ -110,7 +110,7 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="author-input">Author ID</label>
                                             <input type="text" class="form-control" id="author-input"
-                                                placeholder="Enter an author id" required="" th:field="*{BlogPostBy}">
+                                                placeholder="Enter an author id" th:value="${loggedInAdminName}" readonly>
                                             <div class="invalid-feedback">Please Enter an author id.
                                             </div>
                                         </div>
