@@ -9,10 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.*;
-import com.example.demo.model.customers;
-import com.example.demo.model.products;
 import com.example.demo.otherfunction.encryption;
 import com.example.demo.repository.*;
 import org.springframework.data.domain.Pageable;
@@ -51,7 +50,15 @@ public class indexcontroller {
     orderdetailrepository orderdetailsrepo;
 
     @GetMapping("index")
-    public String dashboard(Model model) {
+    public String dashboard(Model model, RedirectAttributes redirectAttributes, HttpSession session) {
+
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
+        if (adminId == null && superId == null) {
+            redirectAttributes.addFlashAttribute("loginRequired", "Please log in to view this page.");
+            return "redirect:/admin/auth-signin-basic";
+        }
         Long totalOrderAmount = orderrepo.findTotalOrderAmount();
         model.addAttribute("totalOrderAmount", totalOrderAmount);
 
