@@ -134,13 +134,18 @@ public class UserController {
     }
 
     @PostMapping("/register/save")
-    public String saveCustomer(@ModelAttribute customers customer) {
-        String hashedPassword = encryption.encrypt(customer.getCustomerPassword());
-        customer.setCustomerPassword(hashedPassword);
-        customer.setCustomerStatus("Active");
-
-        customerrepo.save(customer);
+    public String saveCustomer(@ModelAttribute customers customer,
+            @RequestParam("confirmPassword") String confirmPassword, Model model) {
+        if (customer.getCustomerPassword().equals(confirmPassword)) {
+            String hashedPassword = encryption.encrypt(customer.getCustomerPassword());
+            customer.setCustomerPassword(hashedPassword);
+            customer.setCustomerStatus("Active");
+            customerrepo.save(customer);
         return "redirect:/user/login";
+        } else {
+            model.addAttribute("error", "Passwords do not match.");
+            return "user/register";
+        }
     }
 
     @GetMapping("/login")
@@ -155,7 +160,7 @@ public class UserController {
 
         Map<String, Object> response = new HashMap<>();
         customers custo = customerrepo.findByCemail(email);
-        
+
         if (custo == null) {
             response.put("success", false);
             response.put("message", "Invalid email or password.");
@@ -245,7 +250,6 @@ public class UserController {
 
         if (!newPassword.equals(confirmPassword)) {
             model.addAttribute("error", "The passwords do not match, please try again.");
-            return "user/reset-password";
         }
 
         String encodedPassword = encryption.encrypt(newPassword);
