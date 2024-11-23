@@ -89,7 +89,7 @@
                                                 <p>Payment Method: [[${orders.OrderPaymentMethod}]]</p>
                                                 <span
                                                     th:class="${orders.OrderStatus == 'Pending' ? 'badge bg-warning text-white text-uppercase' : 
-                                                                orders.OrderStatus == 'In Progress' ? 'badge bg-info text-white text-uppercase' : ''}">
+                                                                orders.OrderStatus == 'Inprogress' ? 'badge bg-success text-white text-uppercase' : ''}">
                                                     <p th:text="${orders.OrderStatus}" class="m-0"></p>
                                                 </span>
                                             </div>

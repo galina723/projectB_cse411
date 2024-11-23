@@ -44,9 +44,10 @@
                                                         class="ri-add-line align-bottom me-1"></i> Add Category</button>
 
 
-                                                <button type="button" class="btn btn-info"><i
-                                                        class="ri-file-download-line align-bottom me-1"></i>
-                                                    Export</button>
+                                                <button class="btn btn-info" type="button" id="exportButton"
+                                                    onclick="window.location.href='/export/categories/csv'">
+                                                    <i class="ri-file-download-line align-bottom me-1"></i> Export
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -352,51 +353,51 @@
         });
 
         document.addEventListener("DOMContentLoaded", function () {
-        let currentColumn = null;
-        let isAscending = true;
+            let currentColumn = null;
+            let isAscending = true;
 
-        // Select all headers with the "sort" class
-        document.querySelectorAll('th.sort').forEach(header => {
-            header.addEventListener('click', () => {
-                const table = header.closest('table');
-                const tbody = table.querySelector('tbody');
-                const rows = Array.from(tbody.querySelectorAll('tr'));
-                const columnIndex = Array.from(header.parentNode.children).indexOf(header);
+            // Select all headers with the "sort" class
+            document.querySelectorAll('th.sort').forEach(header => {
+                header.addEventListener('click', () => {
+                    const table = header.closest('table');
+                    const tbody = table.querySelector('tbody');
+                    const rows = Array.from(tbody.querySelectorAll('tr'));
+                    const columnIndex = Array.from(header.parentNode.children).indexOf(header);
 
-                // If the same column is clicked, toggle sort direction
-                if (currentColumn === header) {
-                    isAscending = !isAscending;
-                } else {
-                    // Otherwise, set to ascending and clear classes from other headers
-                    isAscending = true;
-                    document.querySelectorAll('th.sort').forEach(h => h.classList.remove('ascending', 'descending'));
-                    currentColumn = header;
-                }
+                    // If the same column is clicked, toggle sort direction
+                    if (currentColumn === header) {
+                        isAscending = !isAscending;
+                    } else {
+                        // Otherwise, set to ascending and clear classes from other headers
+                        isAscending = true;
+                        document.querySelectorAll('th.sort').forEach(h => h.classList.remove('ascending', 'descending'));
+                        currentColumn = header;
+                    }
 
-                // Update the header class for the sort direction
-                header.classList.toggle('ascending', isAscending);
-                header.classList.toggle('descending', !isAscending);
+                    // Update the header class for the sort direction
+                    header.classList.toggle('ascending', isAscending);
+                    header.classList.toggle('descending', !isAscending);
 
-                // Sort rows based on the text content in the clicked column
-                rows.sort((rowA, rowB) => {
-                    const cellA = rowA.children[columnIndex].textContent.trim();
-                    const cellB = rowB.children[columnIndex].textContent.trim();
+                    // Sort rows based on the text content in the clicked column
+                    rows.sort((rowA, rowB) => {
+                        const cellA = rowA.children[columnIndex].textContent.trim();
+                        const cellB = rowB.children[columnIndex].textContent.trim();
 
-                    // Handle date sorting (if applicable)
-                    const comparison = !isNaN(Date.parse(cellA)) && !isNaN(Date.parse(cellB))
-                        ? new Date(cellA) - new Date(cellB)
-                        : (!isNaN(cellA) && !isNaN(cellB))
-                            ? cellA - cellB
-                            : cellA.localeCompare(cellB, undefined, { numeric: true });
+                        // Handle date sorting (if applicable)
+                        const comparison = !isNaN(Date.parse(cellA)) && !isNaN(Date.parse(cellB))
+                            ? new Date(cellA) - new Date(cellB)
+                            : (!isNaN(cellA) && !isNaN(cellB))
+                                ? cellA - cellB
+                                : cellA.localeCompare(cellB, undefined, { numeric: true });
 
-                    return isAscending ? comparison : -comparison;
+                        return isAscending ? comparison : -comparison;
+                    });
+
+                    // Re-attach sorted rows to the tbody
+                    rows.forEach(row => tbody.appendChild(row));
                 });
-
-                // Re-attach sorted rows to the tbody
-                rows.forEach(row => tbody.appendChild(row));
             });
         });
-    });
     </script>
 </body>
 

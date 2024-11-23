@@ -43,9 +43,9 @@
                                                         <i class="ri-add-line align-bottom me-1"></i> Create Blog
                                                     </button>
                                                 </form>
-                                                <button type="button" class="btn btn-info"><i
-                                                        class="ri-file-download-line align-bottom me-1"></i>
-                                                    Export
+                                                <button class="btn btn-info" type="button" id="exportButton"
+                                                    onclick="window.location.href='/export/blogs/csv'">
+                                                    <i class="ri-file-download-line align-bottom me-1"></i> Export
                                                 </button>
                                             </div>
                                         </div>
@@ -109,14 +109,14 @@
                                                 <thead class="table-light text-muted">
                                                     <tr>
 
-                                                        <th class="sortt">ID</th>
-                                                        <th class="sort" data-sort="title">Title</th>
-                                                        <th class="sortt">Image</th>
+                                                        <th>ID</th>
+                                                        <th class="sort" data-sort="customer_name">Title</th>
+                                                        <th>Image</th>
                                                         <th class="sort" data-sort="date">Created Date</th>
-                                                        <th class="sort" data-sort="author">Author</th>
-                                                        <th class="sortt">Tag</th>
+                                                        <th class="sort" data-sort="customer_name">Author</th>
+                                                        <th>Tag</th>
                                                         <th class="sort" data-sort="status">Status</th>
-                                                        <th class="sortt">Action</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="list form-check-all">
@@ -124,7 +124,7 @@
 
                                                         <td class="id">[[${blog.BlogId}]]
                                                         </td>
-                                                        <td class="title">[[${blog.BlogTitle}]]</td>
+                                                        <td class="customer_name">[[${blog.BlogTitle}]]</td>
                                                         <td class="image img-fluid d">
                                                             <div class="avatar-sm bg-light rounded p-1">
                                                                 <img th:src="@{'/blogimages/' + ${blog.BlogImage}}"
@@ -135,7 +135,7 @@
                                                         <td class="date">
                                                             [[${blog.BlogCreateDate}]]
                                                         </td>
-                                                        <td class="author">[[${blog.BlogPostBy}]]</td>
+                                                        <td class="customer_name">[[${loggedInAdminName}]]</td>
                                                         <td class="tag">[[${blog.Blogtag}]]</td>
                                                         <td class="status">
                                                             <span th:if="${blog.BlogStatus == 'Published'}"

@@ -43,9 +43,9 @@
                                                     th:if="${session.loginSuper != null}"><i
                                                         class="ri-add-line align-bottom me-1"></i> Add Admin</button>
 
-                                                <button type="button" class="btn btn-info"><i
-                                                        class="ri-file-download-line align-bottom me-1"></i>
-                                                    Export
+                                                <button class="btn btn-info" type="button" id="exportButton"
+                                                    onclick="window.location.href='/export/admins/csv'">
+                                                    <i class="ri-file-download-line align-bottom me-1"></i> Export
                                                 </button>
                                             </div>
                                         </div>
@@ -108,27 +108,27 @@
                                             <table class="table align-middle" id="adminTable">
                                                 <thead class="table-light text-muted">
                                                     <tr>
-                                                        <th class="sort">ID</th>
-                                                        <th class="sort" data-sort="name">Full Name</th>
+                                                        <th>ID</th>
+                                                        <th class="sort" data-sort="customer_name">Full Name</th>
                                                         <th class="sort" data-sort="email">Email</th>
                                                         <th class="sort" data-sort="phone">Phone</th>
-                                                        <th class="sort" data-sort="address">Address</th>
-                                                        <th class="sort" data-sort="city">City</th>
-                                                        <th class="sort" data-sort="province">Province</th>
+                                                        <th class="sort" data-sort="customer_name">Address</th>
+                                                        <th class="sort" data-sort="customer_name">City</th>
+                                                        <th class="sort" data-sort="customer_name">Province</th>
                                                         <th class="sort" data-sort="status">Status</th>
-                                                        <th class="sort" th:if="${session.loginSuper != null}">Action
+                                                        <th th:if="${session.loginSuper != null}">Action
                                                         </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="list form-check-all">
                                                     <tr th:each="ad : ${admins}">
                                                         <td class="id">[[${ad.AdminId}]]</td>
-                                                        <td class="name">[[${ad.AdminName}]]</td>
+                                                        <td class="customer_name">[[${ad.AdminName}]]</td>
                                                         <td class="email">[[${ad.AdminEmail}]]</td>
                                                         <td class="phone">[[${ad.AdminPhone}]]</td>
-                                                        <td class="address">[[${ad.AdminAddress}]]</td>
-                                                        <td class="city">[[${ad.AdminCity}]]</td>
-                                                        <td class="province">[[${ad.AdminProvince}]]</td>
+                                                        <td class="customer_name">[[${ad.AdminAddress}]]</td>
+                                                        <td class="customer_name">[[${ad.AdminCity}]]</td>
+                                                        <td class="customer_name">[[${ad.AdminProvince}]]</td>
                                                         <td class="status"><span th:if="${ad.AdminStatus == 'Active'}"
                                                                 class="badge bg-success-subtle text-success text-uppercase">Active</span>
                                                             <span th:if="${ad.AdminStatus == 'Block'}"

@@ -69,10 +69,7 @@
                                                         <td>[[${order.OrderDate}]]</td>
                                                         <td><span
                                                                 th:class="${order.OrderStatus == 'Pending' ? 'badge bg-warning text-white text-uppercase' : 
-                                                            order.OrderStatus == 'In Progress' ? 'badge bg-info text-white text-uppercase' : 
-                                                            order.OrderStatus == 'Cancelled' ? 'badge bg-danger text-white text-uppercase' : 
-                                                            order.OrderStatus == 'Delivered' ? 'badge bg-success text-white text-uppercase' : 
-                                                            order.OrderStatus == 'Returns' ? 'badge bg-secondary text-white text-uppercase' : ''}">
+                                                            order.OrderStatus == 'Inprogress' ? 'badge bg-success text-white text-uppercase' : ''}">
                                                                 <p th:text="${order.OrderStatus}" class="m-0"></p>
                                                             </span>
                                                         </td>

@@ -33,26 +33,15 @@
                                                 <h5 class="card-title mb-0">Customer List</h5>
                                             </div>
                                         </div>
-                                    
                                         <div class="col-sm-auto">
                                             <div class="d-flex flex-wrap align-items-start gap-2">
                                                 <button class="btn btn-soft-danger" id="remove-actions"
                                                     onclick="deleteMultiple()"><i
                                                         class="ri-delete-bin-2-line"></i></button>
-                                                <div class="dropdown">
-                                                    <button class="btn btn-info dropdown-toggle" type="button"
-                                                        id="exportDropdown" data-bs-toggle="dropdown"
-                                                        aria-expanded="false">
-                                                        <i class="ri-file-download-line align-bottom me-1"></i> Export
-                                                    </button>
-                                                    <ul class="dropdown-menu" aria-labelledby="exportDropdown">
-                                                        <!-- Product Export Options -->
-                                                        <li><a class="dropdown-item" href="/export/customers/csv">Export
-                                                                as CSV</a></li>
-                                                        <li><a class="dropdown-item" href="/export/customers/pdf">Export
-                                                                as PDF</a></li>
-                                                    </ul>
-                                                </div>
+                                                <button class="btn btn-info" type="button" id="exportButton"
+                                                    onclick="window.location.href='/export/customers/csv'">
+                                                    <i class="ri-file-download-line align-bottom me-1"></i> Export
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -115,27 +104,27 @@
                                                 <thead class="table-light text-muted">
                                                     <tr>
 
-                                                        <th class="sortt" data-sort="id">ID</th>
+                                                        <th>ID</th>
                                                         <th class="sort" data-sort="customer_name">Full Name</th>
                                                         <th class="sort" data-sort="customer_name">Email</th>
                                                         <th class="sort" data-sort="quantity">Phone</th>
-                                                        <th class="sort" data-sort="address">Address</th>
-                                                        <th class="sort" data-sort="city">City</th>
-                                                        <th class="sort" data-sort="province">Province</th>
+                                                        <th class="sort" data-sort="customer_name">Address</th>
+                                                        <th class="sort" data-sort="customer_name">City</th>
+                                                        <th class="sort" data-sort="customer_name">Province</th>
                                                         <th class="sort desc" data-sort="status">Status</th>
-                                                        <th class="sortt" data-sort="action">Action</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="list form-check-all" >
+                                                <tbody class="list form-check-all">
                                                     <tr th:each="customer : ${customers}">
 
                                                         <td class="id">[[${customer.CustomerId}]]</td>
                                                         <td class="customer_name">[[${customer.CustomerName}]]</td>
                                                         <td class="email">[[${customer.cemail}]]</td>
                                                         <td class="quantity">[[${customer.CustomerPhone}]]</td>
-                                                        <td class="address">[[${customer.CustomerAddress}]]</td>
-                                                        <td class="city">[[${customer.CustomerCity}]]</td>
-                                                        <td class="province">[[${customer.CustomerProvince}]]</td>
+                                                        <td class="customer_name">[[${customer.CustomerAddress}]]</td>
+                                                        <td class="customer_name">[[${customer.CustomerCity}]]</td>
+                                                        <td class="customer_name">[[${customer.CustomerProvince}]]</td>
                                                         <td class="status">
                                                             <span th:if="${customer.CustomerStatus == 'Active'}"
                                                                 class="badge bg-success-subtle text-success text-uppercase">Active</span>

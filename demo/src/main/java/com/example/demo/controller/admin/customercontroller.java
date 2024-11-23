@@ -51,18 +51,6 @@ public class customercontroller {
             return null;
         }
     }
-    
-    // @GetMapping("index")
-    // public String dashboard(Model model, RedirectAttributes redirectAttributes, HttpSession session) {
-    //     Integer adminId = (Integer) session.getAttribute("loginAdmin");
-    //     Integer superId = (Integer) session.getAttribute("loginSuper");
-
-    //     if (adminId == null && superId == null) {
-    //         redirectAttributes.addFlashAttribute("loginRequired", "Please log in to view this page.");
-    //         return "redirect:/admin/auth-signin-basic";
-    //     }
-    //     return ("admin/index");
-    // }
 
     @GetMapping("apps-ecommerce-customers")
     public String customers(Model model, RedirectAttributes redirectAttributes, HttpSession session) {
