@@ -43,9 +43,20 @@
                                                     </button>
                                                 </form>
 
-                                                <button type="button" class="btn btn-info"><i
-                                                        class="ri-file-download-line align-bottom me-1"></i>
-                                                    Export</button>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-info dropdown-toggle" type="button"
+                                                        id="exportDropdown" data-bs-toggle="dropdown"
+                                                        aria-expanded="false">
+                                                        <i class="ri-file-download-line align-bottom me-1"></i> Export
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="exportDropdown">
+                                                        <!-- Product Export Options -->
+                                                        <li><a class="dropdown-item" href="/export/products/csv">Export
+                                                                as CSV</a></li>
+                                                        <li><a class="dropdown-item" href="/export/products/pdf">Export
+                                                                as PDF</a></li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -106,13 +117,14 @@
                                             <table class="table align-middle" id="customerTable">
                                                 <thead class="table-light text-muted">
                                                     <tr>
+
                                                         <th class="sortt">ID</th>
                                                         <th class="sort" data-sort="customer_name">Name</th>
                                                         <th class="image">Main Image</th>
                                                         <th class="sort" data-sort="category">Category</th>
                                                         <th class="sort" data-sort="phone">Price</th>
-                                                        <th class="sort" data-sort="quantity">Quantity</th>
-                                                        <th class="sort" data-sort="date">Created Date</th>
+                                                        <th class="sortt" data-sort="price">Quantity</th>
+                                                        =<th class="sort" data-sort="date">Created Date</th>
                                                         <th class="sort desc" data-sort="status">Status</th>
                                                         <th class="sortt">Action</th>
                                                     </tr>
@@ -130,7 +142,7 @@
                                                         </td>
                                                         <td class="category">[[${product.ProductCategory}]]</td>
                                                         <td class="price">[[${product.ProductPrice}]]</td>
-                                                        <td class="quantity">[[${product.ProductQuantity}]]</td>
+                                                        <td class="price">[[${product.ProductQuantity}]]</td>
                                                         <td class="date">[[${product.CreateTime}]]</td>
                                                         <td class="status">
                                                             <span th:if="${product.ProductStatus == 'Active'}"
@@ -259,7 +271,6 @@
             let currentColumn = null;
             let isAscending = true;
 
-            // Select all headers with the "sort" class
             document.querySelectorAll('th.sort').forEach(header => {
                 header.addEventListener('click', () => {
                     const table = header.closest('table');
@@ -267,36 +278,34 @@
                     const rows = Array.from(tbody.querySelectorAll('tr'));
                     const columnIndex = Array.from(header.parentNode.children).indexOf(header);
 
-                    // If the same column is clicked, toggle sort direction
-                    if (currentColumn === header) {
-                        isAscending = !isAscending;
-                    } else {
-                        // Otherwise, set to ascending and clear classes from other headers
-                        isAscending = true;
-                        document.querySelectorAll('th.sort').forEach(h => h.classList.remove('ascending', 'descending'));
-                        currentColumn = header;
-                    }
+                    // Toggle sorting direction if the same column is clicked
+                    isAscending = currentColumn === header ? !isAscending : true;
+                    currentColumn = header;
 
-                    // Update the header class for the sort direction
+                    // Update header classes for the current sort direction
+                    document.querySelectorAll('th.sort').forEach(h => h.classList.remove('ascending', 'descending'));
                     header.classList.toggle('ascending', isAscending);
                     header.classList.toggle('descending', !isAscending);
 
-                    // Sort rows based on the text content in the clicked column
+                    // Sort rows based on the selected column
                     rows.sort((rowA, rowB) => {
                         const cellA = rowA.children[columnIndex].textContent.trim();
                         const cellB = rowB.children[columnIndex].textContent.trim();
 
-                        // Handle date sorting (if applicable)
-                        const comparison = !isNaN(Date.parse(cellA)) && !isNaN(Date.parse(cellB))
-                            ? new Date(cellA) - new Date(cellB)
-                            : (!isNaN(cellA) && !isNaN(cellB))
-                                ? cellA - cellB
-                                : cellA.localeCompare(cellB, undefined, { numeric: true });
+                        // Sort by date if both cells are valid dates
+                        let comparison;
+                        if (!isNaN(Date.parse(cellA)) && !isNaN(Date.parse(cellB))) {
+                            comparison = new Date(cellA) - new Date(cellB);
+                        } else if (!isNaN(cellA) && !isNaN(cellB)) {  // Sort by number if both are numbers
+                            comparison = cellA - cellB;
+                        } else {  // Sort alphabetically
+                            comparison = cellA.localeCompare(cellB, undefined, { numeric: true });
+                        }
 
                         return isAscending ? comparison : -comparison;
                     });
 
-                    // Re-attach sorted rows to the tbody
+                    // Append sorted rows back to the tbody
                     rows.forEach(row => tbody.appendChild(row));
                 });
             });

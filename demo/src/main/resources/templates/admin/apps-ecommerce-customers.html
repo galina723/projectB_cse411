@@ -38,10 +38,20 @@
                                                 <button class="btn btn-soft-danger" id="remove-actions"
                                                     onclick="deleteMultiple()"><i
                                                         class="ri-delete-bin-2-line"></i></button>
-                                                <button type="button" class="btn btn-info"><i
-                                                        class="ri-file-download-line align-bottom me-1"></i>
-                                                    Export
-                                                </button>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-info dropdown-toggle" type="button"
+                                                        id="exportDropdown" data-bs-toggle="dropdown"
+                                                        aria-expanded="false">
+                                                        <i class="ri-file-download-line align-bottom me-1"></i> Export
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="exportDropdown">
+                                                        <!-- Product Export Options -->
+                                                        <li><a class="dropdown-item" href="/export/products/csv">Export
+                                                                as CSV</a></li>
+                                                        <li><a class="dropdown-item" href="/export/products/pdf">Export
+                                                                as PDF</a></li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -104,24 +114,24 @@
                                                 <thead class="table-light text-muted">
                                                     <tr>
 
-                                                        <th class="sort" data-sort="id">ID</th>
-                                                        <th class="sort" data-sort="name">Full Name</th>
-                                                        <th class="sort" data-sort="email">Email</th>
-                                                        <th class="sort" data-sort="phone">Phone</th>
+                                                        <th class="sortt" data-sort="id">ID</th>
+                                                        <th class="sort" data-sort="customer_name">Full Name</th>
+                                                        <th class="sort" data-sort="customer_name">Email</th>
+                                                        <th class="sort" data-sort="quantity">Phone</th>
                                                         <th class="sort" data-sort="address">Address</th>
                                                         <th class="sort" data-sort="city">City</th>
                                                         <th class="sort" data-sort="province">Province</th>
-                                                        <th class="sort" data-sort="status">Status</th>
-                                                        <th class="sort" data-sort="action">Action</th>
+                                                        <th class="sort desc" data-sort="status">Status</th>
+                                                        <th class="sortt" data-sort="action">Action</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="list form-check-all" th:each="customer : ${customers}">
-                                                    <tr>
+                                                <tbody class="list form-check-all" >
+                                                    <tr th:each="customer : ${customers}">
 
                                                         <td class="id">[[${customer.CustomerId}]]</td>
-                                                        <td class="name">[[${customer.CustomerName}]]</td>
+                                                        <td class="customer_name">[[${customer.CustomerName}]]</td>
                                                         <td class="email">[[${customer.cemail}]]</td>
-                                                        <td class="phone">[[${customer.CustomerPhone}]]</td>
+                                                        <td class="quantity">[[${customer.CustomerPhone}]]</td>
                                                         <td class="address">[[${customer.CustomerAddress}]]</td>
                                                         <td class="city">[[${customer.CustomerCity}]]</td>
                                                         <td class="province">[[${customer.CustomerProvince}]]</td>
@@ -230,36 +240,6 @@
 </html>
 
 <script>
-    // document.addEventListener("DOMContentLoaded", function () {
-    //     // Select all headers with the "sort" class
-    //     document.querySelectorAll('th.sort').forEach(header => {
-    //         header.addEventListener('click', () => {
-    //             const table = header.closest('table');
-    //             const tbody = table.querySelector('tbody');
-    //             const rows = Array.from(tbody.querySelectorAll('tr'));
-    //             const columnIndex = Array.from(header.parentNode.children).indexOf(header);
-
-    //             // Toggle ascending/descending sort order
-    //             const isAscending = header.classList.toggle('ascending');
-
-    //             // Sort rows based on the text content in the clicked column
-    //             rows.sort((rowA, rowB) => {
-    //                 const cellA = rowA.children[columnIndex].textContent.trim();
-    //                 const cellB = rowB.children[columnIndex].textContent.trim();
-
-    //                 // Check if values are numeric for numeric sorting
-    //                 const comparison = !isNaN(cellA) && !isNaN(cellB)
-    //                     ? cellA - cellB
-    //                     : cellA.localeCompare(cellB, undefined, { numeric: true });
-
-    //                 return isAscending ? comparison : -comparison;
-    //             });
-
-    //             // Re-attach sorted rows to the tbody
-    //             rows.forEach(row => tbody.appendChild(row));
-    //         });
-    //     });
-    // });
 
     document.addEventListener('DOMContentLoaded', function () {
         const editButtons = document.querySelectorAll('.edit-customer-btn');
@@ -276,6 +256,54 @@
             });
         });
     });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let currentColumn = null;
+        let isAscending = true;
+
+        // Select all headers with the "sort" class
+        document.querySelectorAll('th.sort').forEach(header => {
+            header.addEventListener('click', () => {
+                const table = header.closest('table');
+                const tbody = table.querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                const columnIndex = Array.from(header.parentNode.children).indexOf(header);
+
+                // If the same column is clicked, toggle sort direction
+                if (currentColumn === header) {
+                    isAscending = !isAscending;
+                } else {
+                    // Otherwise, set to ascending and clear classes from other headers
+                    isAscending = true;
+                    document.querySelectorAll('th.sort').forEach(h => h.classList.remove('ascending', 'descending'));
+                    currentColumn = header;
+                }
+
+                // Update the header class for the sort direction
+                header.classList.toggle('ascending', isAscending);
+                header.classList.toggle('descending', !isAscending);
+
+                // Sort rows based on the text content in the clicked column
+                rows.sort((rowA, rowB) => {
+                    const cellA = rowA.children[columnIndex].textContent.trim();
+                    const cellB = rowB.children[columnIndex].textContent.trim();
+
+                    // Handle date sorting (if applicable)
+                    const comparison = !isNaN(Date.parse(cellA)) && !isNaN(Date.parse(cellB))
+                        ? new Date(cellA) - new Date(cellB)
+                        : (!isNaN(cellA) && !isNaN(cellB))
+                            ? cellA - cellB
+                            : cellA.localeCompare(cellB, undefined, { numeric: true });
+
+                    return isAscending ? comparison : -comparison;
+                });
+
+                // Re-attach sorted rows to the tbody
+                rows.forEach(row => tbody.appendChild(row));
+            });
+        });
+    });
+
 
 </script>
 

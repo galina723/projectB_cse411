@@ -102,7 +102,7 @@
                                                 <thead class="text-muted table-light">
 
                                                     <th class="sortt">ID</th>
-                                                    <th class="sort" data-sort="customerid">Customer</th>
+                                                    <th class="sort" data-sort="customer_name">Customer</th>
                                                     <th class="sort" data-sort="date">Order Date</th>
                                                     <th class="sort" data-sort="address">Address</th>
                                                     <th class="sort" data-sort="city">City</th>
@@ -119,7 +119,7 @@
                                                                 th:href="@{/admin/apps-ecommerce-order-details/{id}(id=${order.OrderId})}"
                                                                 class="fw-medium link-primary">[[${order.OrderId}]]</a>
                                                         </td>
-                                                        <td class="customername">[[${order.Customer.CustomerName}]]</td>
+                                                        <td class="customer_name">[[${order.Customer.CustomerName}]]</td>
                                                         <td class="date">[[${order.OrderDate}]]</td>
                                                         <td class="address">[[${order.OrderAddress}]]</td>
                                                         <td class="city">[[${order.OrderCity}]]</td>
@@ -238,6 +238,54 @@
                 });
             });
         });
+
+        document.addEventListener("DOMContentLoaded", function () {
+        let currentColumn = null;
+        let isAscending = true;
+
+        // Select all headers with the "sort" class
+        document.querySelectorAll('th.sort').forEach(header => {
+            header.addEventListener('click', () => {
+                const table = header.closest('table');
+                const tbody = table.querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                const columnIndex = Array.from(header.parentNode.children).indexOf(header);
+
+                // If the same column is clicked, toggle sort direction
+                if (currentColumn === header) {
+                    isAscending = !isAscending;
+                } else {
+                    // Otherwise, set to ascending and clear classes from other headers
+                    isAscending = true;
+                    document.querySelectorAll('th.sort').forEach(h => h.classList.remove('ascending', 'descending'));
+                    currentColumn = header;
+                }
+
+                // Update the header class for the sort direction
+                header.classList.toggle('ascending', isAscending);
+                header.classList.toggle('descending', !isAscending);
+
+                // Sort rows based on the text content in the clicked column
+                rows.sort((rowA, rowB) => {
+                    const cellA = rowA.children[columnIndex].textContent.trim();
+                    const cellB = rowB.children[columnIndex].textContent.trim();
+
+                    // Handle date sorting (if applicable)
+                    const comparison = !isNaN(Date.parse(cellA)) && !isNaN(Date.parse(cellB))
+                        ? new Date(cellA) - new Date(cellB)
+                        : (!isNaN(cellA) && !isNaN(cellB))
+                            ? cellA - cellB
+                            : cellA.localeCompare(cellB, undefined, { numeric: true });
+
+                    return isAscending ? comparison : -comparison;
+                });
+
+                // Re-attach sorted rows to the tbody
+                rows.forEach(row => tbody.appendChild(row));
+            });
+        });
+    });
+
     </script>
 </body>
 

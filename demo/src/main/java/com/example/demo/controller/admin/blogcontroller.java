@@ -98,7 +98,7 @@ public class blogcontroller {
         MultipartFile image = blogsdto.getBlogImage();
         String storagefilename = image.getOriginalFilename();
 
-        String uploaddir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\blogimages";
+        String uploaddir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\productimages";
         Path uploadpath = Paths.get(uploaddir);
 
         try {
@@ -199,7 +199,7 @@ public class blogcontroller {
             return "admin/apps-ecommerce-edit-blog";
         }
 
-        String uploadDir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\blogimages";
+        String uploadDir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\blogimages";
         Path uploadPath = Paths.get(uploadDir);
 
         MultipartFile image = blogsdto.getBlogImage();

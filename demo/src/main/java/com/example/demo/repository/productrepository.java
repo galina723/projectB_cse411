@@ -24,4 +24,7 @@ public interface productrepository extends CrudRepository<products, Integer> {
     @Query("SELECT p FROM products p WHERE p.ProductCategory = (SELECT c.CategoryName FROM categories c WHERE c.CategoryId = ?1) ORDER BY p.ProductId ASC")
     List<products> findProductsByCategoryId(int categoryId, Pageable pageable);
 
+    @Query("SELECT p FROM products p ORDER BY p.CreateTime DESC")
+    List<products> findTop5Products(Pageable pageable);
+
 }
