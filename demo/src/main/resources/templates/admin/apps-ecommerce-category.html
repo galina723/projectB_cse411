@@ -109,11 +109,11 @@
                                                 <thead class="table-light text-muted">
                                                     <tr>
 
-                                                        <th class="sortt">ID</th>
+                                                        <th>ID</th>
                                                         <th class="sort" data-sort="name">Name</th>
-                                                        <th class="sortt" data-sort="quantity">Quantity</th>
+                                                        <th class="sort" data-sort="phone">Quantity</th>
                                                         <th class="sort" data-sort="status">Status</th>
-                                                        <th class="sortt">Action</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="list form-check-all">
@@ -121,7 +121,7 @@
 
                                                         <td class="id">[[${category.CategoryId}]]</td>
                                                         <td class="name">[[${category.CategoryName}]]</td>
-                                                        <td class="quantity">[[${category.CategoryQuantity}]]</td>
+                                                        <td class="phone">[[${category.CategoryQuantity}]]</td>
                                                         <td class="status">
                                                             <span th:if="${category.CategoryStatus == 'Active'}"
                                                                 class="badge bg-success-subtle text-success text-uppercase">Active</span>
