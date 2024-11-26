@@ -180,12 +180,15 @@
         }
 
         document.getElementById('createblog-form').addEventListener('submit', function (event) {
-            if (!this.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+            event.preventDefault();
 
-            this.classList.add('was-validated');
+            let isValid = true;
+
+            if (isValid) {
+                this.submit();
+            } else {
+                this.classList.add('was-validated');
+            }
         });
     </script>
 

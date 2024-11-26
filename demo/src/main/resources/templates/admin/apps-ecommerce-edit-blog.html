@@ -186,12 +186,14 @@
         }
 
         document.getElementById('createblog-form').addEventListener('submit', function (event) {
-            if (!this.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+            event.preventDefault();
+            let isValid = true;
 
-            this.classList.add('was-validated');
+            if (isValid) {
+                this.submit();
+            } else {
+                this.classList.add('was-validated');
+            }
         });
     </script>
 
