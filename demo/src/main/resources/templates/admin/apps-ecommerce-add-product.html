@@ -109,12 +109,10 @@
                                                                 style="cursor: pointer;"></i>
                                                         </div>
                                                         <h5>Drop files here or click to upload.</h5>
-                                                        <p id="file-name" class="text-muted mt-2"
-                                                            style="font-size: 0.875rem; display: none;">No file chosen
-                                                        </p>
-                                                        <p id="file-name" class="text-muted mt-2"
-                                                            style="display: none;">No file chosen</p>
                                                     </div>
+                                                </div>
+                                                <div id="image-preview-container" class="mt-3 d-flex flex-wrap">
+                                                    <!-- Selected images will be displayed here -->
                                                 </div>
                                             </div>
                                         </div>
@@ -235,16 +233,64 @@
             }
         }
 
+        const selectedFiles = []; // Array to keep track of selected files
+
         document.getElementById('product-other-images-input').addEventListener('change', function () {
-            const fileNameDisplay = document.getElementById('file-name');
-            if (this.files.length > 0) {
-                fileNameDisplay.innerText = this.files.length + " file(s) chosen";
-                fileNameDisplay.style.display = "block";
-            } else {
-                fileNameDisplay.innerText = "No file chosen";
-                fileNameDisplay.style.display = "block";
+            const container = document.getElementById('image-preview-container');
+            container.innerHTML = ''; // Clear previous previews
+
+            const files = this.files;
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (!selectedFiles.includes(file)) {
+                    selectedFiles.push(file); // Add to selected files array
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        const imgContainer = document.createElement('div');
+                        imgContainer.className = 'position-relative me-2 mb-2'; // Bootstrap classes for spacing
+
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'img-thumbnail'; // Bootstrap class for image styling
+
+                        const deleteButton = document.createElement('button');
+                        deleteButton.className = 'btn btn-danger btn-sm position-absolute top-0 end-0';
+                        deleteButton.innerHTML = '<i class="ri-delete-bin-5-fill"></i>'; // Use delete icon
+                        deleteButton.onclick = function () {
+                            // Remove the image from the preview
+                            imgContainer.remove();
+                            // Remove from selectedFiles array
+                            const index = selectedFiles.indexOf(file);
+                            if (index > -1) {
+                                selectedFiles.splice(index, 1); // Remove file from array
+                            }
+                            // Update the hidden input to reflect remaining files
+                            updateHiddenInput();
+                        };
+
+                        imgContainer.appendChild(img);
+                        imgContainer.appendChild(deleteButton);
+                        container.appendChild(imgContainer); // Append the image container to the preview container
+                    };
+
+                    if (file) {
+                        reader.readAsDataURL(file);
+                    }
+                }
             }
         });
+
+        // Function to update hidden input with selected files
+        function updateHiddenInput() {
+            const hiddenInput = document.getElementById('product-other-images-input');
+            // Create a new DataTransfer object to hold the current files
+            const dataTransfer = new DataTransfer();
+            selectedFiles.forEach(file => {
+                dataTransfer.items.add(file); // Add remaining files
+            });
+            hiddenInput.files = dataTransfer.files; // Update the input's files property
+        }
 
 
     </script>

@@ -18306,4 +18306,20 @@ span.flatpickr-weekday {
     cursor: not-allowed;
 }
 
+#image-preview-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.img-thumbnail {
+    max-height: 100px;
+    object-fit: cover;
+}
+
+.position-relative {
+    position: relative;
+}
+
 /*# sourceMappingURL=app.min.css.map */
