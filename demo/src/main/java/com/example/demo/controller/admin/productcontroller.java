@@ -142,6 +142,7 @@ public class productcontroller {
         pro.setProductStatus(productsdto.getProductStatus());
 
         products savedProduct = productrepo.save(pro);
+        
         // Process and save gallery images
         List<MultipartFile> galleryImages = productsdto.getProductOtherImages();
         if (galleryImages != null && !galleryImages.isEmpty()) {
@@ -213,7 +214,6 @@ public class productcontroller {
         productsDto.setCreateTime(product.getCreateTime());
 
         model.addAttribute("productsdto", productsDto);
-        // Pass the existing image URL to the model for displaying in the view
         model.addAttribute("existingImage", "/productimages/" + product.getProductMainImage());
 
         List<productotherimages> galleryImages = productimagerepo.findByProduct(product);
@@ -262,7 +262,6 @@ public class productcontroller {
             }
         }
 
-        // Handle existing gallery images
         List<productotherimages> existingGalleryImages = productimagerepo.findByProduct(pro);
 
         // Handle images to delete
@@ -277,14 +276,11 @@ public class productcontroller {
                         .findFirst()
                         .orElse(null);
                 if (imageEntity != null) {
-                    // Delete the image from the database
                     productimagerepo.delete(imageEntity);
-                    // Delete the image file from the filesystem
                     try {
                         Path filePath = uploadPath.resolve(fileName);
                         Files.deleteIfExists(filePath);
                     } catch (IOException e) {
-                        // Log file deletion error if needed
                         e.printStackTrace();
                     }
                 }
@@ -297,42 +293,31 @@ public class productcontroller {
             for (MultipartFile galleryImage : galleryImages) {
                 if (galleryImage != null && !galleryImage.isEmpty()) {
                     String galleryImageFilename = galleryImage.getOriginalFilename();
-                    Path targetPath = uploadPath.resolve(galleryImageFilename); // Use original filename
-                    System.out.println("Processing gallery image: " + galleryImageFilename);
+                    Path targetPath = uploadPath.resolve(galleryImageFilename);
 
-                    // Check if the file already exists in the upload directory
                     if (Files.exists(targetPath)) {
-                        System.out.println("Image already exists: " + targetPath);
-                        // Optionally, store the image reference in the product
                         productotherimages newImage = new productotherimages();
-                        newImage.setProduct(pro); // Associate with the product
-                        newImage.setProductImage(galleryImageFilename); // Use original filename
+                        newImage.setProduct(pro);
+                        newImage.setProductImage(galleryImageFilename);
                         productimagerepo.save(newImage);
-                        System.out.println("Stored reference of existing image: " + newImage.getProductImage());
-                        continue; // Skip copying the file
+                        continue; 
                     }
 
                     try {
-                        // Create directory if it doesn't exist
                         if (!Files.exists(uploadPath)) {
                             Files.createDirectories(uploadPath);
                             System.out.println("Created directory: " + uploadPath);
                         }
 
-                        // Save the image to the filesystem
                         try (InputStream inputStream = galleryImage.getInputStream()) {
                             Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
-                            System.out.println("Successfully copied image to: " + targetPath);
                         }
 
-                        // Save new gallery image reference to the database
                         productotherimages newImage = new productotherimages();
-                        newImage.setProduct(pro); // Associate with the product
-                        newImage.setProductImage(galleryImageFilename); // Save the original filename
+                        newImage.setProduct(pro); 
+                        newImage.setProductImage(galleryImageFilename); 
                         productimagerepo.save(newImage);
-                        System.out.println("Successfully saved gallery image: " + newImage.getProductImage());
                     } catch (IOException e) {
-                        System.out.println("Error saving image: " + e.getMessage());
                         result.addError(new FieldError("productsdto", "productOtherImages",
                                 "Unable to save the new gallery image. Try again."));
                         return "admin/apps-ecommerce-edit-product";
@@ -340,8 +325,7 @@ public class productcontroller {
                 }
             }
         }
-        
-        // Update product details
+
         pro.setProductName(productsdto.getProductName());
         pro.setProductPrice(productsdto.getProductPrice());
         pro.setProductDescription(productsdto.getProductDescription());
@@ -350,13 +334,11 @@ public class productcontroller {
         pro.setProductStatus(productsdto.getProductStatus());
         pro.setCreateTime(productsdto.getCreateTime());
 
-        // Save the product
         productrepo.save(pro);
 
         return "redirect:/admin/apps-ecommerce-products";
     }
 
-    // delete product
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") int id, RedirectAttributes redirectAttributes) {
         try {
@@ -386,9 +368,8 @@ public class productcontroller {
     public String removeImagePreview(@RequestParam("index") int index,
             productsdto productsdto,
             Model model) {
-        // Remove the selected image from previewImages list
         productsdto.getProductOtherImages().remove(index);
         model.addAttribute("productsdto", productsdto);
-        return "redirect:/admin/apps-ecommerce-add-product"; // return to the form view
+        return "redirect:/admin/apps-ecommerce-add-product";
     }
 }

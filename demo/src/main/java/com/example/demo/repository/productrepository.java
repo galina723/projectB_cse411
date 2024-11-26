@@ -18,13 +18,13 @@ public interface productrepository extends CrudRepository<products, Integer> {
     @Query("SELECT p FROM products p WHERE p.ProductCategory = ?1 AND p.ProductId != ?2")
     List<products> findProductsByCategoryExcludingId(String productCategory, int productId);
 
-    @Query("SELECT p FROM products p ORDER BY p.ProductId DESC")
-    List<products> findTop10Products(Pageable pageable);
-
     @Query("SELECT p FROM products p WHERE p.ProductCategory = (SELECT c.CategoryName FROM categories c WHERE c.CategoryId = ?1) ORDER BY p.ProductId ASC")
     List<products> findProductsByCategoryId(int categoryId, Pageable pageable);
 
     @Query("SELECT p FROM products p ORDER BY p.CreateTime DESC")
     List<products> findTop5Products(Pageable pageable);
 
+    @Query("SELECT p FROM products p JOIN orderdetails od ON p.ProductId = od.ProductId " +
+            "GROUP BY p ORDER BY SUM(od.ProductQuantity) DESC")
+    List<products> findBestProducts(Pageable pageable);
 }

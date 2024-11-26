@@ -38,7 +38,6 @@
                                             <input type="text" class="form-control" id="product-title-input" value=""
                                                 placeholder="Enter product ID" required="" th:field="*{ProductId}"
                                                 readonly>
-                                            <div class="invalid-feedback">Please Enter a product ID.</div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="product-title-input">Product Name</label>
@@ -54,6 +53,7 @@
                                             <textarea id="product-description-input" name="description"
                                                 class="form-control" placeholder="Enter product description" required=""
                                                 th:field="*{ProductDescription}" rows="5"></textarea>
+                                            <div class="invalid-feedback">Please Enter a product description.</div>
                                         </div>
                                     </div>
                                 </div>
@@ -81,7 +81,7 @@
                                                         <input class="form-control d-none" id="product-image-input"
                                                             type="file" accept="image/png, image/gif, image/jpeg"
                                                             th:field="*{ProductMainImage}"
-                                                            onchange="previewMainImage(event)">
+                                                            onchange="previewMainImage(event)" required>
                                                     </div>
                                                     <div class="avatar-lg">
                                                         <div class="avatar-title bg-light rounded">
@@ -102,7 +102,7 @@
                                                             accept="image/png, image/gif, image/jpeg"
                                                             th:field="*{ProductOtherImages}"
                                                             id="product-other-images-input" style="display: none;"
-                                                            onchange="updateGalleryImages(this.files)">
+                                                            onchange="updateGalleryImages(this.files)" required>
                                                     </div>
                                                     <div class="dz-message needsclick text-center"
                                                         onclick="document.getElementById('product-other-images-input').click();">
@@ -245,7 +245,6 @@
         function updateGalleryImages(files) {
             const imagePreviewContainer = document.getElementById('image-preview-container');
 
-            // Loop through selected files
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 const reader = new FileReader();
@@ -260,7 +259,7 @@
                     <i class="ri-delete-bin-5-fill"></i>
                 </button>
             `;
-                    imagePreviewContainer.appendChild(imgDiv); // Append new image div to the container
+                    imagePreviewContainer.appendChild(imgDiv);
                 };
 
                 reader.readAsDataURL(file);
@@ -268,17 +267,41 @@
         }
 
         function removeImage(button, imageName) {
-            // Remove the image from the preview
             const imageDiv = button.parentElement;
             imageDiv.remove();
 
-            // Update the hidden input for images to delete
             const imagesToDeleteInput = document.getElementById('images-to-delete');
-            let imagesToDelete = imagesToDeleteInput.value.split(',').filter(Boolean); // Split and remove empty
-            imagesToDelete.push(imageName); // Add the image name to the array
-            imagesToDeleteInput.value = imagesToDelete.join(','); // Update the hidden input
+            let imagesToDelete = imagesToDeleteInput.value.split(',').filter(Boolean);
+            imagesToDelete.push(imageName);
+            imagesToDeleteInput.value = imagesToDelete.join(','); 
             console.log(imagesToDeleteInput.value);
         }
+
+        document.getElementById('createproduct-form').addEventListener('submit', function (event) {
+            if (!this.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            const quantityInput = document.getElementById('stocks-input');
+            const priceInput = document.getElementById('product-price-input');
+            if (quantityInput.value < 1) {
+                quantityInput.classList.add('is-invalid');
+                quantityInput.nextElementSibling.textContent = 'Please enter a quantity greater than zero.';
+                event.preventDefault();
+            } else {
+                quantityInput.classList.remove('is-invalid');
+            }
+
+            if (priceInput.value < 1) {
+                priceInput.classList.add('is-invalid');
+                priceInput.nextElementSibling.textContent = 'Please enter price greater than zero.';
+                event.preventDefault();
+            } else {
+                priceInput.classList.remove('is-invalid');
+            }
+            this.classList.add('was-validated');
+        });
     </script>
 </body>
 

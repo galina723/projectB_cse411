@@ -15,8 +15,7 @@ import com.example.demo.service.SendEmailService;
 
 import jakarta.servlet.http.HttpSession;
 
-import com.example.demo.otherfunction.JsonLoader;
-import com.example.demo.otherfunction.encryption;
+import com.example.demo.otherfunction.*;
 
 import java.io.IOException;
 import java.net.URI;
@@ -95,12 +94,14 @@ public class UserController {
         model.addAttribute("categories", categories);
 
         Pageable pageable = PageRequest.of(0, 4);
-        List<products> products = productrepo.findTop10Products(pageable);
+        List<products> products = productrepo.findTop5Products(pageable);
+        List<products> products1 = productrepo.findBestProducts(pageable);
 
         int defaultCategoryId = categories.isEmpty() ? 0 : categories.get(0).getCategoryId();
         int defaultCategoryId2 = categories.isEmpty() ? 0 : categories.get(1).getCategoryId();
         List<products> products2 = productrepo.findProductsByCategoryId(defaultCategoryId, pageable);
         List<products> products3 = productrepo.findProductsByCategoryId(defaultCategoryId2, pageable);
+        
         products2 = products2.stream()
                 .filter(product2 -> !"block".equalsIgnoreCase(product2.getProductStatus()))
                 .collect(Collectors.toList());
@@ -115,6 +116,11 @@ public class UserController {
                 .filter(product -> !"block".equalsIgnoreCase(product.getProductStatus()))
                 .collect(Collectors.toList());
         model.addAttribute("products", products);
+
+        products1 = products1.stream()
+                .filter(product1 -> !"block".equalsIgnoreCase(product1.getProductStatus()))
+                .collect(Collectors.toList());
+        model.addAttribute("products1", products1);
 
         List<blogs> blogs = (List<blogs>) blogrepo.findAll();
         blogs = blogs.stream()
@@ -141,7 +147,7 @@ public class UserController {
             customer.setCustomerPassword(hashedPassword);
             customer.setCustomerStatus("Active");
             customerrepo.save(customer);
-        return "redirect:/user/login";
+            return "redirect:/user/login";
         } else {
             model.addAttribute("error", "Passwords do not match.");
             return "user/register";
@@ -248,16 +254,15 @@ public class UserController {
         int customerId = (int) session.getAttribute("customerId");
         customers customer = customerrepo.findById(customerId).orElse(null);
 
-        if (!newPassword.equals(confirmPassword)) {
-            model.addAttribute("error", "The passwords do not match, please try again.");
+        if (newPassword.equals(confirmPassword)) {
+            String encodedPassword = encryption.encrypt(newPassword);
+            customer.setCustomerPassword(encodedPassword);
+            customerrepo.save(customer);
+            return "redirect:/user/login";
+        } else {
+            model.addAttribute("error", "Passwords do not match.");
+            return "user/reset-password";
         }
-
-        String encodedPassword = encryption.encrypt(newPassword);
-        customer.setCustomerPassword(encodedPassword);
-
-        customerrepo.save(customer);
-
-        return "redirect:/user/login";
     }
 
     @GetMapping("404")

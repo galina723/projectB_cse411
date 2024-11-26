@@ -35,7 +35,7 @@
                                                 value="add">
                                             <input type="hidden" class="form-control d-none" id="product-id-input">
                                             <input type="hidden" class="form-control" id="product-title-input" value=""
-                                                placeholder="Enter product ID" required="" th:field="*{ProductId}"
+                                                placeholder="Enter product ID" required th:field="*{ProductId}"
                                                 readonly>
                                         </div>
                                         <div class="mb-3">
@@ -44,14 +44,15 @@
                                                 value="add">
                                             <input type="text" class="form-control d-none" id="product-id-input">
                                             <input type="text" class="form-control" id="product-title-input" value=""
-                                                placeholder="Enter product title" required="" th:field="*{ProductName}">
+                                                placeholder="Enter product title" required th:field="*{ProductName}">
                                             <div class="invalid-feedback">Please Enter a product name.</div>
                                         </div>
                                         <div>
                                             <label for="product-description-input">Product Description</label>
                                             <textarea id="product-description-input" name="description"
-                                                class="form-control" placeholder="Enter product description" required=""
+                                                class="form-control" placeholder="Enter product description" required
                                                 th:field="*{ProductDescription}" rows="5"></textarea>
+                                            <div class="invalid-feedback">Please Enter description.</div>
                                         </div>
                                     </div>
                                 </div>
@@ -79,7 +80,7 @@
                                                         <input class="form-control d-none" id="product-image-input"
                                                             type="file" accept="image/png, image/gif, image/jpeg"
                                                             th:field="*{ProductMainImage}"
-                                                            onchange="previewMainImage(event)">
+                                                            onchange="previewMainImage(event)" required>
                                                     </div>
                                                     <div class="avatar-lg">
                                                         <div class="avatar-title bg-light rounded">
@@ -134,22 +135,17 @@
                                     <div class="card-body">
                                         <div class="mb-3">
                                             <label class="form-label" for="stocks-input">Quantity</label>
-                                            <input type="text" class="form-control" id="stocks-input"
-                                                placeholder="Stocks" required="" th:field="*{ProductQuantity}">
-                                            <div class="invalid-feedback">Please Enter a product stocks.
-                                            </div>
+                                            <input type="number" class="form-control" id="stocks-input"
+                                                placeholder="Stocks" required th:field="*{ProductQuantity}">
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="product-price-input">Price</label>
                                             <div class="input-group has-validation mb-3">
                                                 <span class="input-group-text" id="product-price-addon">$</span>
-                                                <input type="text" class="form-control" id="product-price-input"
+                                                <input type="number" class="form-control" id="product-price-input"
                                                     placeholder="Enter price" aria-label="Price"
-                                                    aria-describedby="product-price-addon" required=""
+                                                    aria-describedby="product-price-addon" required
                                                     th:field="*{ProductPrice}">
-                                                <div class="invalid-feedback">Please Enter a product
-                                                    price.
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -233,45 +229,42 @@
             }
         }
 
-        const selectedFiles = []; // Array to keep track of selected files
+        const selectedFiles = [];
 
         document.getElementById('product-other-images-input').addEventListener('change', function () {
             const container = document.getElementById('image-preview-container');
-            container.innerHTML = ''; // Clear previous previews
+            container.innerHTML = '';
 
             const files = this.files;
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 if (!selectedFiles.includes(file)) {
-                    selectedFiles.push(file); // Add to selected files array
+                    selectedFiles.push(file);
                     const reader = new FileReader();
 
                     reader.onload = function (e) {
                         const imgContainer = document.createElement('div');
-                        imgContainer.className = 'position-relative me-2 mb-2'; // Bootstrap classes for spacing
+                        imgContainer.className = 'position-relative me-2 mb-2';
 
                         const img = document.createElement('img');
                         img.src = e.target.result;
-                        img.className = 'img-thumbnail'; // Bootstrap class for image styling
+                        img.className = 'img-thumbnail';
 
                         const deleteButton = document.createElement('button');
                         deleteButton.className = 'btn btn-danger btn-sm position-absolute top-0 end-0';
-                        deleteButton.innerHTML = '<i class="ri-delete-bin-5-fill"></i>'; // Use delete icon
+                        deleteButton.innerHTML = '<i class="ri-delete-bin-5-fill"></i>';
                         deleteButton.onclick = function () {
-                            // Remove the image from the preview
                             imgContainer.remove();
-                            // Remove from selectedFiles array
                             const index = selectedFiles.indexOf(file);
                             if (index > -1) {
-                                selectedFiles.splice(index, 1); // Remove file from array
+                                selectedFiles.splice(index, 1);
                             }
-                            // Update the hidden input to reflect remaining files
                             updateHiddenInput();
                         };
 
                         imgContainer.appendChild(img);
                         imgContainer.appendChild(deleteButton);
-                        container.appendChild(imgContainer); // Append the image container to the preview container
+                        container.appendChild(imgContainer);
                     };
 
                     if (file) {
@@ -281,18 +274,40 @@
             }
         });
 
-        // Function to update hidden input with selected files
         function updateHiddenInput() {
             const hiddenInput = document.getElementById('product-other-images-input');
-            // Create a new DataTransfer object to hold the current files
             const dataTransfer = new DataTransfer();
             selectedFiles.forEach(file => {
-                dataTransfer.items.add(file); // Add remaining files
+                dataTransfer.items.add(file);
             });
-            hiddenInput.files = dataTransfer.files; // Update the input's files property
+            hiddenInput.files = dataTransfer.files;
         }
 
+        document.getElementById('createproduct-form').addEventListener('submit', function (event) {
+            if (!this.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
 
+            const quantityInput = document.getElementById('stocks-input');
+            const priceInput = document.getElementById('product-price-input');
+            if (quantityInput.value < 1) {
+                quantityInput.classList.add('is-invalid');
+                quantityInput.nextElementSibling.textContent = 'Please enter a quantity greater than zero.';
+                event.preventDefault();
+            } else {
+                quantityInput.classList.remove('is-invalid');
+            }
+
+            if (priceInput.value < 1) {
+                priceInput.classList.add('is-invalid');
+                priceInput.nextElementSibling.textContent = 'Please enter price greater than zero.';
+                event.preventDefault();
+            } else {
+                priceInput.classList.remove('is-invalid');
+            }
+            this.classList.add('was-validated');
+        });
     </script>
 
 </body>
