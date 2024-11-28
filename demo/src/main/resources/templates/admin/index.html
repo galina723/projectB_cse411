@@ -26,13 +26,6 @@
                                                             class="text-uppercase fw-medium text-muted text-truncate mb-0">
                                                             Total Earnings</p>
                                                     </div>
-                                                    <div class="flex-shrink-0">
-                                                        <h5 class="text-success fs-14 mb-0">
-                                                            <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
-                                                            +16.24
-                                                            %
-                                                        </h5>
-                                                    </div>
                                                 </div>
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
@@ -60,12 +53,6 @@
                                                         <p
                                                             class="text-uppercase fw-medium text-muted text-truncate mb-0">
                                                             Orders</p>
-                                                    </div>
-                                                    <div class="flex-shrink-0">
-                                                        <h5 class="text-danger fs-14 mb-0">
-                                                            <i class="ri-arrow-right-down-line fs-13 align-middle"></i>
-                                                            -3.57 %
-                                                        </h5>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
@@ -96,13 +83,6 @@
                                                         <p
                                                             class="text-uppercase fw-medium text-muted text-truncate mb-0">
                                                             Customers</p>
-                                                    </div>
-                                                    <div class="flex-shrink-0">
-                                                        <h5 class="text-success fs-14 mb-0">
-                                                            <i class="ri-arrow-right-up-line fs-13 align-middle"></i>
-                                                            +29.08
-                                                            %
-                                                        </h5>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
@@ -183,12 +163,6 @@
                                         <div class="card card-height-100">
                                             <div class="card-header align-items-center d-flex">
                                                 <h4 class="card-title mb-0 flex-grow-1">Sales by Locations</h4>
-                                                <div class="flex-shrink-0">
-                                                    <button type="button"
-                                                        class="btn btn-soft-primary btn-sm shadow-none">
-                                                        Export Report
-                                                    </button>
-                                                </div>
                                             </div><!-- end card header -->
 
                                             <!-- card body -->
@@ -391,11 +365,6 @@
                                         <div class="card">
                                             <div class="card-header align-items-center d-flex">
                                                 <h4 class="card-title mb-0 flex-grow-1">Recent Orders</h4>
-                                                <div class="flex-shrink-0">
-                                                    <button type="button" class="btn btn-soft-info btn-sm shadow-none">
-                                                        <i class="ri-file-list-3-line align-middle"></i> Generate Report
-                                                    </button>
-                                                </div>
                                             </div><!-- end card header -->
 
                                             <div class="card-body">
@@ -410,10 +379,9 @@
                                                                 <th scope="col">Amount</th>
                                                                 <!-- <th scope="col">Vendor</th> -->
                                                                 <th scope="col">Status</th>
-                                                                <th scope="col">Rating</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody >
+                                                        <tbody>
                                                             <tr th:each="order : ${orders}">
                                                                 <td>
                                                                     <a href="apps-ecommerce-order-details.html"
@@ -421,24 +389,20 @@
                                                                 </td>
                                                                 <td>
                                                                     <div class="d-flex align-items-center">
-                                                                        
-                                                                        <div class="flex-grow-1">[[${order.Customer.CustomerName}]]</div>
+
+                                                                        <div class="flex-grow-1">
+                                                                            [[${order.Customer.CustomerName}]]</div>
                                                                     </div>
                                                                 </td>
                                                                 <!-- <td>Clothes</td> -->
                                                                 <td>
-                                                                    <span class="text-success">[[${order.orderAmount}]]</span>
+                                                                    <span
+                                                                        class="text-success">[[${order.orderAmount}]]</span>
                                                                 </td>
                                                                 <!-- <td>Zoetic Fashion</td> -->
                                                                 <td>
                                                                     <span
                                                                         class="badge bg-success-subtle text-success">[[${order.orderStatus}]]</span>
-                                                                </td>
-                                                                <td>
-                                                                    <h5 class="fs-14 fw-medium mb-0">5.0<span
-                                                                            class="text-muted fs-11 ms-1">(61
-                                                                            votes)</span>
-                                                                    </h5>
                                                                 </td>
                                                             </tr><!-- end tr -->
                                                             <!-- end tr -->

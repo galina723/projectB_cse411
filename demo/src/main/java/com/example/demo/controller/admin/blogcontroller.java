@@ -63,8 +63,6 @@ public class blogcontroller {
         return ("admin/apps-ecommerce-blog");
     }
 
-    // add blog
-
     @GetMapping("apps-ecommerce-create-blog")
     public String addproduct(Model model, RedirectAttributes redirectAttributes, HttpSession session) {
         Integer adminId = (Integer) session.getAttribute("loginAdmin");
@@ -98,7 +96,7 @@ public class blogcontroller {
         MultipartFile image = blogsdto.getBlogImage();
         String storagefilename = image.getOriginalFilename();
 
-        String uploaddir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\productimages";
+        String uploaddir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\blogimages";
         Path uploadpath = Paths.get(uploaddir);
 
         try {
@@ -135,14 +133,11 @@ public class blogcontroller {
         bl.setBlogtag(blogsdto.getBlogtag());
         bl.setBlogImage(storagefilename);
 
-        // Save the product to the repository
         blogrepo.save(bl);
 
-        // Redirect to the product listing page after successful save
         return "redirect:/admin/apps-ecommerce-blog";
     }
 
-    // edit product
 
     @GetMapping("/set-current-blog-id/{id}")
     public String setCurrentBlogId(@PathVariable("id") int id, HttpSession session) {
@@ -181,7 +176,6 @@ public class blogcontroller {
         blogsdto.setBlogtag(blog.getBlogtag());
 
         model.addAttribute("blogsdto", blogsdto);
-        // Pass the existing image URL to the model for displaying in the view
         model.addAttribute("existingImage", "/blogimages/" + blog.getBlogImage());
 
         return "admin/apps-ecommerce-edit-blog";
@@ -199,7 +193,7 @@ public class blogcontroller {
             return "admin/apps-ecommerce-edit-blog";
         }
 
-        String uploadDir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\blogimages";
+        String uploadDir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\blogimages";
         Path uploadPath = Paths.get(uploadDir);
 
         MultipartFile image = blogsdto.getBlogImage();
@@ -220,7 +214,6 @@ public class blogcontroller {
                 return "admin/apps-ecommerce-edit-blog";
             }
         } else {
-            // If no new image is uploaded, keep the existing image
             bl.setBlogImage(bl.getBlogImage());
         }
 
@@ -231,13 +224,11 @@ public class blogcontroller {
         bl.setBlogPostBy(blogsdto.getBlogPostBy());
         bl.setBlogtag(blogsdto.getBlogtag());
 
-        // Save the blog to the repository
         blogrepo.save(bl);
 
         return "redirect:/admin/apps-ecommerce-blog";
     }
 
-    // delete product
 
     @GetMapping("/deleteblog/{id}")
     public String deleteblog(@PathVariable("id") int id, RedirectAttributes redirectAttributes) {

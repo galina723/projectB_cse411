@@ -15,7 +15,7 @@ public class products {
     @Column(name = "id", length = 10)
     private int ProductId;
 
-    @Column(name = "name", length = 50)
+    @Column(name = "name", length = 2083)
     private String ProductName;
 
     @Column(name = "category", length = 30)

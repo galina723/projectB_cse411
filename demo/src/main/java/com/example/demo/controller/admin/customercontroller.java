@@ -11,11 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.model.*;
-import com.example.demo.repository.adminrepository;
-import com.example.demo.repository.blogrepository;
-import com.example.demo.repository.customerrepository;
-import com.example.demo.repository.orderrepository;
-import com.example.demo.repository.productrepository;
+import com.example.demo.repository.*;
 
 import jakarta.servlet.http.HttpSession;
 

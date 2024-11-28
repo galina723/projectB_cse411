@@ -51,6 +51,7 @@ public class productcontroller {
             return null;
         }
     }
+
     @GetMapping("apps-ecommerce-products")
     public String products(Model model, RedirectAttributes redirectAttributes, HttpSession session) {
         Integer adminId = (Integer) session.getAttribute("loginAdmin");
@@ -105,7 +106,7 @@ public class productcontroller {
         MultipartFile image = productsdto.getProductMainImage();
         String storagefilename = image.getOriginalFilename();
 
-        String uploaddir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\productimages";
+        String uploaddir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\productimages";
 
         Path uploadpath = Paths.get(uploaddir);
 
@@ -141,6 +142,7 @@ public class productcontroller {
         pro.setProductStatus(productsdto.getProductStatus());
 
         products savedProduct = productrepo.save(pro);
+        
         // Process and save gallery images
         List<MultipartFile> galleryImages = productsdto.getProductOtherImages();
         if (galleryImages != null && !galleryImages.isEmpty()) {
@@ -212,7 +214,6 @@ public class productcontroller {
         productsDto.setCreateTime(product.getCreateTime());
 
         model.addAttribute("productsdto", productsDto);
-        // Pass the existing image URL to the model for displaying in the view
         model.addAttribute("existingImage", "/productimages/" + product.getProductMainImage());
 
         List<productotherimages> galleryImages = productimagerepo.findByProduct(product);
@@ -225,7 +226,9 @@ public class productcontroller {
     }
 
     @PostMapping("/apps-ecommerce-edit-product")
-    public String saveEditedProduct(@ModelAttribute("productsdto") productsdto productsdto, BindingResult result) {
+    public String saveEditedProduct(@ModelAttribute("productsdto") productsdto productsdto,
+            @RequestParam(value = "imagesToDelete", required = false) String imagesToDelete,
+            BindingResult result) {
         if (result.hasErrors()) {
             return "admin/apps-ecommerce-edit-product";
         }
@@ -236,9 +239,10 @@ public class productcontroller {
             return "admin/apps-ecommerce-edit-product";
         }
 
-        String uploadDir = "E:\\doanB\\projectB_cse411\\demo\\src\\main\\resources\\static\\productimages";
+        String uploadDir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\productimages";
         Path uploadPath = Paths.get(uploadDir);
 
+        // Handle main product image
         MultipartFile image = productsdto.getProductMainImage();
         if (image != null && !image.isEmpty()) {
             String storageFilename = image.getOriginalFilename();
@@ -256,44 +260,62 @@ public class productcontroller {
                         new FieldError("productsdto", "ProductMainImage", "Unable to save the image. Try again."));
                 return "admin/apps-ecommerce-edit-product";
             }
-        } else {
-            // If no new image is uploaded, keep the existing image
-            pro.setProductMainImage(pro.getProductMainImage());
         }
 
         List<productotherimages> existingGalleryImages = productimagerepo.findByProduct(pro);
-        List<MultipartFile> galleryImages = productsdto.getProductOtherImages(); // All uploaded images
 
-        // Check if new images are uploaded
-        boolean hasNewImages = galleryImages.stream()
-                .anyMatch(galleryImage -> galleryImage != null && !galleryImage.isEmpty());
+        // Handle images to delete
+        if (imagesToDelete != null && !imagesToDelete.isEmpty()) {
+            String[] imagesToDeleteArray = imagesToDelete.split(",");
+            for (String imageToDelete : imagesToDeleteArray) {
+                // Extract just the filename
+                String fileName = Paths.get(imageToDelete).getFileName().toString(); // Extract filename
 
-        // If new images are uploaded, delete existing ones
-        if (hasNewImages) {
-            // Delete old gallery images from the database
-            for (productotherimages existingImage : existingGalleryImages) {
-                productimagerepo.delete(existingImage);
+                productotherimages imageEntity = existingGalleryImages.stream()
+                        .filter(img -> img.getProductImage().equals(fileName))
+                        .findFirst()
+                        .orElse(null);
+                if (imageEntity != null) {
+                    productimagerepo.delete(imageEntity);
+                    try {
+                        Path filePath = uploadPath.resolve(fileName);
+                        Files.deleteIfExists(filePath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
+        }
 
-            // Save the new gallery images
+        // Handle new gallery images
+        List<MultipartFile> galleryImages = productsdto.getProductOtherImages();
+        if (galleryImages != null) {
             for (MultipartFile galleryImage : galleryImages) {
                 if (galleryImage != null && !galleryImage.isEmpty()) {
                     String galleryImageFilename = galleryImage.getOriginalFilename();
+                    Path targetPath = uploadPath.resolve(galleryImageFilename);
+
+                    if (Files.exists(targetPath)) {
+                        productotherimages newImage = new productotherimages();
+                        newImage.setProduct(pro);
+                        newImage.setProductImage(galleryImageFilename);
+                        productimagerepo.save(newImage);
+                        continue; 
+                    }
 
                     try {
                         if (!Files.exists(uploadPath)) {
                             Files.createDirectories(uploadPath);
+                            System.out.println("Created directory: " + uploadPath);
                         }
+
                         try (InputStream inputStream = galleryImage.getInputStream()) {
-                            Path targetPath = uploadPath.resolve(galleryImageFilename);
-                            if (!Files.exists(targetPath)) {
-                                Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
-                            }
+                            Files.copy(inputStream, targetPath, StandardCopyOption.REPLACE_EXISTING);
                         }
 
                         productotherimages newImage = new productotherimages();
-                        newImage.setProduct(pro);
-                        newImage.setProductImage(galleryImageFilename);
+                        newImage.setProduct(pro); 
+                        newImage.setProductImage(galleryImageFilename); 
                         productimagerepo.save(newImage);
                     } catch (IOException e) {
                         result.addError(new FieldError("productsdto", "productOtherImages",
@@ -317,7 +339,6 @@ public class productcontroller {
         return "redirect:/admin/apps-ecommerce-products";
     }
 
-    // delete product
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") int id, RedirectAttributes redirectAttributes) {
         try {
@@ -347,9 +368,8 @@ public class productcontroller {
     public String removeImagePreview(@RequestParam("index") int index,
             productsdto productsdto,
             Model model) {
-        // Remove the selected image from previewImages list
         productsdto.getProductOtherImages().remove(index);
         model.addAttribute("productsdto", productsdto);
-        return "redirect:/admin/apps-ecommerce-add-product"; // return to the form view
+        return "redirect:/admin/apps-ecommerce-add-product";
     }
 }
