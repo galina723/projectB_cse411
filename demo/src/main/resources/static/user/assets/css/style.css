@@ -27,7 +27,7 @@
     23. newsletter popup css here
     24. modal css here
 -----------------------------------------------------------------------------------*/
-@import url("https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i&amp;display=swap");
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700,900");
 
 * {
   box-sizing: border-box;
@@ -59,7 +59,7 @@ body {
   font-style: normal;
   font-weight: 400;
   visibility: visible;
-  font-family: "Lato", sans-serif;
+  font-family: "roboto", sans-serif;
   color: #232323;
   letter-spacing: 0.3px;
 }

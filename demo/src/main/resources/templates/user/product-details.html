@@ -35,18 +35,18 @@
                             <div class="product-details-tab">
                                 <div id="img-1" class="zoomWrapper single-zoom">
                                     <a href="#">
-                                        <img id="zoom1" th:src="@{'/productimages/' + ${products.ProductMainImage}}"
-                                            th:attr="data-zoom-image=@{'/productimages/' + ${products.ProductMainImage}}"
-                                            alt="big-1">
+                                        <img id="zoom1" th:src="@{'/productimages/' + ${products.productMainImage}}"
+                                            th:attr="data-zoom-image=@{'/productimages/' + ${products.productMainImage}}"
+                                            alt="Main Image">
                                     </a>
                                 </div>
 
                                 <div class="single-zoom-thumb">
                                     <ul class="s-tab-zoom owl-carousel single-product-active" id="gallery_01">
-                                        <li th:each="image:${galleryImageUrls}">
-                                            <a href="#" class="elevatezoom-gallery" data-update="" data-image="${image}"
+                                        <li th:each="image : ${galleryImageUrls}">
+                                            <a href="#" class="elevatezoom-gallery" data-image="${image}"
                                                 data-zoom-image="${image}">
-                                                <img th:src="${image}" alt="zo-th-1" />
+                                                <img th:src="${image}" alt="Thumbnail" />
                                             </a>
                                         </li>
                                     </ul>
@@ -200,6 +200,31 @@
 
         </section>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Select the main image element
+            const mainImage = document.getElementById('zoom1');
+
+            // Add click event listeners to thumbnail links
+            document.querySelectorAll('.elevatezoom-gallery').forEach(thumbnail => {
+                thumbnail.addEventListener('click', function (event) {
+                    event.preventDefault(); // Prevent default action of the link
+
+                    // Get the new image source from the clicked thumbnail
+                    const newImageSrc = this.getAttribute('data-image');
+                    const newZoomImageSrc = this.getAttribute('data-zoom-image');
+
+                    // Debugging: Log the new image sources to check if they are correct
+                    console.log('New Image Source:', newImageSrc);
+                    console.log('New Zoom Image Source:', newZoomImageSrc);
+
+                    // Update the main image source and zoom image source
+                    mainImage.src = newImageSrc;
+                    mainImage.setAttribute('data-zoom-image', newZoomImageSrc);
+                });
+            });
+        });
+    </script>
 </body>
 
 
