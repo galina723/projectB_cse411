@@ -59,7 +59,7 @@ body {
   font-style: normal;
   font-weight: 400;
   visibility: visible;
-  font-family: "Lato", sans-serif;
+  font-family: "Arial", sans-serif;
   color: #232323;
   letter-spacing: 0.3px;
 }
@@ -12434,7 +12434,30 @@ iframe {
   border: none;
 }
 
+.border-frame {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px;
+}
 
+.product_name {
+  white-space: nowrap;       
+  overflow: hidden;          
+  text-overflow: ellipsis;   
+  max-width: 100%;        
+}
+
+.cart_info a {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.pagination {
+  justify-content: center;
+}
 /*privacy policy css end*/
 
 /*# sourceMappingURL=style.css.map */

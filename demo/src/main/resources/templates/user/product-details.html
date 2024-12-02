@@ -43,10 +43,17 @@
 
                                 <div class="single-zoom-thumb">
                                     <ul class="s-tab-zoom owl-carousel single-product-active" id="gallery_01">
-                                        <li th:each="image:${galleryImageUrls}">
-                                            <a href="#" class="elevatezoom-gallery" data-update="" data-image="${image}"
-                                                data-zoom-image="${image}">
-                                                <img th:src="${image}" alt="zo-th-1" />
+                                        <li>
+                                            <a href="#" class="elevatezoom-gallery" 
+                                               th:attr="data-image=@{'/productimages/' + ${products.ProductMainImage}}, data-zoom-image=@{'/productimages/' + ${products.ProductMainImage}}">
+                                                <img th:src="@{'/productimages/' + ${products.ProductMainImage}}" alt="main image" />
+                                            </a>
+                                        </li>
+                                        
+                                        <li th:each="image : ${galleryImageUrls}">
+                                            <a href="#" class="elevatezoom-gallery" 
+                                               th:attr="data-image=@{${image}}, data-zoom-image=@{${image}}">
+                                                <img th:src="${image}" alt="thumbnail" />
                                             </a>
                                         </li>
                                     </ul>
@@ -200,6 +207,28 @@
 
         </section>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const thumbnails = document.querySelectorAll('.elevatezoom-gallery');
+
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', function (event) {
+                    event.preventDefault();
+
+                    const mainImage = document.getElementById('zoom1');
+                    const newImageSrc = this.getAttribute('data-image');
+                    const newZoomImageSrc = this.getAttribute('data-zoom-image');
+
+                    mainImage.src = newImageSrc;
+                    mainImage.setAttribute('data-zoom-image', newZoomImageSrc);
+
+                    thumbnails.forEach(th => th.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
 </body>
 
 
