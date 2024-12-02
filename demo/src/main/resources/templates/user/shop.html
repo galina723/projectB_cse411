@@ -47,10 +47,13 @@
                                     </div>
                                     <div class="widget_list widget_filter">
                                         <h3>Filter by price</h3>
-                                        <form action="#">
+                                        <form th:action="@{/user/shop}" method="get">
+                                            <input type="hidden" name="category" th:value="${categoryName}" />
+                                            <input type="hidden" name="minPrice" id="minPrice" />
+                                            <input type="hidden" name="maxPrice" id="maxPrice" />
                                             <div id="slider-range"></div>
+                                            <input type="text" id="amount" readonly />
                                             <button type="submit">Filter</button>
-                                            <input type="text" name="text" id="amount" />
                                         </form>
                                     </div>
 
@@ -67,7 +70,7 @@
 
 
                                 </div>
-                                <div class=" niceselect_option">
+                                <!-- <div class=" niceselect_option">
                                     <form class="select_option" action="#">
                                         <select name="orderby" id="short">
 
@@ -79,7 +82,7 @@
                                             <option value="6">Product Name: Z</option>
                                         </select>
                                     </form>
-                                </div>
+                                </div> -->
                                 <div class="123">
 
                                 </div>
@@ -129,19 +132,28 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="shop_toolbar t_bottom">
-                                <div class="pagination">
-                                    <ul>
-                                        <li class="current">1</li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li class="next"><a href="#">next</a></li>
-                                        <li><a href="#">>></a></li>
-                                    </ul>
-                                </div>
-                            </div> -->
-                            <!--shop toolbar end-->
-                            <!--shop wrapper end-->
+                            <div class="pagination">
+                                <ul>
+                                    <!-- Previous button -->
+                                    <li th:if="${currentPage > 0}">
+                                        <a th:href="@{'/user/shop'(category=${categoryName}, page=${currentPage - 1})}">
+                                            << </a>
+                                    </li>
+
+                                    <!-- Page numbers -->
+                                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                        th:classappend="${i == currentPage} ? 'current'">
+                                        <a th:href="@{'/user/shop'(category=${categoryName}, page=${i})}"
+                                            th:text="${i + 1}"></a>
+                                    </li>
+
+                                    <!-- Next button -->
+                                    <li th:if="${currentPage < totalPages - 1}">
+                                        <a
+                                            th:href="@{'/user/shop'(category=${categoryName}, page=${currentPage + 1})}">>></a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -150,6 +162,23 @@
 
         </section>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#slider-range").slider({
+                range: true,
+                min: 0,
+                max: 1000,
+                values: [0, 1000], 
+                slide: function (event, ui) {
+                    $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+                    $('input[name="minPrice"]').val(ui.values[0]);
+                    $('input[name="maxPrice"]').val(ui.values[1]);
+                }
+            });
+            $("#amount").val("$" + $("#slider-range").slider("values", 0) + " - $" + $("#slider-range").slider("values", 1));
+        });
+    </script>
 </body>
 
 

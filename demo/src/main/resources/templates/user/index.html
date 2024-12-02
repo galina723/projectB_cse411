@@ -414,14 +414,14 @@
                         <div class="col-lg-6 col-md-6">
                             <div class="single_banner">
                                 <div class="banner_thumb">
-                                    <a href="/user/shop"><img src="/user/assets/img/bg/banner2.jpg" alt=""></a>
+                                    <a href="/user/shop"><img src="/user/assets/img/bg/banner2.png" alt=""></a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6">
                             <div class="single_banner">
                                 <div class="banner_thumb">
-                                    <a href="/user/shop"><img src="/user/assets/img/bg/banner3.jpg" alt=""></a>
+                                    <a href="/user/shop"><img src="/user/assets/img/bg/banner3.png" alt=""></a>
                                 </div>
                             </div>
                         </div>
@@ -432,23 +432,6 @@
         </section>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var checkoutSuccess = "[[${session.checkoutSuccess}]]";
-
-            if (checkoutSuccess === "true") {
-                Toastify({
-                    text: "Checkout successful! Your order has been placed.",
-                    duration: 700,
-                    gravity: "top",
-                    position: "right",
-                    backgroundColor: "#4CAF50",
-                }).showToast();
-
-                fetch("/user/checkout/clearCheckoutSuccess");
-            }
-        });
-    </script>
 </body>
 
 </html>

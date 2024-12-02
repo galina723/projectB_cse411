@@ -101,7 +101,7 @@ public class UserController {
         int defaultCategoryId2 = categories.isEmpty() ? 0 : categories.get(12).getCategoryId();
         List<products> products2 = productrepo.findProductsByCategoryId(defaultCategoryId, pageable);
         List<products> products3 = productrepo.findProductsByCategoryId(defaultCategoryId2, pageable);
-        
+
         products2 = products2.stream()
                 .filter(product2 -> !"block".equalsIgnoreCase(product2.getProductStatus()))
                 .collect(Collectors.toList());
@@ -594,7 +594,7 @@ public class UserController {
         cartrepo.deleteAllByCustomerId(customerId);
 
         session.setAttribute("checkoutSuccess", true);
-        return "redirect:/user/index";
+        return "redirect:/user/my-account";
     }
 
     @GetMapping("/checkout/clearCheckoutSuccess")
@@ -606,7 +606,7 @@ public class UserController {
             session.removeAttribute("checkoutSuccess");
         }
 
-        return "user/index";
+        return "user/my-account";
     }
 
     @GetMapping("contact")
@@ -660,15 +660,16 @@ public class UserController {
             customer.setCustomerCity(updatedCustomer.getCustomerCity());
             customer.setCustomerProvince(jsonLoader.getProvinceNameById(updatedCustomer.getCustomerProvince()));
             if (!newPassword.isEmpty()) {
-                if (!newPassword.equals(confirmPassword)) {
-                    model.addAttribute("error", "The passwords do not match, please try again.");
-                    return "redirect:/user/my-account";
+                if (newPassword.equals(confirmPassword)) {
+                    String encodedPassword = encryption.encrypt(newPassword);
+                    customer.setCustomerPassword(encodedPassword);
+                    customerrepo.save(customer);
+                } else {
+                    model.addAttribute("error", "Passwords do not match!");
                 }
-
-                String encodedPassword = encryption.encrypt(newPassword);
-                customer.setCustomerPassword(encodedPassword);
+            } else {
+                customerrepo.save(customer);
             }
-            customerrepo.save(customer);
         }
 
         return "redirect:/user/my-account";
@@ -724,21 +725,37 @@ public class UserController {
     }
 
     @GetMapping("/shop")
-    public String shop(@RequestParam(value = "category", required = false) String categoryName, Model model) {
+    public String shop(@RequestParam(value = "category", required = false) String categoryName,
+            @RequestParam(value = "minPrice", required = false) Double minPrice,
+            @RequestParam(value = "maxPrice", required = false) Double maxPrice,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            Model model) {
+        int size = 8;
         List<categories> categories = (List<categories>) caterepo.findAll();
         model.addAttribute("categories", categories);
 
-        List<products> products;
-        if (categoryName != null && !categoryName.isEmpty()) {
-            products = productrepo.findProductsByCategory(categoryName);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("ProductId").descending());
+        Pageable pageable1 = PageRequest.of(page, 100, Sort.by("ProductPrice").descending());
+        Page<products> productPage;
+
+        if (minPrice != null && maxPrice != null) {
+            if (categoryName != null && !categoryName.isEmpty()) {
+                productPage = productrepo.findProductsByCategoryAndPriceRange(categoryName, minPrice, maxPrice,
+                        pageable1);
+            } else {
+                productPage = productrepo.findProductsByPriceRange(minPrice, maxPrice, pageable1);
+            }
+        } else if (categoryName != null && !categoryName.isEmpty()) {
+            productPage = productrepo.findProductsByCategory(categoryName, pageable);
         } else {
-            products = (List<products>) productrepo.findAll();
+            productPage = productrepo.findAllProducts(pageable);
         }
 
-        products = products.stream()
-                .filter(product -> !"block".equalsIgnoreCase(product.getProductStatus()))
-                .collect(Collectors.toList());
-        model.addAttribute("products", products);
-        return "user/shop";
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("categoryName", categoryName);
+
+        return "user/shop"; 
     }
 }
