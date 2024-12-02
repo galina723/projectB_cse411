@@ -31,7 +31,7 @@
             <div class="product_details mb-60">
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-5 col-md-5">
+                        <div class="col-lg-4 col-md-5">
                             <div class="product-details-tab">
                                 <div id="img-1" class="zoomWrapper single-zoom">
                                     <a href="#">
@@ -44,15 +44,16 @@
                                 <div class="single-zoom-thumb">
                                     <ul class="s-tab-zoom owl-carousel single-product-active" id="gallery_01">
                                         <li>
-                                            <a href="#" class="elevatezoom-gallery" 
-                                               th:attr="data-image=@{'/productimages/' + ${products.ProductMainImage}}, data-zoom-image=@{'/productimages/' + ${products.ProductMainImage}}">
-                                                <img th:src="@{'/productimages/' + ${products.ProductMainImage}}" alt="main image" />
+                                            <a href="#" class="elevatezoom-gallery"
+                                                th:attr="data-image=@{'/productimages/' + ${products.ProductMainImage}}, data-zoom-image=@{'/productimages/' + ${products.ProductMainImage}}">
+                                                <img th:src="@{'/productimages/' + ${products.ProductMainImage}}"
+                                                    alt="main image" />
                                             </a>
                                         </li>
-                                        
+
                                         <li th:each="image : ${galleryImageUrls}">
-                                            <a href="#" class="elevatezoom-gallery" 
-                                               th:attr="data-image=@{${image}}, data-zoom-image=@{${image}}">
+                                            <a href="#" class="elevatezoom-gallery"
+                                                th:attr="data-image=@{${image}}, data-zoom-image=@{${image}}">
                                                 <img th:src="${image}" alt="thumbnail" />
                                             </a>
                                         </li>
@@ -109,6 +110,7 @@
 
                             </div>
                         </div>
+                        <div class="col-lg-1 col-md-12"></div>
                     </div>
                 </div>
             </div>

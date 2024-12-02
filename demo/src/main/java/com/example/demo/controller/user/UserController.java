@@ -97,8 +97,8 @@ public class UserController {
         List<products> products = productrepo.findTop5Products(pageable);
         List<products> products1 = productrepo.findBestProducts(pageable);
 
-        int defaultCategoryId = categories.isEmpty() ? 0 : categories.get(7).getCategoryId();
-        int defaultCategoryId2 = categories.isEmpty() ? 0 : categories.get(12).getCategoryId();
+        int defaultCategoryId = categories.isEmpty() ? 0 : categories.get(12).getCategoryId();
+        int defaultCategoryId2 = categories.isEmpty() ? 0 : categories.get(7).getCategoryId();
         List<products> products2 = productrepo.findProductsByCategoryId(defaultCategoryId, pageable);
         List<products> products3 = productrepo.findProductsByCategoryId(defaultCategoryId2, pageable);
 
