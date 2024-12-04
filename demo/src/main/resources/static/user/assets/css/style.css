@@ -12441,10 +12441,10 @@ iframe {
 }
 
 .product_name {
-  white-space: nowrap;       
-  overflow: hidden;          
-  text-overflow: ellipsis;   
-  max-width: 100%;        
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .cart_info a {
@@ -12458,6 +12458,7 @@ iframe {
 .pagination {
   justify-content: center;
 }
+
 /*privacy policy css end*/
 
 /*# sourceMappingURL=style.css.map */

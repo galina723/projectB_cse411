@@ -89,7 +89,7 @@
                                                     </div>
                                                     <figcaption class="related_content">
                                                         <h4><a
-                                                                th:href="@{/user/blog-details/{id}(id=${recentBlog.BlogId})}">[[${recentBlog.BlogTitle}]]</a>
+                                                                th:href="@{/user/blog-details/{id}(id=${recentBlog.BlogId})}" th:text="${#strings.abbreviate(recentBlog.BlogTitle, 45)}"></a>
                                                         </h4>
                                                         <div class="blog_meta">
                                                             <span class="author">By : [[${recentBlog.BlogPostBy}]] /

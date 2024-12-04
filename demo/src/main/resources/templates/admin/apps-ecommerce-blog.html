@@ -124,7 +124,8 @@
 
                                                         <td class="id">[[${blog.BlogId}]]
                                                         </td>
-                                                        <td class="customer_name">[[${blog.BlogTitle}]]</td>
+                                                        <td class="customer_name"
+                                                            th:text="${#strings.abbreviate(blog.BlogTitle, 40)}"></td>
                                                         <td class="image img-fluid d">
                                                             <div class="avatar-sm bg-light rounded p-1">
                                                                 <img th:src="@{'/blogimages/' + ${blog.BlogImage}}"
@@ -135,8 +136,8 @@
                                                         <td class="date">
                                                             [[${blog.BlogCreateDate}]]
                                                         </td>
-                                                        <td class="customer_name">[[${loggedInAdminName}]]</td>
-                                                        <td class="tag">[[${blog.Blogtag}]]</td>
+                                                        <td class="customer_name">[[${blog.BlogPostBy}]]</td>
+                                                        <td class="tag" th:text="${#strings.abbreviate(blog.Blogtag, 40)}"></td>
                                                         <td class="status">
                                                             <span th:if="${blog.BlogStatus == 'Published'}"
                                                                 class="badge bg-success-subtle text-success text-uppercase">Published</span>

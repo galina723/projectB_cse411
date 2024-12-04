@@ -132,28 +132,47 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="pagination">
-                                <ul>
-                                    <!-- Previous button -->
-                                    <li th:if="${currentPage > 0}">
-                                        <a th:href="@{'/user/shop'(category=${categoryName}, page=${currentPage - 1})}">
-                                            << </a>
-                                    </li>
-
-                                    <!-- Page numbers -->
-                                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                                        th:classappend="${i == currentPage} ? 'current'">
-                                        <a th:href="@{'/user/shop'(category=${categoryName}, page=${i})}"
-                                            th:text="${i + 1}"></a>
-                                    </li>
-
-                                    <!-- Next button -->
-                                    <li th:if="${currentPage < totalPages - 1}">
-                                        <a
-                                            th:href="@{'/user/shop'(category=${categoryName}, page=${currentPage + 1})}">>></a>
-                                    </li>
-                                </ul>
-                            </div>
+                        </div>
+                        <div class="pagination">
+                            <ul>
+                                <!-- Previous button -->
+                                <li th:if="${currentPage > 0}">
+                                    <a th:href="@{'/user/shop'(category=${categoryName}, page=${currentPage - 1})}"><<</a>
+                                </li>
+                        
+                                <!-- First page link -->
+                                <li th:if="${currentPage > 2}">
+                                    <a th:href="@{'/user/shop'(category=${categoryName}, page=0)}" th:text="'1'"></a>
+                                </li>
+                        
+                                <!-- Ellipsis if needed after the first page -->
+                                <li th:if="${currentPage > 2}">
+                                    <span>...</span>
+                                </li>
+                        
+                                <!-- Show page numbers around the current page -->
+                                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                                    th:if="${i >= currentPage - 1 && i <= currentPage + 1}"
+                                    th:classappend="${i == currentPage} ? 'current'">
+                                    <a th:href="@{'/user/shop'(category=${categoryName}, page=${i})}"
+                                        th:text="${i + 1}"></a>
+                                </li>
+                        
+                                <!-- Ellipsis if needed before the last page -->
+                                <li th:if="${currentPage < totalPages - 3}">
+                                    <span>...</span>
+                                </li>
+                        
+                                <!-- Last page link -->
+                                <li th:if="${currentPage < totalPages - 2}">
+                                    <a th:href="@{'/user/shop'(category=${categoryName}, page=${totalPages - 1})}" th:text="${totalPages}"></a>
+                                </li>
+                        
+                                <!-- Next button -->
+                                <li th:if="${currentPage < totalPages - 1}">
+                                    <a th:href="@{'/user/shop'(category=${categoryName}, page=${currentPage + 1})}">>></a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>

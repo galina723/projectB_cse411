@@ -124,7 +124,9 @@
                                                     <tr th:each="product : ${products}">
 
                                                         <td class="id">[[${product.ProductId}]]</td>
-                                                        <td class="customer_name">[[${product.ProductName}]]</td>
+                                                        <td class="customer_name"
+                                                            th:text="${#strings.abbreviate(product.ProductName, 30)}">
+                                                        </td>
                                                         <td class="image">
                                                             <div class="avatar-sm bg-light rounded p-1">
                                                                 <img th:src="@{'/productimages/' + ${product.ProductMainImage}}"
@@ -269,34 +271,29 @@
                     const rows = Array.from(tbody.querySelectorAll('tr'));
                     const columnIndex = Array.from(header.parentNode.children).indexOf(header);
 
-                    // Toggle sorting direction if the same column is clicked
                     isAscending = currentColumn === header ? !isAscending : true;
                     currentColumn = header;
 
-                    // Update header classes for the current sort direction
                     document.querySelectorAll('th.sort').forEach(h => h.classList.remove('ascending', 'descending'));
                     header.classList.toggle('ascending', isAscending);
                     header.classList.toggle('descending', !isAscending);
 
-                    // Sort rows based on the selected column
                     rows.sort((rowA, rowB) => {
                         const cellA = rowA.children[columnIndex].textContent.trim();
                         const cellB = rowB.children[columnIndex].textContent.trim();
 
-                        // Sort by date if both cells are valid dates
                         let comparison;
                         if (!isNaN(Date.parse(cellA)) && !isNaN(Date.parse(cellB))) {
                             comparison = new Date(cellA) - new Date(cellB);
-                        } else if (!isNaN(cellA) && !isNaN(cellB)) {  // Sort by number if both are numbers
+                        } else if (!isNaN(cellA) && !isNaN(cellB)) {
                             comparison = cellA - cellB;
-                        } else {  // Sort alphabetically
+                        } else {
                             comparison = cellA.localeCompare(cellB, undefined, { numeric: true });
                         }
 
                         return isAscending ? comparison : -comparison;
                     });
 
-                    // Append sorted rows back to the tbody
                     rows.forEach(row => tbody.appendChild(row));
                 });
             });

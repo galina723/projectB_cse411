@@ -73,7 +73,7 @@
                                                                 <p th:text="${order.OrderStatus}" class="m-0"></p>
                                                             </span>
                                                         </td>
-                                                        <td>$[[${order.OrderAmount}]]</td>
+                                                        <td>$[[${#numbers.formatDecimal(order.OrderAmount,2,2)}]]</td>
                                                         <td><a th:href="@{'/user/order-details/' + ${order.OrderId}}"
                                                                 class="view">view</a></td>
                                                     </tr>
@@ -182,10 +182,8 @@
                     var provinceId = this.value;
 
 
-                    // Clear previous options in the city dropdown
                     citySelect.innerHTML = '<option value="" disabled selected>Select a city</option>';
 
-                    // Fetch districts based on selected province
                     fetch(`/user/districts/${provinceId}`)
                         .then(response => {
                             if (!response.ok) {
@@ -196,15 +194,13 @@
                         .then(data => {
                             if (Array.isArray(data) && data.length > 0) {
                                 data.forEach(function (district) {
-                                    // Create a new option element
                                     let option = document.createElement("option");
                                     option.value = district.name;
                                     option.textContent = district.name;
                                     citySelect.appendChild(option);
                                 });
 
-                                // Re-initialize or refresh the custom select library
-                                $(citySelect).niceSelect('update'); // Adjust this line based on your library's method
+                                $(citySelect).niceSelect('update');
                             } else {
                                 console.warn("No districts found for this province.");
                             }

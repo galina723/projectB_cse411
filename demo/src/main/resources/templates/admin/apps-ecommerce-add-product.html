@@ -209,10 +209,8 @@
         </section>
     </div>
     <script>
-        // Get the current date and format it as 'yyyy-MM-dd'
         const formattedDate = `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, '0')}-${String(new Date().getDate()).padStart(2, '0')}`;
 
-        // Set the value of the input field
         document.getElementById('datepicker-publish-input').value = formattedDate;
         function previewMainImage(event) {
             const file = event.target.files[0];
@@ -221,7 +219,7 @@
             reader.onload = function (e) {
                 const img = document.getElementById('product-img');
                 img.src = e.target.result;
-                img.style.display = 'block'; // Show the image
+                img.style.display = 'block';
             };
 
             if (file) {
@@ -233,15 +231,13 @@
 
         document.getElementById('product-other-images-input').addEventListener('change', function () {
             const container = document.getElementById('image-preview-container');
-            container.innerHTML = '';
+            const files = Array.from(this.files);
 
-            const files = this.files;
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                if (!selectedFiles.includes(file)) {
+            files.forEach(file => {
+                if (!selectedFiles.some(f => f.name === file.name)) {
                     selectedFiles.push(file);
-                    const reader = new FileReader();
 
+                    const reader = new FileReader();
                     reader.onload = function (e) {
                         const imgContainer = document.createElement('div');
                         imgContainer.className = 'position-relative me-2 mb-2';
@@ -271,20 +267,24 @@
                         reader.readAsDataURL(file);
                     }
                 }
-            }
+            });
+
+            updateHiddenInput();
         });
 
         function updateHiddenInput() {
             const hiddenInput = document.getElementById('product-other-images-input');
             const dataTransfer = new DataTransfer();
+
             selectedFiles.forEach(file => {
                 dataTransfer.items.add(file);
             });
+
             hiddenInput.files = dataTransfer.files;
         }
 
         document.getElementById('createproduct-form').addEventListener('submit', function (event) {
-            event.preventDefault(); 
+            event.preventDefault();
 
             let isValid = true;
 
@@ -308,7 +308,7 @@
             }
 
             if (isValid) {
-                this.submit(); 
+                this.submit();
             } else {
                 this.classList.add('was-validated');
             }

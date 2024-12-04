@@ -284,13 +284,20 @@ public class UserController {
         return "user/blog-details";
     }
 
-    @GetMapping("blog")
-    public String blog(Model model) {
-        List<blogs> blogs = (List<blogs>) blogrepo.findAll();
-        blogs = blogs.stream()
+    @GetMapping("/blog")
+    public String blog(@RequestParam(value = "page", defaultValue = "0") int page, Model model) {
+        int size = 9;
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<blogs> blogPage = blogrepo.findAll(pageable);
+        List<blogs> visibleBlogs = blogPage.getContent().stream()
                 .filter(blog -> !"hidden".equalsIgnoreCase(blog.getBlogStatus()))
                 .collect(Collectors.toList());
-        model.addAttribute("blogs", blogs);
+
+        model.addAttribute("blogs", visibleBlogs);
+        model.addAttribute("currentPage", blogPage.getNumber());
+        model.addAttribute("totalPages", blogPage.getTotalPages());
+
         return "user/blog";
     }
 
@@ -566,7 +573,7 @@ public class UserController {
         order.setCustomer(customerrepo.findById(customerId).orElse(null));
         order.setOrderDate(new java.sql.Date(new Date().getTime()));
         order.setOrderStatus("Pending");
-        order.setOrderAmount((int) total);
+        order.setOrderAmount(total);
         order.setOrderPaymentMethod("COD");
         order.setOrderNote(note != null ? note : "");
         order.setOrderAddress(address);
@@ -647,6 +654,8 @@ public class UserController {
     @PostMapping("/my-account")
     public String updateAccount(@RequestParam("newPassword") String newPassword,
             @RequestParam("confirmPassword") String confirmPassword,
+            @RequestParam(value = "orderProvince", required = false) String province,
+            @RequestParam(value = "orderCity", required = false) String city,
             @ModelAttribute("customer") customers updatedCustomer, HttpSession session, Model model) {
         Integer customerId = (Integer) session.getAttribute("loginCustomer");
         if (customerId == null) {
@@ -655,10 +664,16 @@ public class UserController {
 
         customers customer = customerrepo.findById(customerId).orElse(null);
         if (customer != null) {
+
             customer.setCustomerName(updatedCustomer.getCustomerName());
             customer.setCustomerAddress(updatedCustomer.getCustomerAddress());
-            customer.setCustomerCity(updatedCustomer.getCustomerCity());
-            customer.setCustomerProvince(jsonLoader.getProvinceNameById(updatedCustomer.getCustomerProvince()));
+            if (province != null) {
+                String provinceName = jsonLoader.getProvinceNameById(province);
+                customer.setCustomerProvince(provinceName);
+            }
+            if (city != null) {
+                customer.setCustomerCity(city);
+            }
             if (!newPassword.isEmpty()) {
                 if (newPassword.equals(confirmPassword)) {
                     String encodedPassword = encryption.encrypt(newPassword);
@@ -756,6 +771,6 @@ public class UserController {
         model.addAttribute("totalPages", productPage.getTotalPages());
         model.addAttribute("categoryName", categoryName);
 
-        return "user/shop"; 
+        return "user/shop";
     }
 }

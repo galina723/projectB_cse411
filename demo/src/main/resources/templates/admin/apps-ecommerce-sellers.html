@@ -126,7 +126,8 @@
                                                         <td class="customer_name">[[${ad.AdminName}]]</td>
                                                         <td class="email">[[${ad.AdminEmail}]]</td>
                                                         <td class="phone">[[${ad.AdminPhone}]]</td>
-                                                        <td class="customer_name">[[${ad.AdminAddress}]]</td>
+                                                        <td class="customer_name"
+                                                            th:text="${#strings.abbreviate(ad.AdminAddress, 30)}"></td>
                                                         <td class="customer_name">[[${ad.AdminCity}]]</td>
                                                         <td class="customer_name">[[${ad.AdminProvince}]]</td>
                                                         <td class="status"><span th:if="${ad.AdminStatus == 'Active'}"

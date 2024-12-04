@@ -143,7 +143,6 @@ public class productcontroller {
 
         products savedProduct = productrepo.save(pro);
         
-        // Process and save gallery images
         List<MultipartFile> galleryImages = productsdto.getProductOtherImages();
         if (galleryImages != null && !galleryImages.isEmpty()) {
             for (MultipartFile galleryImage : galleryImages) {
