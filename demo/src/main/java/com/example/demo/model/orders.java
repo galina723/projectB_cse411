@@ -30,7 +30,7 @@ public class orders {
     private String OrderStatus;
 
     @Column(name = "amount", nullable = false)
-    private int OrderAmount;
+    private double OrderAmount;
 
     @Column(name = "paymentmethod", length = 50, nullable = false)
     private String OrderPaymentMethod;
@@ -47,6 +47,14 @@ public class orders {
     @Column(name = "province", length = 50, nullable = false)
     private String OrderProvince;
 
+    public double getOrderAmount() {
+        return OrderAmount;
+    }
+
+    public void setOrderAmount(double orderAmount) {
+        OrderAmount = orderAmount;
+    }
+
     public int getOrderId() {
         return OrderId;
     }
@@ -61,14 +69,6 @@ public class orders {
 
     public void setOrderStatus(String orderStatus) {
         OrderStatus = orderStatus;
-    }
-
-    public int getOrderAmount() {
-        return OrderAmount;
-    }
-
-    public void setOrderAmount(int orderAmount) {
-        OrderAmount = orderAmount;
     }
 
     public String getOrderPaymentMethod() {

@@ -18322,4 +18322,10 @@ span.flatpickr-weekday {
     position: relative;
 }
 
+.truncate {
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    max-width: 200px; 
+  }
 /*# sourceMappingURL=app.min.css.map */

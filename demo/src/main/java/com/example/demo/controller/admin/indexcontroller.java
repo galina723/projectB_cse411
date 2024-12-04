@@ -80,7 +80,7 @@ public class indexcontroller {
         model.addAttribute("totalCustomers", totalCustomers);
 
         Pageable pageable = PageRequest.of(0, 5);
-        List<products> product = productrepo.findTop5Products(pageable);
+        List<products> product = productrepo.findBestProducts(pageable);
         model.addAttribute("products", product);
 
         Pageable pageable1 = PageRequest.of(0, 5);

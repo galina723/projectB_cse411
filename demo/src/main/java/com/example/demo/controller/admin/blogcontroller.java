@@ -22,6 +22,7 @@ import com.example.demo.model.blogs;
 import com.example.demo.model.blogsdto;
 import com.example.demo.repository.*;
 
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -33,7 +34,6 @@ public class blogcontroller {
 
     @Autowired
     blogrepository blogrepo;
-
 
     @ModelAttribute("loggedInAdminName")
     public String getLoggedInAdminName(HttpSession session) {
@@ -48,7 +48,7 @@ public class blogcontroller {
             return null;
         }
     }
-    
+
     @GetMapping("apps-ecommerce-blog")
     public String blog(Model model, RedirectAttributes redirectAttributes, HttpSession session) {
         Integer adminId = (Integer) session.getAttribute("loginAdmin");
@@ -83,7 +83,11 @@ public class blogcontroller {
     }
 
     @PostMapping("apps-ecommerce-create-blog/save")
-    public String saveProduct(@ModelAttribute("blogsdto") blogsdto blogsdto, BindingResult result) {
+    public String saveProduct(@ModelAttribute("blogsdto") blogsdto blogsdto, BindingResult result,
+            HttpSession session) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
         if (result.hasErrors()) {
             return "admin/apps-ecommerce-create-blog";
         }
@@ -129,7 +133,11 @@ public class blogcontroller {
         bl.setBlogDescription(blogsdto.getBlogDescription());
         bl.setBlogStatus(blogsdto.getBlogStatus());
         bl.setBlogCreateDate(blogsdto.getBlogCreateDate());
-        bl.setBlogPostBy(blogsdto.getBlogPostBy());
+        if (adminId != null) {
+            bl.setBlogPostBy(adminrepo.findById(adminId).get().getAdminName());
+        } else if (superId != null) {
+            bl.setBlogPostBy(adminrepo.findById(superId).get().getAdminName());
+        }
         bl.setBlogtag(blogsdto.getBlogtag());
         bl.setBlogImage(storagefilename);
 
@@ -137,7 +145,6 @@ public class blogcontroller {
 
         return "redirect:/admin/apps-ecommerce-blog";
     }
-
 
     @GetMapping("/set-current-blog-id/{id}")
     public String setCurrentBlogId(@PathVariable("id") int id, HttpSession session) {
@@ -182,7 +189,11 @@ public class blogcontroller {
     }
 
     @PostMapping("/apps-ecommerce-edit-blog")
-    public String saveEditedBlog(@ModelAttribute("blogsdto") blogsdto blogsdto, BindingResult result) {
+    public String saveEditedBlog(@ModelAttribute("blogsdto") blogsdto blogsdto, BindingResult result,
+            HttpSession session) {
+        Integer adminId = (Integer) session.getAttribute("loginAdmin");
+        Integer superId = (Integer) session.getAttribute("loginSuper");
+
         if (result.hasErrors()) {
             return "admin/apps-ecommerce-edit-blog";
         }
@@ -221,14 +232,17 @@ public class blogcontroller {
         bl.setBlogDescription(blogsdto.getBlogDescription());
         bl.setBlogStatus(blogsdto.getBlogStatus());
         bl.setBlogCreateDate(blogsdto.getBlogCreateDate());
-        bl.setBlogPostBy(blogsdto.getBlogPostBy());
+        if (adminId != null) {
+            bl.setBlogPostBy(adminrepo.findById(adminId).get().getAdminName());
+        } else if (superId != null) {
+            bl.setBlogPostBy(adminrepo.findById(superId).get().getAdminName());
+        }
         bl.setBlogtag(blogsdto.getBlogtag());
 
         blogrepo.save(bl);
 
         return "redirect:/admin/apps-ecommerce-blog";
     }
-
 
     @GetMapping("/deleteblog/{id}")
     public String deleteblog(@PathVariable("id") int id, RedirectAttributes redirectAttributes) {

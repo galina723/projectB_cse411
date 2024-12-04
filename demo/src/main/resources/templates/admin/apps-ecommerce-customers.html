@@ -122,7 +122,9 @@
                                                         <td class="customer_name">[[${customer.CustomerName}]]</td>
                                                         <td class="email">[[${customer.cemail}]]</td>
                                                         <td class="quantity">[[${customer.CustomerPhone}]]</td>
-                                                        <td class="customer_name">[[${customer.CustomerAddress}]]</td>
+                                                        <td class="customer_name"
+                                                            th:text="${#strings.abbreviate(customer.CustomerAddress, 30)}">
+                                                        </td>
                                                         <td class="customer_name">[[${customer.CustomerCity}]]</td>
                                                         <td class="customer_name">[[${customer.CustomerProvince}]]</td>
                                                         <td class="status">

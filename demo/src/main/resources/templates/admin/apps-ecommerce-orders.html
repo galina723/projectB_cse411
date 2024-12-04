@@ -123,10 +123,13 @@
                                                         <td class="customer_name">[[${order.Customer.CustomerName}]]
                                                         </td>
                                                         <td class="date">[[${order.OrderDate}]]</td>
-                                                        <td class="customer_name">[[${order.OrderAddress}]]</td>
+                                                        <td class="customer_name"
+                                                            th:text="${#strings.abbreviate(order.OrderAddress, 20)}">
+                                                        </td>
                                                         <td class="customer_name">[[${order.OrderCity}]]</td>
                                                         <td class="customer_name">[[${order.OrderProvince}]]</td>
-                                                        <td class="amount">[[${order.OrderAmount}]]</td>
+                                                        <td class="amount">[[${#numbers.formatDecimal(order.OrderAmount,
+                                                            2, 2)}]]</td>
                                                         <td class="payment">[[${order.OrderPaymentMethod}]]</td>
                                                         <td class="status">
                                                             <span

@@ -102,7 +102,7 @@
                                         <div class="coupon_inner">
                                             <div class="cart_subtotal">
                                                 <p>Total</p>
-                                                <p class="cart_amount">$<span th:text="${orders.OrderAmount}"></p>
+                                                <p class="cart_amount">$<span th:text="${#numbers.formatDecimal(orders.OrderAmount,2,2)}"></p>
                                             </div>
                                         </div>
                                     </div>

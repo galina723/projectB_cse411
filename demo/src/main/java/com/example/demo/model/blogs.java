@@ -15,7 +15,7 @@ public class blogs {
     @Column(name = "id", length = 10)
     private int BlogId;
 
-    @Column(name = "title", length = 50)
+    @Column(name = "title", columnDefinition = "TEXT")
     private String BlogTitle;
 
     @Column(name = "description", columnDefinition = "TEXT")
@@ -31,7 +31,7 @@ public class blogs {
     @Column(name = "postby", length = 50)
     private String BlogPostBy;
 
-    @Column(name = "tag", length = 50)
+    @Column(name = "tag", columnDefinition = "TEXT")
     private String Blogtag;
 
     @Column(name = "image", length = 2083)

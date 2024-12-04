@@ -50,7 +50,9 @@
                                                                     alt="" class="img-fluid d-block">
                                                             </div>
                                                             <div class="flex-grow-1 ms-3">
-                                                                <h5 class="fs-15">[[${orderdetail.ProductName}]]</h5>
+                                                                <h5 class="fs-15"
+                                                                    th:text="${#strings.abbreviate(orderdetail.ProductName, 30)}">
+                                                                </h5>
 
                                                             </div>
                                                         </div>
@@ -69,7 +71,9 @@
                                                             <tbody>
                                                                 <tr class="border-top border-top-dashed">
                                                                     <th scope="row">Total (USD) :</th>
-                                                                    <th class="text-end">$[[${orders.OrderAmount}]]</th>
+                                                                    <th class="text-end">
+                                                                        $[[${#numbers.formatDecimal(orders.OrderAmount,2,2)}]]
+                                                                    </th>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
