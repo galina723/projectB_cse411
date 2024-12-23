@@ -37,9 +37,9 @@
                                     <div class="row">
 
                                         <div class="col-12 mb-20">
-                                            <label>Full Name </label>
+                                            <label>Full Name <span>*</span> </label>
                                             <input placeholder="Enter your full name" type="text"
-                                                th:field="*{CustomerName}">
+                                                th:field="*{CustomerName}" required>
                                         </div>
                                         <div class="col-12 mb-20">
                                             <label>Province <span>*</span></label>
@@ -63,12 +63,12 @@
                                                 name="orderAddress" required>
                                         </div>
                                         <div class="col-lg-6 mb-20">
-                                            <label>Phone</label>
-                                            <input type="text" th:field="*{CustomerPhone}">
+                                            <label>Phone <span>*</span></label>
+                                            <input type="text" th:field="*{CustomerPhone}" required>
                                         </div>
                                         <div class="col-lg-6 mb-20">
-                                            <label> Email Address</label>
-                                            <input type="text" th:field="*{cemail}">
+                                            <label> Email Address <span>*</span></label>
+                                            <input type="text" th:field="*{cemail}" required>
                                         </div>
                                     </div>
                                 </div>
