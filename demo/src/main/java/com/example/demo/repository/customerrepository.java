@@ -1,7 +1,6 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.customers;
-import com.example.demo.model.products;
 
 import java.util.List;
 

@@ -141,7 +141,12 @@ public class UserController {
 
     @PostMapping("/register/save")
     public String saveCustomer(@ModelAttribute customers customer,
-            @RequestParam("confirmPassword") String confirmPassword, Model model) {
+            @RequestParam("confirmPassword") String confirmPassword, @RequestParam("cemail") String cemail,
+            Model model) {
+        if (customerrepo.findByCemail(cemail) != null) {
+            model.addAttribute("error", "Email already exists.");
+            return "user/register";
+        }
         if (customer.getCustomerPassword().equals(confirmPassword)) {
             String hashedPassword = encryption.encrypt(customer.getCustomerPassword());
             customer.setCustomerPassword(hashedPassword);
