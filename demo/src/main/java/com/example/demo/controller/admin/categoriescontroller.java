@@ -136,6 +136,7 @@ public class categoriescontroller {
         List<products> products = productrepo.findProductsByCategory(oldCategoryName);
         for (products product : products) {
             product.setProductCategory(categoriesdto.getCategoryName());
+            product.setProductStatus(categoriesdto.getCategoryStatus());
         }
         productrepo.saveAll(products);
 
