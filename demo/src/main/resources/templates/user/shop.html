@@ -39,7 +39,8 @@
                                         <h3>Category</h3>
                                         <ul>
                                             <li><a href="/user/shop">All</a></li>
-                                            <li th:each="category : ${categories}">
+                                            <li th:each="category : ${categories}"
+                                                th:if="${category.CategoryStatus?.toLowerCase() == 'active'}">
                                                 <a th:text="${category.CategoryName}"
                                                     th:href="@{'/user/shop?category=' + ${category.CategoryName}}"></a>
                                             </li>
@@ -137,19 +138,20 @@
                             <ul>
                                 <!-- Previous button -->
                                 <li th:if="${currentPage > 0}">
-                                    <a th:href="@{'/user/shop'(category=${categoryName}, page=${currentPage - 1})}"><<</a>
+                                    <a th:href="@{'/user/shop'(category=${categoryName}, page=${currentPage - 1})}">
+                                        << </a>
                                 </li>
-                        
+
                                 <!-- First page link -->
                                 <li th:if="${currentPage > 2}">
                                     <a th:href="@{'/user/shop'(category=${categoryName}, page=0)}" th:text="'1'"></a>
                                 </li>
-                        
+
                                 <!-- Ellipsis if needed after the first page -->
                                 <li th:if="${currentPage > 2}">
                                     <span>...</span>
                                 </li>
-                        
+
                                 <!-- Show page numbers around the current page -->
                                 <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                                     th:if="${i >= currentPage - 1 && i <= currentPage + 1}"
@@ -157,20 +159,22 @@
                                     <a th:href="@{'/user/shop'(category=${categoryName}, page=${i})}"
                                         th:text="${i + 1}"></a>
                                 </li>
-                        
+
                                 <!-- Ellipsis if needed before the last page -->
                                 <li th:if="${currentPage < totalPages - 3}">
                                     <span>...</span>
                                 </li>
-                        
+
                                 <!-- Last page link -->
                                 <li th:if="${currentPage < totalPages - 2}">
-                                    <a th:href="@{'/user/shop'(category=${categoryName}, page=${totalPages - 1})}" th:text="${totalPages}"></a>
+                                    <a th:href="@{'/user/shop'(category=${categoryName}, page=${totalPages - 1})}"
+                                        th:text="${totalPages}"></a>
                                 </li>
-                        
+
                                 <!-- Next button -->
                                 <li th:if="${currentPage < totalPages - 1}">
-                                    <a th:href="@{'/user/shop'(category=${categoryName}, page=${currentPage + 1})}">>></a>
+                                    <a
+                                        th:href="@{'/user/shop'(category=${categoryName}, page=${currentPage + 1})}">>></a>
                                 </li>
                             </ul>
                         </div>
@@ -188,7 +192,7 @@
                 range: true,
                 min: 0,
                 max: 1000,
-                values: [0, 1000], 
+                values: [0, 1000],
                 slide: function (event, ui) {
                     $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
                     $('input[name="minPrice"]').val(ui.values[0]);

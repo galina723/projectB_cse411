@@ -58,7 +58,7 @@
                                                     </td>
                                                     <td class="product-price">$[[${item.ProductPrice}]]</td>
                                                     <td class="product_quantity">[[${item.quantity}]]</td>
-                                                    <td class="product_total">$[[${item.totalPrice}]]</td>
+                                                    <td class="product_total">$[[${#numbers.formatDecimal(item.totalPrice, 2,2)}]]</td>
                                                 </tr>
                                             </tbody>
                                         </table>
