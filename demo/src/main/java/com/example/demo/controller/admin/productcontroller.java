@@ -239,7 +239,7 @@ public class productcontroller {
             return "admin/apps-ecommerce-edit-product";
         }
 
-        String uploadDir = "C:\\Users\\Admin\\Downloads\\Cosmetic\\projectB_cse311\\demo\\src\\main\\resources\\static\\productimages";
+        String uploadDir = "E:\\demo\\src\\main\\resources\\static\\productimages";
         Path uploadPath = Paths.get(uploadDir);
 
         // Handle main product image
@@ -373,3 +373,5 @@ public class productcontroller {
         return "redirect:/admin/apps-ecommerce-add-product";
     }
 }
+
+
